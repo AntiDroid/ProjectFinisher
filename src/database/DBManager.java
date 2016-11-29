@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DBManager {
 
@@ -13,7 +14,19 @@ public class DBManager {
 
 	// Singleton Pattern
 	private static DBManager instance = null;
-
+	
+	//Standardtabellen
+	ConcurrentHashMap<Integer, Lehrer> lehrerMem = new ConcurrentHashMap<Integer, Lehrer>();
+	ConcurrentHashMap<Integer, Student> studentMem = new ConcurrentHashMap<Integer, Student>();
+	ConcurrentHashMap<Integer, Kurs> kursMem = new ConcurrentHashMap<Integer, Kurs>();
+	ConcurrentHashMap<Integer, Uservoting> userVotMem = new ConcurrentHashMap<Integer, Uservoting>();
+	ConcurrentHashMap<Integer, Folie> folieMem = new ConcurrentHashMap<Integer, Folie>();
+	ConcurrentHashMap<Integer, Foliensatz> folienSatzMem = new ConcurrentHashMap<Integer, Foliensatz>();
+	ConcurrentHashMap<Integer, Auswahlbereich> auswBMem = new ConcurrentHashMap<Integer, Auswahlbereich>();
+	
+	//Zwischentabellen
+	//ConcurrentHashMap<Integer, Uservoting> userVotMem = new ConcurrentHashMap<Integer, Uservoting>();
+	
 	private DBManager(){
 
 		try {
@@ -42,14 +55,13 @@ public class DBManager {
 				stat.setString(1, null);
 				stat.setString(2, p.getNachname());
 				stat.setString(3, p.getVorname());
-				stat.setDouble(4, p.getGeld());
 				stat.execute();
 
 				Statement stmt = conn.createStatement();
 				ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
 
 				if(rs.next()){
-					p.setPersonID(rs.getInt(1));
+					p.setID(rs.getInt(1));
 				}
 
 			}catch(SQLException e){
@@ -65,7 +77,6 @@ public class DBManager {
 				PreparedStatement stat = conn.prepareStatement(sql);
 				stat.setString(1, p.getNachname());
 				stat.setString(2, p.getVorname());
-				stat.setDouble(3, p.getGeld());
 				stat.setInt(4, p.getID());
 				stat.execute();
 
