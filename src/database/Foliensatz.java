@@ -8,7 +8,7 @@ public class Foliensatz {
 	private String name;
 	
 	public Foliensatz(int kID, String n) {
-		this.setID(-1);
+		this.folienSatzID = -1;
 		this.kursID = kID;
 		
 		this.name = n;

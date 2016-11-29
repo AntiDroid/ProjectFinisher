@@ -1,7 +1,7 @@
 package database;
 
 public class Folie {
-
+	
 	private int folienID;
 	private int foliensatzID;
 	
