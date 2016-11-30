@@ -1,14 +1,18 @@
 package database;
 
-public class Auswahlbereich {
+public class Auswahlbereich extends DBObject {
 
 	private int auswahlBereichsID;
+	
+	private Folie folie;
 	private int folienID;
 	
 	private int obenLinks, untenRechts;
 	
-	public Auswahlbereich(int fID, int oL, int uL) {
+	public Auswahlbereich(int fID, Folie f, int oL, int uL) {
 		this.auswahlBereichsID = -1;
+		
+		this.folie = f;
 		this.folienID = fID;
 		
 		this.obenLinks = oL;
@@ -45,5 +49,21 @@ public class Auswahlbereich {
 
 	public void setObenLinks(int obenLinks) {
 		this.obenLinks = obenLinks;
+	}
+	
+	public void Save(){
+		DBManager.Instance().Save(this);
+	}
+	
+	public void Delete(){
+		DBManager.Instance().Save(this);
+	}
+
+	public Folie getFolie() {
+		return folie;
+	}
+
+	public void setFolie(Folie folie) {
+		this.folie = folie;
 	}
 }

@@ -1,19 +1,23 @@
 package database;
 
-public class Uservoting {
+public class Uservoting extends DBObject{
 
 	private int votingID;
 	private String sessionID;
 	private int studentenID, folienID;
+	private Student student;
+	private Folie folie;
 	
 	private int koordX, koordY;
 	private String auswahloption;
 	
-	public Uservoting(String sesID, int stID, int fID, int kX, int kY, String ao) {
+	public Uservoting(String sesID, int stID, Student s, int fID, Folie f, int kX, int kY, String ao) {
 		this.votingID = -1;
 		this.sessionID = sesID;
 		this.studentenID = stID;
+		this.student = s;
 		this.folienID = fID;
+		this.folie = f;
 		
 		this.koordX = kX;
 		this.koordY = kY;
@@ -74,5 +78,29 @@ public class Uservoting {
 
 	public void setAuswahloption(String auswahloption) {
 		this.auswahloption = auswahloption;
+	}
+	
+	public void Save(){
+		DBManager.Instance().Save(this);
+	}
+	
+	public void Delete(){
+		DBManager.Instance().Save(this);
+	}
+
+	public Folie getFolie() {
+		return folie;
+	}
+
+	public void setFolie(Folie folie) {
+		this.folie = folie;
+	}
+
+	public Student getStudent() {
+		return student;
+	}
+
+	public void setStudent(Student student) {
+		this.student = student;
 	}
 }

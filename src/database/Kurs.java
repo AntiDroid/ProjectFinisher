@@ -1,6 +1,6 @@
 package database;
 
-public class Kurs {
+public class Kurs extends DBObject{
 
 	private int kursID;
 	
@@ -26,5 +26,13 @@ public class Kurs {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void Save(){
+		DBManager.Instance().Save(this);
+	}
+	
+	public void Delete(){
+		DBManager.Instance().Save(this);
 	}
 }

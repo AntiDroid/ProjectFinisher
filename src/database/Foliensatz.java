@@ -1,15 +1,18 @@
 package database;
 
-public class Foliensatz {
+public class Foliensatz extends DBObject{
 
 	private int folienSatzID;
+	
+	private Kurs kurs;
 	private int kursID;
 	
 	private String name;
 	
-	public Foliensatz(int kID, String n) {
+	public Foliensatz(int kID, Kurs k, String n) {
 		this.folienSatzID = -1;
 		this.kursID = kID;
+		this.kurs = k;
 		
 		this.name = n;
 	}
@@ -36,6 +39,22 @@ public class Foliensatz {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public void Save(){
+		DBManager.Instance().Save(this);
+	}
+	
+	public void Delete(){
+		DBManager.Instance().Save(this);
+	}
+
+	public Kurs getKurs() {
+		return kurs;
+	}
+
+	public void setKurs(Kurs kurs) {
+		this.kurs = kurs;
 	}
 	
 }

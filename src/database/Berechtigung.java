@@ -1,12 +1,20 @@
 package database;
 
-public class Berechtigung {
+public class Berechtigung extends DBObject{
 
+	private int berechtigungsID;
+	
 	private int LehrerID, kursID;
+	private Lehrer lehrer;
+	private Kurs kurs;
 	
 	private char berechtigungsTyp;
 	
-	public Berechtigung(int lID, int kID, char b) {
+	public Berechtigung(int lID, int kID, Lehrer l, Kurs k, char b) {
+		this.berechtigungsID = -1;
+		
+		this.lehrer = l;
+		this.kurs = k;
 		this.LehrerID = lID;
 		this.kursID = kID;
 		
@@ -35,6 +43,38 @@ public class Berechtigung {
 
 	public void setBerechtigungsTyp(char berechtigungsTyp) {
 		this.berechtigungsTyp = berechtigungsTyp;
+	}
+
+	public int getID() {
+		return berechtigungsID;
+	}
+
+	public void setID(int berechtigungsID) {
+		this.berechtigungsID = berechtigungsID;
+	}
+	
+	public void Save(){
+		DBManager.Instance().Save(this);
+	}
+	
+	public void Delete(){
+		DBManager.Instance().Save(this);
+	}
+
+	public Lehrer getLehrer() {
+		return lehrer;
+	}
+
+	public void setLehrer(Lehrer lehrer) {
+		this.lehrer = lehrer;
+	}
+
+	public Kurs getKurs() {
+		return kurs;
+	}
+
+	public void setKurs(Kurs kurs) {
+		this.kurs = kurs;
 	}
 	
 }

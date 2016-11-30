@@ -1,6 +1,6 @@
 package database;
 
-public class Lehrer {
+public class Lehrer extends DBObject{
 
 	private int lehrerID;
 	
@@ -45,6 +45,14 @@ public class Lehrer {
 
 	public void setPasswort(String passwort) {
 		this.passwort = passwort;
+	}
+	
+	public void Save(){
+		DBManager.Instance().Save(this);
+	}
+	
+	public void Delete(){
+		DBManager.Instance().Save(this);
 	}
 	
 }
