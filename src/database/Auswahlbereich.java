@@ -1,5 +1,7 @@
 package database;
 
+import java.sql.Connection;
+
 public class Auswahlbereich extends DBObject {
 
 	private int auswahlBereichsID;
@@ -51,12 +53,12 @@ public class Auswahlbereich extends DBObject {
 		this.obenLinks = obenLinks;
 	}
 	
-	public void sqlSave(){
-		DBManager.Instance().Save(this);
+	public void sqlSave(Connection conn){
+		DBManager.Instance().sqlSave(conn, this);
 	}
 	
-	public void sqlDelete(){
-		DBManager.Instance().Save(this);
+	public void sqlDelete(Connection conn){
+		DBManager.Instance().sqlDelete(conn, this);
 	}
 
 	public Folie getFolie() {
@@ -66,4 +68,5 @@ public class Auswahlbereich extends DBObject {
 	public void setFolie(Folie folie) {
 		this.folie = folie;
 	}
+
 }

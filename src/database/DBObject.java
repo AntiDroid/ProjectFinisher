@@ -1,5 +1,7 @@
 package database;
 
+import java.sql.Connection;
+
 public abstract class DBObject {
 	
 	private boolean isModified = true, toBeDeleted = false;
@@ -20,6 +22,6 @@ public abstract class DBObject {
 		this.toBeDeleted = toBeDeleted;
 	}
 
-	abstract public void sqlSave();
-	abstract public void sqlDelete();
+	abstract public void sqlSave(Connection conn);
+	abstract public void sqlDelete(Connection conn);
 }
