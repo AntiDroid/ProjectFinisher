@@ -12,6 +12,10 @@ public class Kurs {
 		this.name = n;
 	}
 
+	public Kurs() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getID() {
 		return kursID;
 	}

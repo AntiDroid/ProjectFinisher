@@ -4,14 +4,19 @@ public class Student {
 
 	private int studentenID;
 	
-	private String vorname, nachname, passwort;
+	private String benutzername, vorname, nachname, passwort;
 	
-	public Student(String vn, String nn, String pw) {
+	public Student(String bn, String vn, String nn, String pw) {
 		this.setID(-1);
 		
+		this.benutzername = bn;
 		this.vorname = vn;
 		this.nachname = nn;
 		this.passwort = pw;
+	}
+
+	public Student() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public int getID() {
@@ -44,6 +49,14 @@ public class Student {
 
 	public void setNachname(String nachname) {
 		this.nachname = nachname;
+	}
+
+	public String getBenutzername() {
+		return benutzername;
+	}
+
+	public void setBenutzername(String benutzername) {
+		this.benutzername = benutzername;
 	}
 	
 }

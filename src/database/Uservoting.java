@@ -24,6 +24,10 @@ public class Uservoting {
 		this.auswahloption = ao;
 	}
 
+	public Uservoting() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getID() {
 		return votingID;
 	}

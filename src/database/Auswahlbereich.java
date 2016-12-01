@@ -19,6 +19,8 @@ public class Auswahlbereich {
 		this.untenRechts = uL;
 	}
 
+	public Auswahlbereich() {}
+
 	public int getID() {
 		return auswahlBereichsID;
 	}

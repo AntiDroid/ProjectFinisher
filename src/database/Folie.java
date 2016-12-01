@@ -20,6 +20,10 @@ public class Folie {
 		this.folienTyp = fT;
 	}
 
+	public Folie() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getID() {
 		return folienID;
 	}
@@ -56,7 +60,7 @@ public class Folie {
 		return fSatz;
 	}
 
-	public void setfSatz(Foliensatz fSatz) {
+	public void setFSatz(Foliensatz fSatz) {
 		this.fSatz = fSatz;
 	}
 

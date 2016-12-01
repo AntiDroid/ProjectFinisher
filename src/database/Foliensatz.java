@@ -17,6 +17,10 @@ public class Foliensatz {
 		this.name = n;
 	}
 
+	public Foliensatz() {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getID() {
 		return folienSatzID;
 	}
