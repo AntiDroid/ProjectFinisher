@@ -1,5 +1,6 @@
 package database;
 
+import java.beans.PropertyVetoException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -8,15 +9,22 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.concurrent.ConcurrentHashMap;
 
+import com.mchange.v2.c3p0.ComboPooledDataSource;
+
 public class DBManager {
 
 	Connection conn;
 
-	//Typen als char- oder als enum-Elemente
-	//bei delete aus der hashmap entfernen, sicher?
+	//singleton aufgrund von mehrfach Zugriffen entfernen
+	//Zwischenspeicher mit HashMaps unwichtig
+	//Datenbankeigenschaften aus Klassen entfernen
 	
-	// Singleton Pattern
+	//Singleton Pattern rausnehmen?
 	private static DBManager instance = null;
+	
+	public static DBManager Instance(){
+		return instance;
+	}
 	
 	//Standardtabellen
 	ConcurrentHashMap<Integer, Auswahlbereich> auswBMem = new ConcurrentHashMap<Integer, Auswahlbereich>();
@@ -34,20 +42,29 @@ public class DBManager {
 	private DBManager(){
 
 		try {
+			
+			//NEU
+			ComboPooledDataSource cpds = new ComboPooledDataSource();
+			cpds.setDriverClass("com.mysql.jdbc.Driver"); 				//loads the jdbc driver
+			cpds.setJdbcUrl( "jdbc:mysql:/localhost/interaktiveFolien" );
+			cpds.setUser("root");
+			cpds.setPassword("");
+			
+// the settings below are optional -- c3p0 can work with defaults
+//			cpds.setMinPoolSize(5);
+//			cpds.setAcquireIncrement(5);
+//			cpds.setMaxPoolSize(20);
+			
+			//ALT
 			conn = DriverManager.getConnection("jdbc:mysql:/localhost/interaktiveFolien", "root", "");
-		} catch (SQLException e) {
+			
+		} catch (Exception e) {
 			System.out.println("Datenbankverbindung fehlgeschlagen!");
 			e.printStackTrace();
 		}
 	}
 
-	public static DBManager Instance(){
-		if (instance == null)
-			instance = new DBManager();
-		return instance;
-	}
-
-	public void Save(Auswahlbereich a){
+	public void sqlSave(Auswahlbereich a){
 	
 		if(a.getID() < 0){
 	
@@ -92,7 +109,7 @@ public class DBManager {
 		}
 	}
 	
-	public void Delete(Auswahlbereich a){
+	public void sqlDelete(Auswahlbereich a){
 		
 		String sql = "DELETE FROM Auswahlbereich WHERE BereichID = ?";
 		
@@ -107,7 +124,7 @@ public class DBManager {
 		}
 	}
 
-	public void Save(Berechtigung b){
+	public void sqlSave(Berechtigung b){
 	
 		if(b.getID() < 0){
 	
@@ -151,7 +168,7 @@ public class DBManager {
 		}
 	}
 
-	public void Delete(Berechtigung b){
+	public void sqlDelete(Berechtigung b){
 		
 		String sql = "DELETE FROM Berechtigung WHERE BerechtigungsID = ?";
 		
@@ -166,7 +183,7 @@ public class DBManager {
 		}
 	}
 	
-	public void Save(Folie f){
+	public void sqlSave(Folie f){
 	
 		if(f.getID() < 0){
 	
@@ -211,7 +228,7 @@ public class DBManager {
 		}
 	}
 
-	public void Delete(Folie f){
+	public void sqlDelete(Folie f){
 		
 		String sql = "DELETE FROM Folie WHERE FolienID = ?";
 		
@@ -226,7 +243,7 @@ public class DBManager {
 		}
 	}
 	
-	public void Save(Foliensatz f){
+	public void sqlSave(Foliensatz f){
 	
 		if(f.getID() < 0){
 	
@@ -269,7 +286,7 @@ public class DBManager {
 		}
 	}
 	
-	public void Delete(Foliensatz f){
+	public void sqlDelete(Foliensatz f){
 		
 		String sql = "DELETE FROM Foliensatz WHERE FoliensatzID = ?";
 		
@@ -284,7 +301,7 @@ public class DBManager {
 		}
 	}
 
-	public void Save(Kurs k){
+	public void sqlSave(Kurs k){
 	
 		if(k.getID() < 0){
 	
@@ -325,7 +342,7 @@ public class DBManager {
 		}
 	}
 	
-	public void Delete(Kurs k){
+	public void sqlDelete(Kurs k){
 		
 		String sql = "DELETE FROM Kurs WHERE KursID = ?";
 		
@@ -340,7 +357,7 @@ public class DBManager {
 		}
 	}
 
-	public void Save(Kursteilnahme k){
+	public void sqlSave(Kursteilnahme k){
 	
 		if(k.getID() < 0){
 	
@@ -383,7 +400,7 @@ public class DBManager {
 		}
 	}
 	
-	public void Delete(Kursteilnahme k){
+	public void sqlDelete(Kursteilnahme k){
 		
 		String sql = "DELETE FROM Kursteilnahme WHERE KursteilnahmeID = ?";
 		
@@ -398,7 +415,7 @@ public class DBManager {
 		}
 	}
 
-	public void Save(Lehrer p){
+	public void sqlSave(Lehrer p){
 
 		if(p.getID() < 0){
 
@@ -444,7 +461,7 @@ public class DBManager {
 		
 	}
 	
-	public void Delete(Lehrer l){
+	public void sqlDelete(Lehrer l){
 		
 		String sql = "DELETE FROM Lehrer WHERE LehrerID = ?";
 		
@@ -459,7 +476,7 @@ public class DBManager {
 		}
 	}
 	
-	public void Save(Student st){
+	public void sqlSave(Student st){
 
 		if(st.getID() < 0){
 
@@ -504,7 +521,7 @@ public class DBManager {
 		}
 	}
 	
-	public void Delete(Student s){
+	public void sqlDelete(Student s){
 		
 		String sql = "DELETE FROM Student WHERE StudentenID = ?";
 		
@@ -519,7 +536,7 @@ public class DBManager {
 		}
 	}
 	
-	public void Save(Uservoting u){
+	public void sqlSave(Uservoting u){
 
 		if(u.getID() < 0){
 
@@ -570,7 +587,7 @@ public class DBManager {
 		}
 	}
 	
-	public void Delete(Uservoting u){
+	public void sqlDelete(Uservoting u){
 		
 		String sql = "DELETE FROM Uservoting WHERE VotingID = ?";
 		
@@ -585,103 +602,103 @@ public class DBManager {
 		}
 	}
 	
-	public void synchronize(){
+	public void sqlSynchronize(){
 		
 		for(Auswahlbereich x: auswBMem.values()){
 			if(x.isToBeDeleted()){
-				x.Delete();
+				x.sqlDelete();
 				auswBMem.remove(x.getID());
 			}
 			else if(x.isModified()){
-				x.Save();
+				x.sqlSave();
 				x.setModified(false);
 			}
 		}
 		
 		for(Folie x: folieMem.values()){
 			if(x.isToBeDeleted()){
-				x.Delete();
+				x.sqlDelete();
 				folieMem.remove(x.getID());
 			}
 			else if(x.isModified()){
-				x.Save();
+				x.sqlSave();
 				x.setModified(false);
 			}
 		}
 
 		for(Foliensatz x: folienSatzMem.values()){
 			if(x.isToBeDeleted()){
-				x.Delete();
+				x.sqlDelete();
 				folienSatzMem.remove(x.getID());
 			}
 			else if(x.isModified()){
-				x.Save();
+				x.sqlSave();
 				x.setModified(false);
 			}
 		}
 		
 		for(Kurs x: kursMem.values()){
 			if(x.isToBeDeleted()){
-				x.Delete();
+				x.sqlDelete();
 				kursMem.remove(x.getID());
 			}
 			else if(x.isModified()){
-				x.Save();
+				x.sqlSave();
 				x.setModified(false);
 			}
 		}
 
 		for(Lehrer x: lehrerMem.values()){
 			if(x.isToBeDeleted()){
-				x.Delete();
+				x.sqlDelete();
 				lehrerMem.remove(x.getID());
 			}
 			else if(x.isModified()){
-				x.Save();
+				x.sqlSave();
 				x.setModified(false);
 			}
 		}
 		
 		for(Student x: studentMem.values()){
 			if(x.isToBeDeleted()){
-				x.Delete();
+				x.sqlDelete();
 				studentMem.remove(x.getID());
 			}
 			else if(x.isModified()){
-				x.Save();
+				x.sqlSave();
 				x.setModified(false);
 			}
 		}
 		
 		for(Uservoting x: userVotMem.values()){
 			if(x.isToBeDeleted()){
-				x.Delete();
+				x.sqlDelete();
 				userVotMem.remove(x.getID());
 			}
 			else if(x.isModified()){
-				x.Save();
+				x.sqlSave();
 				x.setModified(false);
 			}
 		}
 		
 		for(Berechtigung x: rechteMem.values()){
 			if(x.isToBeDeleted()){
-				x.Delete();
+				x.sqlDelete();
 				rechteMem.remove(x.getID());
 			}
 			else if(x.isModified()){
-				x.Save();
+				x.sqlSave();
 				x.setModified(false);
 			}
 		}
 		
 		for(Kursteilnahme x: kursTeilnahmeMem.values()){
 			if(x.isToBeDeleted()){
-				x.Delete();
+				x.sqlDelete();
 				kursTeilnahmeMem.remove(x.getID());
 			}
 			else if(x.isModified()){
-				x.Save();
+				x.sqlSave();
 				x.setModified(false);
 			}
 		}

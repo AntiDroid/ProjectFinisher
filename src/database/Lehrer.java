@@ -47,11 +47,11 @@ public class Lehrer extends DBObject{
 		this.passwort = passwort;
 	}
 	
-	public void Save(){
+	public void sqlSave(){
 		DBManager.Instance().Save(this);
 	}
 	
-	public void Delete(){
+	public void sqlDelete(){
 		DBManager.Instance().Save(this);
 	}
 	

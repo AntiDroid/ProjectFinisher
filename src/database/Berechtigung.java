@@ -53,11 +53,11 @@ public class Berechtigung extends DBObject{
 		this.berechtigungsID = berechtigungsID;
 	}
 	
-	public void Save(){
+	public void sqlSave(){
 		DBManager.Instance().Save(this);
 	}
 	
-	public void Delete(){
+	public void sqlDelete(){
 		DBManager.Instance().Save(this);
 	}
 

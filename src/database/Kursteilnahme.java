@@ -42,11 +42,11 @@ public class Kursteilnahme extends DBObject{
 		this.studentenID = studentenID;
 	}
 	
-	public void Save(){
+	public void sqlSave(){
 		DBManager.Instance().Save(this);
 	}
 	
-	public void Delete(){
+	public void sqlDelete(){
 		DBManager.Instance().Save(this);
 	}
 

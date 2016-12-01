@@ -80,11 +80,11 @@ public class Uservoting extends DBObject{
 		this.auswahloption = auswahloption;
 	}
 	
-	public void Save(){
+	public void sqlSave(){
 		DBManager.Instance().Save(this);
 	}
 	
-	public void Delete(){
+	public void sqlDelete(){
 		DBManager.Instance().Save(this);
 	}
 

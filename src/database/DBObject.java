@@ -20,6 +20,6 @@ public abstract class DBObject {
 		this.toBeDeleted = toBeDeleted;
 	}
 
-	abstract public void Save();
-	abstract public void Delete();
+	abstract public void sqlSave();
+	abstract public void sqlDelete();
 }
