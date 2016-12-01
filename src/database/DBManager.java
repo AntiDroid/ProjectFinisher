@@ -568,7 +568,8 @@ public class DBManager {
 		return list;
 	}
 
-	public boolean isKursBeteiligt(Kurs kurs, Student student) throws SQLException {
+	public boolean isKursBeteiligt(Kurs kurs, Student student)
+			throws SQLException {
 
 		String sql = "SELECT * FROM Kursteilnahme WHERE KursID = ? AND StudentenID = ?";
 
@@ -627,9 +628,10 @@ public class DBManager {
 		return obj;
 	}
 
-	//#was wenn alle Uservotings einer folie und session gebraucht werden?
-	public ArrayList<Uservoting> getUservotings(Student student, Folie folie) throws SQLException{
-		
+	// #was wenn alle Uservotings einer folie und session gebraucht werden?
+	public ArrayList<Uservoting> getUservotings(Student student, Folie folie)
+			throws SQLException {
+
 		ArrayList<Uservoting> list = new ArrayList<Uservoting>();
 
 		String sql = "SELECT * FROM Uservoting WHERE StudentenID = ? AND FolienID = ?";
@@ -643,7 +645,7 @@ public class DBManager {
 		while (rs.next()) {
 
 			Uservoting obj = new Uservoting();
-			
+
 			obj.setID(rs.getInt("VotingID"));
 			obj.setSessionID(rs.getString("SessionID"));
 			obj.setStudentenID(student.getID());
@@ -653,14 +655,15 @@ public class DBManager {
 			obj.setKoordX(rs.getInt("KoordX"));
 			obj.setKoordY(rs.getInt("KoordY"));
 			obj.setAuswahloption(rs.getString("Auswahloption"));
-			
+
 			list.add(obj);
 		}
 
 		return list;
 	}
-	
-	public int getLetzteAktiveFolienID(int lID, int fSatzID, int fID) throws SQLException {
+
+	public int getLetzteAktiveFolienID(int lID, int fSatzID, int fID)
+			throws SQLException {
 
 		String sql = "SELECT LetzteFolieID FROM LetzteAktiveFolie WHERE LehrerID = ?"
 				+ " AND FoliensatzID = ? AND LetzteFolieID = ?";
@@ -674,7 +677,7 @@ public class DBManager {
 
 		if (rs.next())
 			return rs.getInt("LetzteFolieID");
-					
+
 		return -1;
 	}
 }
