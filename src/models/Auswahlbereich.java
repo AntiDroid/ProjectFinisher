@@ -1,4 +1,4 @@
-package database;
+package models;
 
 public class Auswahlbereich {
 

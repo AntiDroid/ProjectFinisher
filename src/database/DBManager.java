@@ -7,6 +7,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import models.Auswahlbereich;
+import models.Folie;
+import models.Foliensatz;
+import models.Kurs;
+import models.Lehrer;
+import models.Student;
+import models.Uservoting;
+
 public class DBManager {
 
 	Connection conn;
