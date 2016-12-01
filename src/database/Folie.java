@@ -1,21 +1,21 @@
 package database;
 
-public class Folie extends DBObject{
-	
+public class Folie {
+
 	private int folienID;
-	
+
 	private Foliensatz fSatz;
 	private int foliensatzID;
-	
+
 	private String fPath;
 	private char folienTyp;
-	
+
 	public Folie(int fsID, Foliensatz fS, String fP, char fT) {
 		this.folienID = -1;
-		
+
 		this.fSatz = fS;
 		this.foliensatzID = fsID;
-		
+
 		this.fPath = fP;
 		this.folienTyp = fT;
 	}
@@ -51,14 +51,6 @@ public class Folie extends DBObject{
 	public void setFolienTyp(char folienTyp) {
 		this.folienTyp = folienTyp;
 	}
-	
-	public void sqlSave(){
-		DBManager.Instance().Save(this);
-	}
-	
-	public void sqlDelete(){
-		DBManager.Instance().Save(this);
-	}
 
 	public Foliensatz getfSatz() {
 		return fSatz;
@@ -67,5 +59,5 @@ public class Folie extends DBObject{
 	public void setfSatz(Foliensatz fSatz) {
 		this.fSatz = fSatz;
 	}
-	
+
 }

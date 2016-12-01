@@ -1,6 +1,6 @@
 package database;
 
-public class Student extends DBObject{
+public class Student {
 
 	private int studentenID;
 	
@@ -44,14 +44,6 @@ public class Student extends DBObject{
 
 	public void setNachname(String nachname) {
 		this.nachname = nachname;
-	}
-	
-	public void sqlSave(){
-		DBManager.Instance().Save(this);
-	}
-	
-	public void sqlDelete(){
-		DBManager.Instance().Save(this);
 	}
 	
 }

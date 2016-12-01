@@ -6,6 +6,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import employees.model.Employee;
+
 public class DBManager {
 
 	Connection conn;
@@ -13,9 +15,7 @@ public class DBManager {
 	private DBManager() {
 
 		try {
-
 			conn = ConnectionPool.getInstance().getConnection();
-
 		} catch (Exception e) {
 			System.out.println("Datenbankverbindung fehlgeschlagen!");
 			e.printStackTrace();
@@ -26,7 +26,31 @@ public class DBManager {
 		conn.close();
 	}
 
-	public void sqlSave(Auswahlbereich a) {
+	public Auswahlbereich getAuswahlbereich(int id) {
+
+		Auswahlbereich obj;
+		String sql = "SELECT * FROM Auswahlbereich WHERE emp_no = ?";
+
+		PreparedStatement stmt = conn.prepareStatement(sql);
+		stmt.setInt(1, id);
+
+		ResultSet rs = stmt.executeQuery();
+		if (rs.next()) {
+//			obj.setId(id);
+//			obj.setBirthDate(rs.getDate("birth_date"));
+//			obj.setFirstName(rs.getString("first_name"));
+//			obj.setLastName(rs.getString("last_name"));
+//			obj.setGender(rs.getString("gender"));
+//			obj.setHireDate(rs.getDate("hire_date"));
+//			obj.setPassword(rs.getString("password"));
+		}
+
+		rs.close();
+		stmt.close();
+		return obj;
+	}
+
+	public void save(Auswahlbereich a) {
 
 		if (a.getID() < 0) {
 
@@ -70,7 +94,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Auswahlbereich a) {
+	public void delete(Auswahlbereich a) {
 
 		String sql = "DELETE FROM Auswahlbereich WHERE BereichID = ?";
 
@@ -85,7 +109,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Berechtigung b) {
+	public void save(Berechtigung b) {
 
 		if (b.getID() < 0) {
 
@@ -128,7 +152,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Berechtigung b) {
+	public void delete(Berechtigung b) {
 
 		String sql = "DELETE FROM Berechtigung WHERE BerechtigungsID = ?";
 
@@ -143,7 +167,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Folie f) {
+	public void save(Folie f) {
 
 		if (f.getID() < 0) {
 
@@ -187,7 +211,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Folie f) {
+	public void delete(Folie f) {
 
 		String sql = "DELETE FROM Folie WHERE FolienID = ?";
 
@@ -202,7 +226,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Foliensatz f) {
+	public void save(Foliensatz f) {
 
 		if (f.getID() < 0) {
 
@@ -244,7 +268,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Foliensatz f) {
+	public void delete(Foliensatz f) {
 
 		String sql = "DELETE FROM Foliensatz WHERE FoliensatzID = ?";
 
@@ -259,7 +283,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Kurs k) {
+	public void save(Kurs k) {
 
 		if (k.getID() < 0) {
 
@@ -299,7 +323,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Kurs k) {
+	public void delete(Kurs k) {
 
 		String sql = "DELETE FROM Kurs WHERE KursID = ?";
 
@@ -314,7 +338,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Kursteilnahme k) {
+	public void save(Kursteilnahme k) {
 
 		if (k.getID() < 0) {
 
@@ -356,7 +380,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Kursteilnahme k) {
+	public void delete(Kursteilnahme k) {
 
 		String sql = "DELETE FROM Kursteilnahme WHERE KursteilnahmeID = ?";
 
@@ -371,7 +395,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Lehrer p) {
+	public void save(Lehrer p) {
 
 		if (p.getID() < 0) {
 
@@ -416,7 +440,7 @@ public class DBManager {
 
 	}
 
-	public void sqlDelete(Lehrer l) {
+	public void delete(Lehrer l) {
 
 		String sql = "DELETE FROM Lehrer WHERE LehrerID = ?";
 
@@ -431,7 +455,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Student st) {
+	public void save(Student st) {
 
 		if (st.getID() < 0) {
 
@@ -475,7 +499,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Student s) {
+	public void delete(Student s) {
 
 		String sql = "DELETE FROM Student WHERE StudentenID = ?";
 
@@ -490,7 +514,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Uservoting u) {
+	public void save(Uservoting u) {
 
 		if (u.getID() < 0) {
 
@@ -540,7 +564,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Uservoting u) {
+	public void delete(Uservoting u) {
 
 		String sql = "DELETE FROM Uservoting WHERE VotingID = ?";
 

@@ -1,6 +1,6 @@
 package database;
 
-public class Kursteilnahme extends DBObject{
+public class Kursteilnahme {
 
 	private int kursteilnahmeID;
 	
@@ -40,14 +40,6 @@ public class Kursteilnahme extends DBObject{
 
 	public void setStudentenID(int studentenID) {
 		this.studentenID = studentenID;
-	}
-	
-	public void sqlSave(){
-		DBManager.Instance().Save(this);
-	}
-	
-	public void sqlDelete(){
-		DBManager.Instance().Save(this);
 	}
 
 	public Kurs getKurs() {

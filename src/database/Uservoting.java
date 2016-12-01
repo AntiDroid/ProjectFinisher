@@ -1,6 +1,6 @@
 package database;
 
-public class Uservoting extends DBObject{
+public class Uservoting {
 
 	private int votingID;
 	private String sessionID;
@@ -78,14 +78,6 @@ public class Uservoting extends DBObject{
 
 	public void setAuswahloption(String auswahloption) {
 		this.auswahloption = auswahloption;
-	}
-	
-	public void sqlSave(){
-		DBManager.Instance().Save(this);
-	}
-	
-	public void sqlDelete(){
-		DBManager.Instance().Save(this);
 	}
 
 	public Folie getFolie() {

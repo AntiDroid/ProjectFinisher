@@ -1,6 +1,6 @@
 package database;
 
-public class Berechtigung extends DBObject{
+public class Berechtigung {
 
 	private int berechtigungsID;
 	
@@ -51,14 +51,6 @@ public class Berechtigung extends DBObject{
 
 	public void setID(int berechtigungsID) {
 		this.berechtigungsID = berechtigungsID;
-	}
-	
-	public void sqlSave(){
-		DBManager.Instance().Save(this);
-	}
-	
-	public void sqlDelete(){
-		DBManager.Instance().Save(this);
 	}
 
 	public Lehrer getLehrer() {

@@ -1,7 +1,5 @@
 package database;
 
-import java.sql.Connection;
-
 public class Auswahlbereich {
 
 	private int auswahlBereichsID;
@@ -51,14 +49,6 @@ public class Auswahlbereich {
 
 	public void setObenLinks(int obenLinks) {
 		this.obenLinks = obenLinks;
-	}
-	
-	public void sqlSave(){
-		DBManager.Instance().sqlSave( this);
-	}
-	
-	public void sqlDelete(){
-		DBManager.Instance().sqlDelete(this);
 	}
 
 	public Folie getFolie() {
