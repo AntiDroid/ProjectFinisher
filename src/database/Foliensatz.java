@@ -1,6 +1,6 @@
 package database;
 
-public class Foliensatz extends DBObject{
+public class Foliensatz {
 
 	private int folienSatzID;
 	

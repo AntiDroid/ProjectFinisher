@@ -1,74 +1,20 @@
 package database;
 
-import java.beans.PropertyVetoException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.concurrent.ConcurrentHashMap;
-
-import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class DBManager {
 
+	Connection conn;
 
-	// singleton aufgrund von mehrfach Zugriffen entfernen
-	// Zwischenspeicher mit HashMaps unwichtig
-	// Datenbankeigenschaften aus Klassen entfernen
-	
-	//Transaktionen commit und rollback
-
-	// Singleton Pattern rausnehmen?
-	private static DBManager instance = null;
-
-	public static DBManager Instance() {
-		if (instance == null) instance = new DBManager();
-		return instance;
-	}
-
-	public Connection GetConnection() throws SQLException
-	{
-		// Alt aus Pool
-		// return cpds.getConnection();
-		
-		// ALT
-		return  DriverManager.getConnection(
-							"jdbc:mysql:/localhost/interaktiveFolien", "root", "");
-	}
-	public void closeConnection(Connection conn) throws SQLException
-	{
-		conn.close();
-	}
-	
-	ComboPooledDataSource cpds = new ComboPooledDataSource();
-	
-	private void InitalizeConnectionPool() throws PropertyVetoException
-	{
-		// Bitte Parameter aus Conf lesen und setzen
-		cpds.setDriverClass("com.mysql.jdbc.Driver"); // loads the jdbc
-														// driver
-		cpds.setJdbcUrl("jdbc:mysql:/localhost/interaktiveFolien");
-		cpds.setUser("root");
-		cpds.setPassword("");
-
-		//the settings below are optional -- c3p0 can work with defaults
-		// cpds.setMinPoolSize(5);
-		// cpds.setAcquireIncrement(5);
-		// cpds.setMaxPoolSize(20);
-	}
-	
-	
-	
 	private DBManager() {
 
 		try {
 
-			// NEU
-			InitalizeConnectionPool();
-
-			
+			conn = ConnectionPool.getInstance().getConnection();
 
 		} catch (Exception e) {
 			System.out.println("Datenbankverbindung fehlgeschlagen!");
@@ -76,9 +22,11 @@ public class DBManager {
 		}
 	}
 
-	
-	
-	public void sqlSave(Connection conn, Auswahlbereich a) {
+	public void dispose() throws SQLException {
+		conn.close();
+	}
+
+	public void sqlSave(Auswahlbereich a) {
 
 		if (a.getID() < 0) {
 
@@ -122,7 +70,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Connection conn, Auswahlbereich a) {
+	public void sqlDelete(Auswahlbereich a) {
 
 		String sql = "DELETE FROM Auswahlbereich WHERE BereichID = ?";
 
@@ -137,7 +85,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Connection conn, Berechtigung b) {
+	public void sqlSave(Berechtigung b) {
 
 		if (b.getID() < 0) {
 
@@ -180,7 +128,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Connection conn, Berechtigung b) {
+	public void sqlDelete(Berechtigung b) {
 
 		String sql = "DELETE FROM Berechtigung WHERE BerechtigungsID = ?";
 
@@ -195,7 +143,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Connection conn, Folie f) {
+	public void sqlSave(Folie f) {
 
 		if (f.getID() < 0) {
 
@@ -239,7 +187,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Connection conn, Folie f) {
+	public void sqlDelete(Folie f) {
 
 		String sql = "DELETE FROM Folie WHERE FolienID = ?";
 
@@ -254,7 +202,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Connection conn, Foliensatz f) {
+	public void sqlSave(Foliensatz f) {
 
 		if (f.getID() < 0) {
 
@@ -296,7 +244,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Connection conn, Foliensatz f) {
+	public void sqlDelete(Foliensatz f) {
 
 		String sql = "DELETE FROM Foliensatz WHERE FoliensatzID = ?";
 
@@ -311,7 +259,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Connection conn, Kurs k) {
+	public void sqlSave(Kurs k) {
 
 		if (k.getID() < 0) {
 
@@ -351,7 +299,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Connection conn, Kurs k) {
+	public void sqlDelete(Kurs k) {
 
 		String sql = "DELETE FROM Kurs WHERE KursID = ?";
 
@@ -366,7 +314,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Connection conn, Kursteilnahme k) {
+	public void sqlSave(Kursteilnahme k) {
 
 		if (k.getID() < 0) {
 
@@ -408,7 +356,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Connection conn, Kursteilnahme k) {
+	public void sqlDelete(Kursteilnahme k) {
 
 		String sql = "DELETE FROM Kursteilnahme WHERE KursteilnahmeID = ?";
 
@@ -423,7 +371,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Connection conn, Lehrer p) {
+	public void sqlSave(Lehrer p) {
 
 		if (p.getID() < 0) {
 
@@ -468,7 +416,7 @@ public class DBManager {
 
 	}
 
-	public void sqlDelete(Connection conn, Lehrer l) {
+	public void sqlDelete(Lehrer l) {
 
 		String sql = "DELETE FROM Lehrer WHERE LehrerID = ?";
 
@@ -483,7 +431,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Connection conn, Student st) {
+	public void sqlSave(Student st) {
 
 		if (st.getID() < 0) {
 
@@ -527,7 +475,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Connection conn, Student s) {
+	public void sqlDelete(Student s) {
 
 		String sql = "DELETE FROM Student WHERE StudentenID = ?";
 
@@ -542,7 +490,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlSave(Connection conn, Uservoting u) {
+	public void sqlSave(Uservoting u) {
 
 		if (u.getID() < 0) {
 
@@ -592,7 +540,7 @@ public class DBManager {
 		}
 	}
 
-	public void sqlDelete(Connection conn, Uservoting u) {
+	public void sqlDelete(Uservoting u) {
 
 		String sql = "DELETE FROM Uservoting WHERE VotingID = ?";
 
@@ -606,100 +554,4 @@ public class DBManager {
 			System.out.println("Deleteproblem - Uservoting");
 		}
 	}
-
-	/*	//Unnötig
-	public void sqlSynchronize(Connection conn) {
-
-		for (Auswahlbereich x : auswBMem.values()) {
-			if (x.isToBeDeleted()) {
-				x.sqlDelete(conn);
-				auswBMem.remove(x.getID());
-			} else if (x.isModified()) {
-				x.sqlSave(conn);
-				x.setModified(false);
-			}
-		}
-
-		for (Folie x : folieMem.values()) {
-			if (x.isToBeDeleted()) {
-				x.sqlDelete();
-				folieMem.remove(x.getID());
-			} else if (x.isModified()) {
-				x.sqlSave();
-				x.setModified(false);
-			}
-		}
-
-		for (Foliensatz x : folienSatzMem.values()) {
-			if (x.isToBeDeleted()) {
-				x.sqlDelete();
-				folienSatzMem.remove(x.getID());
-			} else if (x.isModified()) {
-				x.sqlSave();
-				x.setModified(false);
-			}
-		}
-
-		for (Kurs x : kursMem.values()) {
-			if (x.isToBeDeleted()) {
-				x.sqlDelete();
-				kursMem.remove(x.getID());
-			} else if (x.isModified()) {
-				x.sqlSave();
-				x.setModified(false);
-			}
-		}
-
-		for (Lehrer x : lehrerMem.values()) {
-			if (x.isToBeDeleted()) {
-				x.sqlDelete();
-				lehrerMem.remove(x.getID());
-			} else if (x.isModified()) {
-				x.sqlSave();
-				x.setModified(false);
-			}
-		}
-
-		for (Student x : studentMem.values()) {
-			if (x.isToBeDeleted()) {
-				x.sqlDelete();
-				studentMem.remove(x.getID());
-			} else if (x.isModified()) {
-				x.sqlSave();
-				x.setModified(false);
-			}
-		}
-
-		for (Uservoting x : userVotMem.values()) {
-			if (x.isToBeDeleted()) {
-				x.sqlDelete();
-				userVotMem.remove(x.getID());
-			} else if (x.isModified()) {
-				x.sqlSave();
-				x.setModified(false);
-			}
-		}
-
-		for (Berechtigung x : rechteMem.values()) {
-			if (x.isToBeDeleted()) {
-				x.sqlDelete();
-				rechteMem.remove(x.getID());
-			} else if (x.isModified()) {
-				x.sqlSave();
-				x.setModified(false);
-			}
-		}
-
-		for (Kursteilnahme x : kursTeilnahmeMem.values()) {
-			if (x.isToBeDeleted()) {
-				x.sqlDelete();
-				kursTeilnahmeMem.remove(x.getID());
-			} else if (x.isModified()) {
-				x.sqlSave();
-				x.setModified(false);
-			}
-		}
-		
-	}
-	*/
 }
