@@ -60,5 +60,4 @@ public class Auswahlbereich {
 	public void setFolie(Folie folie) {
 		this.folie = folie;
 	}
-
 }
