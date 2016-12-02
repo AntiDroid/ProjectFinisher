@@ -25,7 +25,6 @@ public class Uservoting {
 	}
 
 	public Uservoting() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public int getID() {

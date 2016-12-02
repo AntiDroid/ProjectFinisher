@@ -21,7 +21,6 @@ public class Folie {
 	}
 
 	public Folie() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public int getID() {

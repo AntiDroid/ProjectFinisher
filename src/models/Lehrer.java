@@ -17,7 +17,6 @@ public class Lehrer {
 	}
 
 	public Lehrer() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getNachname() {

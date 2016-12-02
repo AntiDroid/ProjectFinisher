@@ -20,7 +20,7 @@ public class DBManager {
 	Connection conn;
 
 	private DBManager() {
-
+		
 		try {
 			conn = ConnectionPool.getInstance().getConnection();
 		} catch (Exception e) {

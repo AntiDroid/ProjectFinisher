@@ -13,7 +13,6 @@ public class Kurs {
 	}
 
 	public Kurs() {
-		// TODO Auto-generated constructor stub
 	}
 
 	public int getID() {
