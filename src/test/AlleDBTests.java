@@ -9,6 +9,6 @@ import org.junit.runners.Suite.SuiteClasses;
 		FolieTest.class, KursTest.class, LehrerTest.class, StudentTest.class,
 		UservotingTest.class })
 
-public class AllDBTests {
+public class AlleDBTests {
 
 }

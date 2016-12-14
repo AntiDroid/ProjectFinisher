@@ -23,9 +23,9 @@ public class DBManager {
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();
-		} catch (Exception e) {
-			System.out.println("Datenbankverbindung fehlgeschlagen!");
+		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Datenbankverbindung fehlgeschlagen!");
 		}
 	}
 
@@ -33,9 +33,9 @@ public class DBManager {
 		try {
 			conn.close();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out
 					.println("Trennung der Datenbankverbindung fehlgeschlagen!");
-			e.printStackTrace();
 		}
 	}
 
@@ -62,6 +62,7 @@ public class DBManager {
 				}
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Insertproblem - Auswahlbereich");
 			}
 		} else {
@@ -78,6 +79,7 @@ public class DBManager {
 				stat.execute();
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Updateproblem - Auswahlbereich");
 			}
 		}
@@ -94,6 +96,7 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("Deleteproblem - Auswahlbereich");
 		}
 	}
@@ -121,6 +124,7 @@ public class DBManager {
 				}
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Insertproblem - Folie");
 			}
 		} else {
@@ -137,6 +141,7 @@ public class DBManager {
 				stat.execute();
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Updateproblem - Folie");
 			}
 		}
@@ -153,6 +158,7 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("Deleteproblem - Folie");
 		}
 	}
@@ -179,6 +185,7 @@ public class DBManager {
 				}
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Insertproblem - Foliensatz");
 			}
 		} else {
@@ -194,6 +201,7 @@ public class DBManager {
 				stat.execute();
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Updateproblem - Foliensatz");
 			}
 		}
@@ -210,6 +218,7 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("Deleteproblem - Foliensatz");
 		}
 	}
@@ -235,6 +244,7 @@ public class DBManager {
 				}
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Insertproblem - Kurs");
 			}
 		} else {
@@ -249,6 +259,7 @@ public class DBManager {
 				stat.execute();
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Updateproblem - Kurs");
 			}
 		}
@@ -265,6 +276,7 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("Deleteproblem - Kurs");
 		}
 	}
@@ -273,15 +285,16 @@ public class DBManager {
 
 		if (p.getID() < 0) {
 
-			String sql = "INSERT INTO Lehrer VALUES (?, ?, ?, ?)";
+			String sql = "INSERT INTO Lehrer VALUES (?, ?, ?, ?, ?)";
 
 			try {
 
 				PreparedStatement stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
-				stat.setString(2, p.getVorname());
-				stat.setString(3, p.getNachname());
-				stat.setString(4, p.getPasswort());
+				stat.setString(2, p.getBenutzername());
+				stat.setString(3, p.getVorname());
+				stat.setString(4, p.getNachname());
+				stat.setString(5, p.getPasswort());
 				stat.execute();
 
 				Statement stmt = conn.createStatement();
@@ -292,6 +305,7 @@ public class DBManager {
 				}
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Insertproblem - Lehrer");
 			}
 		} else {
@@ -308,6 +322,7 @@ public class DBManager {
 				stat.execute();
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Updateproblem - Lehrer");
 			}
 		}
@@ -325,6 +340,7 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("Deleteproblem - Lehrer");
 		}
 	}
@@ -333,15 +349,16 @@ public class DBManager {
 
 		if (st.getID() < 0) {
 
-			String sql = "INSERT INTO Student VALUES (?, ?, ?, ?)";
+			String sql = "INSERT INTO Student VALUES (?, ?, ?, ?, ?)";
 
 			try {
 
 				PreparedStatement stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
-				stat.setString(2, st.getVorname());
-				stat.setString(3, st.getNachname());
-				stat.setString(4, st.getPasswort());
+				stat.setString(2, st.getBenutzername());
+				stat.setString(3, st.getVorname());
+				stat.setString(4, st.getNachname());
+				stat.setString(5, st.getPasswort());
 				stat.execute();
 
 				Statement stmt = conn.createStatement();
@@ -352,6 +369,7 @@ public class DBManager {
 				}
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Insertproblem - Student");
 			}
 		} else {
@@ -368,6 +386,7 @@ public class DBManager {
 				stat.execute();
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Updateproblem - Student");
 			}
 		}
@@ -384,6 +403,7 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("Deleteproblem - Student");
 		}
 	}
@@ -414,6 +434,7 @@ public class DBManager {
 				}
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Insertproblem - Uservoting");
 			}
 		} else {
@@ -433,6 +454,7 @@ public class DBManager {
 				stat.execute();
 
 			} catch (SQLException e) {
+				e.printStackTrace();
 				System.out.println("Updateproblem - Uservoting");
 			}
 		}
@@ -449,6 +471,7 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
+			e.printStackTrace();
 			System.out.println("Deleteproblem - Uservoting");
 		}
 	}
@@ -481,6 +504,7 @@ public class DBManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Selectproblem - Auswahlbereiche");
 		}
 
 		return list;
@@ -504,6 +528,7 @@ public class DBManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Selectproblem - Berechtigung");
 		}
 
 		return res;
@@ -515,8 +540,8 @@ public class DBManager {
 
 		String sql = "SELECT * FROM Folie WHERE FoliensatzID = ?";
 
-		try{
-		
+		try {
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, fSatz.getID());
 
@@ -537,8 +562,9 @@ public class DBManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
-			
+			System.out.println("Selectproblem - Folien");
+		}
+
 		return list;
 	}
 
@@ -548,8 +574,8 @@ public class DBManager {
 
 		String sql = "SELECT * FROM Foliensatz WHERE KursID = ?";
 
-		try{
-		
+		try {
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, kurs.getID());
 
@@ -569,8 +595,9 @@ public class DBManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
-			
+			System.out.println("Selectproblem - Foliensätze");
+		}
+
 		return list;
 	}
 
@@ -580,8 +607,8 @@ public class DBManager {
 
 		String sql = "SELECT * FROM Kurs";
 
-		try{
-		
+		try {
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			ResultSet rs = stmt.executeQuery();
 
@@ -597,8 +624,9 @@ public class DBManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
-			
+			System.out.println("Selectproblem - Kurse");
+		}
+
 		return list;
 	}
 
@@ -606,8 +634,8 @@ public class DBManager {
 
 		String sql = "SELECT * FROM Kursteilnahme WHERE KursID = ? AND StudentenID = ?";
 
-		try{
-		
+		try {
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(kurs.getID(), student.getID());
 
@@ -618,22 +646,21 @@ public class DBManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println("Selectproblem - isKursBeteiligt");
 		}
-			
+
 		return false;
 	}
 
 	public Lehrer getLehrer(String bn) {
 
 		String sql = "SELECT * FROM Lehrer WHERE Benutzername = ?";
-
 		Lehrer obj = new Lehrer();
 
-		try{
-		
+		try {
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, bn);
-
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
@@ -646,24 +673,23 @@ public class DBManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
-			
+			System.out.println("Selectproblem - Lehrer");
+		}
+		
 		return obj;
 	}
 
 	public Student getStudent(String bn) {
 
 		String sql = "SELECT * FROM Student WHERE Benutzername = ?";
-
 		Student obj = new Student();
 
-		try{
-		
+		try {
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setString(1, bn);
-
 			ResultSet rs = stmt.executeQuery();
-			
+
 			if (rs.next()) {
 				obj.setID(rs.getInt("StudentenID"));
 				obj.setBenutzername(bn);
@@ -674,8 +700,9 @@ public class DBManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
-			
+			System.out.println("Selectproblem - Student");
+		}
+
 		return obj;
 	}
 
@@ -686,8 +713,8 @@ public class DBManager {
 
 		String sql = "SELECT * FROM Uservoting WHERE StudentenID = ? AND FolienID = ?";
 
-		try{
-		
+		try {
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, student.getID());
 			stmt.setInt(2, folie.getID());
@@ -713,8 +740,9 @@ public class DBManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
-			
+			System.out.println("Selectproblem - Uservotings");
+		}
+
 		return list;
 	}
 
@@ -723,8 +751,8 @@ public class DBManager {
 		String sql = "SELECT LetzteFolieID FROM LetzteAktiveFolie WHERE LehrerID = ?"
 				+ " AND FoliensatzID = ? AND LetzteFolieID = ?";
 
-		try{
-		
+		try {
+
 			PreparedStatement stmt = conn.prepareStatement(sql);
 			stmt.setInt(1, lID);
 			stmt.setInt(2, fSatzID);
@@ -737,8 +765,9 @@ public class DBManager {
 
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}	
-			
+			System.out.println("Selectproblem - letzte aktive Folie");
+		}
+
 		return -1;
 	}
 }

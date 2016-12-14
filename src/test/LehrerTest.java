@@ -1,58 +1,59 @@
 package test;
 
 import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-
-import models.Kurs;
 import models.Lehrer;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import database.ConnectionPool;
 import database.DBManager;
 
 public class LehrerTest {
 
 	static DBManager conn;
 	static Lehrer lehrer;
-	
+
 	@BeforeClass
 	public static void setUp() {
 
 		conn = new DBManager();
-		lehrer = new Lehrer();
-		
+		lehrer = new Lehrer("MaxMus2016", "Max", "Mustermann", "passwort");
 	}
 
 	@Test
-	public void testKursSaveNewAndGet() {
+	public void testLehrerSaveGet() {
 
-		lehrer = new Lehrer("MaxMus-2016", "Max", "Mustermann", "passwort");
 		conn.save(lehrer);
-		
-		assertTrue(conn.getLehrer("MaxMus-2016").equals(lehrer));
+		Lehrer getL = conn.getLehrer(lehrer.getBenutzername());
+
+		if (getL.getID() == -99)
+			assertTrue(false);
+		assertTrue(getL.equals(lehrer));
+
+		lehrer.setVorname("Peter");
+		lehrer.setNachname("Petermann");
+
+		conn.save(lehrer);
+		getL = conn.getLehrer(lehrer.getBenutzername());
+
+		if (getL.getID() == -99)
+			assertTrue(false);
+		assertTrue(getL.equals(lehrer));
 	}
 
 	@Test
-	public void testKursSaveModified() {
+	public void testLehrerDelete() {
 
-
-	}
-
-	@Test
-	public void testKursDelete() {
-
-
+		conn.save(lehrer);
+		conn.delete(lehrer);
+		assertTrue(conn.getLehrer(lehrer.getBenutzername()).getID() == -99);
 	}
 
 	@AfterClass
 	public static void end() {
-		
-		
-		
+
+		conn.delete(lehrer);
 		conn.dispose();
 	}
 }

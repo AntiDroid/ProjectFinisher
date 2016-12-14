@@ -7,7 +7,6 @@ public class Lehrer {
 	private String benutzername, vorname, nachname, passwort;
 
 	public Lehrer(String bn, String vn, String nn, String pw) {
-
 		this.lehrerID = -1;
 
 		this.benutzername = bn;
@@ -17,6 +16,15 @@ public class Lehrer {
 	}
 
 	public Lehrer() {
+		this.lehrerID = -99;
+	}
+
+	public int getID() {
+		return lehrerID;
+	}
+
+	public void setID(int lehrerID) {
+		this.lehrerID = lehrerID;
 	}
 
 	public String getNachname() {
@@ -33,14 +41,6 @@ public class Lehrer {
 
 	public void setVorname(String vorname) {
 		this.vorname = vorname;
-	}
-
-	public int getID() {
-		return lehrerID;
-	}
-
-	public void setID(int lehrerID) {
-		this.lehrerID = lehrerID;
 	}
 
 	public String getPasswort() {
@@ -62,7 +62,7 @@ public class Lehrer {
 	public boolean equals(Object o) {
 
 		Lehrer l = (Lehrer) o;
-
+		
 		return (benutzername.equals(l.benutzername))
 				&& (vorname.equals(l.vorname)) && (nachname.equals(l.nachname))
 				&& (passwort.equals(l.passwort));
