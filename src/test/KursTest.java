@@ -89,10 +89,7 @@ public class KursTest {
 		conn.delete(kurse[0]);
 		conn.delete(kurse[2]);
 		
-		if(!conn.getKurse().isEmpty())
-			assertTrue(false);
-		else
-			assertTrue(true);
+		assertTrue(conn.getKurse().isEmpty());
 	}
 
 	@AfterClass

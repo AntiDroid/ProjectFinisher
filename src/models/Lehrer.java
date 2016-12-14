@@ -3,13 +3,13 @@ package models;
 public class Lehrer {
 
 	private int lehrerID;
-	
+
 	private String benutzername, vorname, nachname, passwort;
-	
+
 	public Lehrer(String bn, String vn, String nn, String pw) {
-		
+
 		this.lehrerID = -1;
-		
+
 		this.benutzername = bn;
 		this.vorname = vn;
 		this.nachname = nn;
@@ -58,5 +58,14 @@ public class Lehrer {
 	public void setBenutzername(String benutzername) {
 		this.benutzername = benutzername;
 	}
-	
+
+	public boolean equals(Object o) {
+
+		Lehrer l = (Lehrer) o;
+
+		return (benutzername.equals(l.benutzername))
+				&& (vorname.equals(l.vorname)) && (nachname.equals(l.nachname))
+				&& (passwort.equals(l.passwort));
+	}
+
 }

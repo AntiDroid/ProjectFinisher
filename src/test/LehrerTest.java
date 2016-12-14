@@ -17,21 +17,23 @@ import database.DBManager;
 public class LehrerTest {
 
 	static DBManager conn;
-	static Lehrer[] lehrer;
+	static Lehrer lehrer;
 	
 	@BeforeClass
 	public static void setUp() {
 
 		conn = new DBManager();
+		lehrer = new Lehrer();
 		
-
 	}
 
 	@Test
 	public void testKursSaveNewAndGet() {
 
+		lehrer = new Lehrer("MaxMus-2016", "Max", "Mustermann", "passwort");
+		conn.save(lehrer);
 		
-		
+		assertTrue(conn.getLehrer("MaxMus-2016").equals(lehrer));
 	}
 
 	@Test
