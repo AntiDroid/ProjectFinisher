@@ -34,8 +34,7 @@ public class DBManager {
 			conn.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out
-					.println("Trennung der Datenbankverbindung fehlgeschlagen!");
+			System.out.println("Trennung der DB-Verbindung fehlgeschlagen!");
 		}
 	}
 
@@ -675,7 +674,7 @@ public class DBManager {
 			e.printStackTrace();
 			System.out.println("Selectproblem - Lehrer");
 		}
-		
+
 		return obj;
 	}
 

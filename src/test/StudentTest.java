@@ -29,7 +29,8 @@ public class StudentTest {
 
 		if (getS.getID() == -99)
 			assertTrue(false);
-		assertTrue(getS.equals(student));
+		else
+			assertTrue(getS.equals(student));
 
 		student.setVorname("Peter");
 		student.setNachname("Petermann");
@@ -39,7 +40,8 @@ public class StudentTest {
 
 		if (getS.getID() == -99)
 			assertTrue(false);
-		assertTrue(getS.equals(student));
+		else
+			assertTrue(getS.equals(student));
 	}
 
 	@Test
