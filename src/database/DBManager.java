@@ -19,8 +19,8 @@ public class DBManager {
 
 	Connection conn;
 
-	private DBManager() {
-		
+	public DBManager() {
+
 		try {
 			conn = ConnectionPool.getInstance().getConnection();
 		} catch (Exception e) {
@@ -29,8 +29,14 @@ public class DBManager {
 		}
 	}
 
-	public void dispose() throws SQLException {
-		conn.close();
+	public void dispose() {
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			System.out
+					.println("Trennung der Datenbankverbindung fehlgeschlagen!");
+			e.printStackTrace();
+		}
 	}
 
 	public void save(Auswahlbereich a) {
@@ -447,237 +453,292 @@ public class DBManager {
 		}
 	}
 
-	public ArrayList<Auswahlbereich> getAuswahlbereiche(Folie folie)
-			throws SQLException {
+	public ArrayList<Auswahlbereich> getAuswahlbereiche(Folie folie) {
 
 		ArrayList<Auswahlbereich> list = new ArrayList<Auswahlbereich>();
 
 		String sql = "SELECT * FROM Auswahlbereich WHERE FolienID = ?";
 
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, folie.getID());
+		try {
 
-		ResultSet rs = stmt.executeQuery();
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, folie.getID());
 
-		while (rs.next()) {
+			ResultSet rs = stmt.executeQuery();
 
-			Auswahlbereich obj = new Auswahlbereich();
+			while (rs.next()) {
 
-			obj.setID(rs.getInt("BereichID"));
-			obj.setFolie(folie);
-			obj.setFolienID(folie.getID());
-			obj.setObenLinks(rs.getInt("EckeOL"));
-			obj.setUntenRechts(rs.getInt("EckeUR"));
+				Auswahlbereich obj = new Auswahlbereich();
 
-			list.add(obj);
+				obj.setID(rs.getInt("BereichID"));
+				obj.setFolie(folie);
+				obj.setFolienID(folie.getID());
+				obj.setObenLinks(rs.getInt("EckeOL"));
+				obj.setUntenRechts(rs.getInt("EckeUR"));
+
+				list.add(obj);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 
 		return list;
 	}
 
-	public char getBerechtigung(Lehrer lehrer, Kurs kurs) throws SQLException {
+	public char getBerechtigung(Lehrer lehrer, Kurs kurs) {
 
 		char res = 'X';
 
 		String sql = "SELECT Berechtigungstyp FROM Berechtigung WHERE LehrerID = ? AND KursID = ?";
+		try {
 
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, lehrer.getID());
-		stmt.setInt(2, kurs.getID());
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, lehrer.getID());
+			stmt.setInt(2, kurs.getID());
 
-		ResultSet rs = stmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();
 
-		if (rs.next())
-			res = rs.getString("Berechtigungstyp").charAt(0);
+			if (rs.next())
+				res = rs.getString("Berechtigungstyp").charAt(0);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 
 		return res;
 	}
 
-	public ArrayList<Folie> getFolien(Foliensatz fSatz) throws SQLException {
+	public ArrayList<Folie> getFolien(Foliensatz fSatz) {
 
 		ArrayList<Folie> list = new ArrayList<Folie>();
 
 		String sql = "SELECT * FROM Folie WHERE FoliensatzID = ?";
 
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, fSatz.getID());
+		try{
+		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, fSatz.getID());
 
-		ResultSet rs = stmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();
 
-		while (rs.next()) {
+			while (rs.next()) {
 
-			Folie obj = new Folie();
+				Folie obj = new Folie();
 
-			obj.setID(rs.getInt("FolienID"));
-			obj.setFSatz(fSatz);
-			obj.setFoliensatzID(fSatz.getID());
-			obj.setfPath(rs.getString("fPath"));
-			obj.setFolienTyp(rs.getString("FolienTyp").charAt(0));
+				obj.setID(rs.getInt("FolienID"));
+				obj.setFSatz(fSatz);
+				obj.setFoliensatzID(fSatz.getID());
+				obj.setfPath(rs.getString("fPath"));
+				obj.setFolienTyp(rs.getString("FolienTyp").charAt(0));
 
-			list.add(obj);
-		}
+				list.add(obj);
+			}
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+			
 		return list;
 	}
 
-	public ArrayList<Foliensatz> getFoliensätze(Kurs kurs) throws SQLException {
+	public ArrayList<Foliensatz> getFoliensätze(Kurs kurs) {
 
 		ArrayList<Foliensatz> list = new ArrayList<Foliensatz>();
 
 		String sql = "SELECT * FROM Foliensatz WHERE KursID = ?";
 
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, kurs.getID());
+		try{
+		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, kurs.getID());
 
-		ResultSet rs = stmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();
 
-		while (rs.next()) {
+			while (rs.next()) {
 
-			Foliensatz obj = new Foliensatz();
+				Foliensatz obj = new Foliensatz();
 
-			obj.setID(rs.getInt("FoliensatzID"));
-			obj.setKursID(kurs.getID());
-			obj.setKurs(kurs);
-			obj.setName(rs.getString("Name"));
+				obj.setID(rs.getInt("FoliensatzID"));
+				obj.setKursID(kurs.getID());
+				obj.setKurs(kurs);
+				obj.setName(rs.getString("Name"));
 
-			list.add(obj);
-		}
+				list.add(obj);
+			}
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+			
 		return list;
 	}
 
-	public ArrayList<Kurs> getKurse() throws SQLException {
+	public ArrayList<Kurs> getKurse() {
 
 		ArrayList<Kurs> list = new ArrayList<Kurs>();
 
 		String sql = "SELECT * FROM Kurs";
 
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		ResultSet rs = stmt.executeQuery();
+		try{
+		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			ResultSet rs = stmt.executeQuery();
 
-		while (rs.next()) {
+			while (rs.next()) {
 
-			Kurs obj = new Kurs();
+				Kurs obj = new Kurs();
 
-			obj.setID(rs.getInt("KursID"));
-			obj.setName(rs.getString("Name"));
+				obj.setID(rs.getInt("KursID"));
+				obj.setName(rs.getString("Name"));
 
-			list.add(obj);
-		}
+				list.add(obj);
+			}
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+			
 		return list;
 	}
 
-	public boolean isKursBeteiligt(Kurs kurs, Student student)
-			throws SQLException {
+	public boolean isKursBeteiligt(Kurs kurs, Student student) {
 
 		String sql = "SELECT * FROM Kursteilnahme WHERE KursID = ? AND StudentenID = ?";
 
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(kurs.getID(), student.getID());
+		try{
+		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(kurs.getID(), student.getID());
 
-		ResultSet rs = stmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();
 
-		if (rs.next())
-			return true;
+			if (rs.next())
+				return true;
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+			
 		return false;
 	}
 
-	public Lehrer getLehrer(String bn) throws SQLException {
+	public Lehrer getLehrer(String bn) {
 
 		String sql = "SELECT * FROM Lehrer WHERE Benutzername = ?";
 
 		Lehrer obj = new Lehrer();
 
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, bn);
+		try{
+		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, bn);
 
-		ResultSet rs = stmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();
 
-		if (rs.next()) {
-			obj.setID(rs.getInt("LehrerID"));
-			obj.setBenutzername(bn);
-			obj.setVorname(rs.getString("Vorname"));
-			obj.setNachname(rs.getString("Nachname"));
-			obj.setPasswort(rs.getString("Passwort"));
-		}
+			if (rs.next()) {
+				obj.setID(rs.getInt("LehrerID"));
+				obj.setBenutzername(bn);
+				obj.setVorname(rs.getString("Vorname"));
+				obj.setNachname(rs.getString("Nachname"));
+				obj.setPasswort(rs.getString("Passwort"));
+			}
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+			
 		return obj;
 	}
 
-	public Student getStudent(String bn) throws SQLException {
+	public Student getStudent(String bn) {
 
 		String sql = "SELECT * FROM Student WHERE Benutzername = ?";
 
 		Student obj = new Student();
 
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setString(1, bn);
+		try{
+		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setString(1, bn);
 
-		ResultSet rs = stmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();
+			
+			if (rs.next()) {
+				obj.setID(rs.getInt("StudentenID"));
+				obj.setBenutzername(bn);
+				obj.setVorname(rs.getString("Vorname"));
+				obj.setNachname(rs.getString("Nachname"));
+				obj.setPasswort(rs.getString("Passwort"));
+			}
 
-		if (rs.next()) {
-			obj.setID(rs.getInt("StudentenID"));
-			obj.setBenutzername(bn);
-			obj.setVorname(rs.getString("Vorname"));
-			obj.setNachname(rs.getString("Nachname"));
-			obj.setPasswort(rs.getString("Passwort"));
-		}
-
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+			
 		return obj;
 	}
 
-	// #was wenn alle Uservotings einer folie und session gebraucht werden?
-	public ArrayList<Uservoting> getUservotings(Student student, Folie folie)
-			throws SQLException {
+	// # was wenn alle Uservotings einer folie und session gebraucht werden?
+	public ArrayList<Uservoting> getUservotings(Student student, Folie folie) {
 
 		ArrayList<Uservoting> list = new ArrayList<Uservoting>();
 
 		String sql = "SELECT * FROM Uservoting WHERE StudentenID = ? AND FolienID = ?";
 
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, student.getID());
-		stmt.setInt(2, folie.getID());
+		try{
+		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, student.getID());
+			stmt.setInt(2, folie.getID());
 
-		ResultSet rs = stmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();
 
-		while (rs.next()) {
+			while (rs.next()) {
 
-			Uservoting obj = new Uservoting();
+				Uservoting obj = new Uservoting();
 
-			obj.setID(rs.getInt("VotingID"));
-			obj.setSessionID(rs.getString("SessionID"));
-			obj.setStudentenID(student.getID());
-			obj.setStudent(student);
-			obj.setFolienID(folie.getID());
-			obj.setFolie(folie);
-			obj.setKoordX(rs.getInt("KoordX"));
-			obj.setKoordY(rs.getInt("KoordY"));
-			obj.setAuswahloption(rs.getString("Auswahloption"));
+				obj.setID(rs.getInt("VotingID"));
+				obj.setSessionID(rs.getString("SessionID"));
+				obj.setStudentenID(student.getID());
+				obj.setStudent(student);
+				obj.setFolienID(folie.getID());
+				obj.setFolie(folie);
+				obj.setKoordX(rs.getInt("KoordX"));
+				obj.setKoordY(rs.getInt("KoordY"));
+				obj.setAuswahloption(rs.getString("Auswahloption"));
 
-			list.add(obj);
-		}
+				list.add(obj);
+			}
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+			
 		return list;
 	}
 
-	public int getLetzteAktiveFolienID(int lID, int fSatzID, int fID)
-			throws SQLException {
+	public int getLetzteAktiveFolienID(int lID, int fSatzID, int fID) {
 
 		String sql = "SELECT LetzteFolieID FROM LetzteAktiveFolie WHERE LehrerID = ?"
 				+ " AND FoliensatzID = ? AND LetzteFolieID = ?";
 
-		PreparedStatement stmt = conn.prepareStatement(sql);
-		stmt.setInt(1, lID);
-		stmt.setInt(2, fSatzID);
-		stmt.setInt(3, fID);
+		try{
+		
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, lID);
+			stmt.setInt(2, fSatzID);
+			stmt.setInt(3, fID);
 
-		ResultSet rs = stmt.executeQuery();
+			ResultSet rs = stmt.executeQuery();
 
-		if (rs.next())
-			return rs.getInt("LetzteFolieID");
+			if (rs.next())
+				return rs.getInt("LetzteFolieID");
 
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}	
+			
 		return -1;
 	}
 }

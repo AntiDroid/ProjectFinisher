@@ -31,4 +31,11 @@ public class Kurs {
 		this.name = name;
 	}
 	
+	public boolean equals(Object o){
+		
+		Kurs k = (Kurs) o;
+		
+		return (this.kursID == k.kursID) && (this.getName() == k.getName());
+	}
+	
 }

@@ -15,8 +15,10 @@ public class ConnectionPool {
 
 	public static ConnectionPool getInstance() {
 
-		if (instance == null)
+		if (instance == null){
 			instance = new ConnectionPool();
+			instance.InitializeConnectionPool();
+		}
 
 		return instance;
 	}
@@ -28,15 +30,17 @@ public class ConnectionPool {
 	}
 
 	// MUSS EINMAL AUFGERUFEN WERDEN -> ServletContext
-	public void InitalizeConnectionPool(String jdbcUrl, String user, String passwd) 
-			throws PropertyVetoException {
+	public void InitializeConnectionPool() {
 		
-		cpds.setDriverClass("com.mysql.jdbc.Driver");
-		// cpds.setJdbcUrl("jdbc:mysql:/localhost/interaktiveFolien");
-		cpds.setJdbcUrl(jdbcUrl);
-		// cpds.setUser("root");
-		cpds.setUser(user);
-		cpds.setPassword(passwd);
+		 try {
+			cpds.setDriverClass("com.mysql.jdbc.Driver");
+		 } catch (PropertyVetoException e) {
+			e.printStackTrace();
+		 }
+		 
+		 cpds.setJdbcUrl("jdbc:mysql://localhost/interaktivefolien");
+		 cpds.setUser("root");
+		 cpds.setPassword("");
 
 		// the settings below are optional -- c3p0 can work with defaults
 		// cpds.setMinPoolSize(5);
