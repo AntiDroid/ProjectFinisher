@@ -442,8 +442,8 @@ public class DBManager {
 			}
 		} else {
 
-			String sql = "UPDATE Kursteilnahme SET SessionID = ?, StudentenID = ?, FolienID = ?, "
-					+ "KoordX = ?, KoordY = ?, Auswahloption = ? WHERE KursteilnahmeID = ?";
+			String sql = "UPDATE Uservoting SET SessionID = ?, StudentenID = ?, FolienID = ?, "
+					+ "KoordX = ?, KoordY = ?, Auswahloption = ? WHERE VotingID = ?";
 
 			try {
 
@@ -453,7 +453,8 @@ public class DBManager {
 				stat.setInt(3, u.getFolienID());
 				stat.setInt(4, u.getKoordX());
 				stat.setInt(5, u.getKoordY());
-				stat.setInt(6, u.getID());
+				stat.setString(6, u.getAuswahloption());
+				stat.setInt(7, u.getID());
 				stat.execute();
 
 			} catch (SQLException e) {

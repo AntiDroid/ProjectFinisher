@@ -27,6 +27,16 @@ public class UservotingTest {
 	static Folie folie;
 	static Student student;
 
+	static String[] sessions = { "Test1", "Test3", "Test2" };
+
+	static int[] clickX1 = { 1, 2, 3, 7, 8, 9, 13, 14, 15 };
+	static int[] clickY1 = { 4, 5, 6, 10, 11, 12, 16, 17, 18 };
+	
+	static int[] clickX2 = { 11, 12, 13, 17, 18, 19, 113, 114, 115 };
+	static int[] clickY2 = { 14, 15, 16, 110, 111, 112, 116, 117, 118 };
+
+	static String[] optionen = { "", "A", "Flugzeug" };
+
 	@BeforeClass
 	public static void setUp() {
 
@@ -39,21 +49,23 @@ public class UservotingTest {
 		folie = new Folie(fSatz.getID(), fSatz, "Test", 'T');
 		conn.save(folie);
 		student = new Student("Test", "TestVName", "TestNName", "TestPW");
+		conn.save(student);
 
-		uvBereiche = new Uservoting[3];
+		uvBereiche = new Uservoting[9];
 		for (int i = 0; i < uvBereiche.length; i++)
-			uvBereiche[i] = new Uservoting("SessionX", student.getID(), student, folie.getID(), folie, 0, 0, "");
+			uvBereiche[i] = new Uservoting("SessionX", student.getID(),
+					student, folie.getID(), folie, 0, 0, "");
 	}
 
-	//SessionID, Klick KoordX und Y, Auswahloption ist optional
-	
 	@Test
 	public void testAuswahlbereichSaveGet() {
 
 		// Standard
 		for (int i = 0; i < uvBereiche.length; i++) {
-			uvBereiche[i].setObenLinksX(xOben1[i]);
-			uvBereiche[i].setObenLinksY(yOben1[i]);
+			uvBereiche[i].setSessionID(sessions[i/3]);
+			uvBereiche[i].setKoordX(clickX1[i]);
+			uvBereiche[i].setKoordY(clickY1[i]);
+			uvBereiche[i].setAuswahloption(optionen[i/3]);
 		}
 		for (Uservoting uv : uvBereiche)
 			conn.save(uv);
@@ -62,14 +74,18 @@ public class UservotingTest {
 		ArrayList<Uservoting> uvListe = conn.getUservotings(student, folie);
 
 		for (int i = 0; i < uvListe.size(); i++)
-			assertTrue(uvListe.get(i).getObenLinksX() == xOben1[i]
-					&& uvListe.get(i).getObenLinksY() == yOben1[i]
+			assertTrue(uvListe.get(i).getSessionID() == sessions[i/3]
+					&& uvListe.get(i).getKoordX() == clickX1[i]
+					&& uvListe.get(i).getKoordY() == clickY1[i]
+					&& uvListe.get(i).getAuswahloption() == optionen[i/3]
 					&& uvListe.get(i).getID() == (i + 1));
-	
+
 		// Änderung
 		for (int i = 0; i < uvBereiche.length; i++) {
-			uvBereiche[i].setObenLinksX(xOben2[i]);
-			uvBereiche[i].setObenLinksY(yOben2[i]);
+			uvBereiche[i].setSessionID(sessions[i/3]);
+			uvBereiche[i].setKoordX(clickX2[i]);
+			uvBereiche[i].setKoordY(clickY2[i]);
+			uvBereiche[i].setAuswahloption(optionen[i/3]);
 		}
 		for (Uservoting uv : uvBereiche)
 			conn.save(uv);
@@ -79,8 +95,10 @@ public class UservotingTest {
 		uvListe = conn.getUservotings(student, folie);
 
 		for (int i = 0; i < uvListe.size(); i++)
-			assertTrue(uvListe.get(i).getObenLinksX() == xOben2[i]
-					&& uvListe.get(i).getObenLinksY() == yOben2[i]
+			assertTrue(uvListe.get(i).getSessionID() == sessions[i/3]
+					&& uvListe.get(i).getKoordX() == clickX2[i]
+					&& uvListe.get(i).getKoordY() == clickY2[i]
+					&& uvListe.get(i).getAuswahloption() == optionen[i/3]
 					&& uvListe.get(i).getID() == (i + 1));
 	}
 
@@ -88,27 +106,31 @@ public class UservotingTest {
 	public void testAuswahlbereichDelete() {
 
 		for (int i = 0; i < uvBereiche.length; i++) {
-			uvBereiche[i].setObenLinksX(xOben1[i]);
-			uvBereiche[i].setObenLinksY(yOben1[i]);
+			uvBereiche[i].setSessionID(sessions[i/3]);
+			uvBereiche[i].setKoordX(clickX1[i]);
+			uvBereiche[i].setKoordY(clickY1[i]);
+			uvBereiche[i].setAuswahloption(optionen[i/3]);
 		}
 		for (Uservoting uv : uvBereiche)
 			conn.save(uv);
 
 		conn.delete(uvBereiche[1]);
 
-		ArrayList<Auswahlbereich> abListe = conn.getAuswahlbereiche(folie);
+		ArrayList<Uservoting> uvListe = conn.getUservotings(student, folie);
 
-		for (int i = 0; i < abListe.size(); i++)
-			assertTrue(abListe.get(i).getObenLinksX() != xOben1[1]
-					&& abListe.get(i).getObenLinksY() != yOben1[1]
-					&& abListe.get(i).getID() != 2);
+		for (int i = 0; i < uvListe.size(); i++)
+			assertTrue(uvListe.get(i).getSessionID() != sessions[0]
+					&& uvListe.get(i).getKoordX() != clickX2[1]
+					&& uvListe.get(i).getKoordY() != clickY2[1]
+					&& uvListe.get(i).getAuswahloption() != optionen[0]
+					&& uvListe.get(i).getID() != 2);
 
 		conn.delete(uvBereiche[0]);
 		conn.delete(uvBereiche[2]);
 
-		assertTrue(conn.getAuswahlbereiche(folie).isEmpty());
+		assertTrue(conn.getUservotings(student, folie).isEmpty());
 	}
-	
+
 	@AfterClass
 	public static void end() {
 
