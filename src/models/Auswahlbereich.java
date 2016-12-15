@@ -3,23 +3,26 @@ package models;
 public class Auswahlbereich {
 
 	private int auswahlBereichsID;
-	
+
 	private Folie folie;
 	private int folienID;
-	
-	private int obenLinks, untenRechts;
-	
-	public Auswahlbereich(int fID, Folie f, int oL, int uL) {
+
+	private int obenLinksX, obenLinksY, untenRechtsX, untenRechtsY;
+
+	public Auswahlbereich(int fID, Folie f, int oLX, int oLY, int uLX, int uLY) {
 		this.auswahlBereichsID = -1;
-		
+
 		this.folie = f;
 		this.folienID = fID;
-		
-		this.obenLinks = oL;
-		this.untenRechts = uL;
+
+		this.obenLinksX = oLX;
+		this.obenLinksY = oLY;
+		this.untenRechtsX = uLX;
+		this.untenRechtsY = uLY;
 	}
 
-	public Auswahlbereich() {}
+	public Auswahlbereich() {
+	}
 
 	public int getID() {
 		return auswahlBereichsID;
@@ -37,27 +40,43 @@ public class Auswahlbereich {
 		this.folienID = folienID;
 	}
 
-	public int getUntenRechts() {
-		return untenRechts;
-	}
-
-	public void setUntenRechts(int untenRechts) {
-		this.untenRechts = untenRechts;
-	}
-
-	public int getObenLinks() {
-		return obenLinks;
-	}
-
-	public void setObenLinks(int obenLinks) {
-		this.obenLinks = obenLinks;
-	}
-
 	public Folie getFolie() {
 		return folie;
 	}
 
 	public void setFolie(Folie folie) {
 		this.folie = folie;
+	}
+
+	public int getUntenRechtsY() {
+		return untenRechtsY;
+	}
+
+	public void setUntenRechtsY(int untenRechtsY) {
+		this.untenRechtsY = untenRechtsY;
+	}
+
+	public int getObenLinksX() {
+		return obenLinksX;
+	}
+
+	public void setObenLinksX(int obenLinksX) {
+		this.obenLinksX = obenLinksX;
+	}
+
+	public int getObenLinksY() {
+		return obenLinksY;
+	}
+
+	public void setObenLinksY(int obenLinksY) {
+		this.obenLinksY = obenLinksY;
+	}
+
+	public int getUntenRechtsX() {
+		return untenRechtsX;
+	}
+
+	public void setUntenRechtsX(int untenRechtsX) {
+		this.untenRechtsX = untenRechtsX;
 	}
 }

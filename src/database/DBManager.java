@@ -42,15 +42,17 @@ public class DBManager {
 
 		if (a.getID() < 0) {
 
-			String sql = "INSERT INTO Auswahlbereich VALUES (?, ?, ?, ?)";
+			String sql = "INSERT INTO Auswahlbereich VALUES (?, ?, ?, ?, ?, ?)";
 
 			try {
 
 				PreparedStatement stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
 				stat.setInt(2, a.getFolienID());
-				stat.setInt(3, a.getObenLinks());
-				stat.setInt(4, a.getUntenRechts());
+				stat.setInt(3, a.getObenLinksX());
+				stat.setInt(4, a.getObenLinksY());
+				stat.setInt(5, a.getUntenRechtsX());
+				stat.setInt(6, a.getUntenRechtsY());
 				stat.execute();
 
 				Statement stmt = conn.createStatement();
@@ -66,15 +68,17 @@ public class DBManager {
 			}
 		} else {
 
-			String sql = "UPDATE Auswahlbereich SET FolienID = ?, EckeOL = ?, EckeUR = ? WHERE BereichID = ?";
+			String sql = "UPDATE Auswahlbereich SET FolienID = ?, EckeOLX = ?, EckeOLY = ?, EckeURX = ?, EckeURY = ? WHERE BereichID = ?";
 
 			try {
 
 				PreparedStatement stat = conn.prepareStatement(sql);
 				stat.setInt(1, a.getFolienID());
-				stat.setInt(2, a.getObenLinks());
-				stat.setInt(3, a.getUntenRechts());
-				stat.setInt(4, a.getID());
+				stat.setInt(2, a.getObenLinksX());
+				stat.setInt(3, a.getObenLinksY());
+				stat.setInt(4, a.getUntenRechtsX());
+				stat.setInt(5, a.getUntenRechtsY());
+				stat.setInt(6, a.getID());
 				stat.execute();
 
 			} catch (SQLException e) {
@@ -495,8 +499,10 @@ public class DBManager {
 				obj.setID(rs.getInt("BereichID"));
 				obj.setFolie(folie);
 				obj.setFolienID(folie.getID());
-				obj.setObenLinks(rs.getInt("EckeOL"));
-				obj.setUntenRechts(rs.getInt("EckeUR"));
+				obj.setObenLinksX(rs.getInt("EckeOLX"));
+				obj.setObenLinksY(rs.getInt("EckeOLY"));
+				obj.setUntenRechtsX(rs.getInt("EckeURX"));
+				obj.setUntenRechtsY(rs.getInt("EckeURY"));
 
 				list.add(obj);
 			}
