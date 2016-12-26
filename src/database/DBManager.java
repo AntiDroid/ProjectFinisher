@@ -752,6 +752,82 @@ public class DBManager {
 
 		return list;
 	}
+	
+	public ArrayList<Kurs> getKurseStudent(int studentenID) {
+
+		ArrayList<Kurs> list = new ArrayList<Kurs>();
+
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT k.KursID, k.Name FROM Student s "
+				+ "JOIN Kursteilnahme USING(StudentenID) "
+				+ "JOIN Kurs k USING(KursID) "
+				+ "WHERE s.StudentenID = ?";
+
+		try {
+			
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, studentenID);
+			rs = stat.executeQuery();
+
+			while (rs.next()) {
+
+				Kurs obj = new Kurs();
+
+				obj.setID(rs.getInt("KursID"));
+				obj.setName(rs.getString("Name"));
+
+				list.add(obj);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - Kurse von Student");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+
+		return list;
+	}
+	
+	public ArrayList<Kurs> getKurseLehrer(int lehrerID) {
+
+		ArrayList<Kurs> list = new ArrayList<Kurs>();
+
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT k.KursID, k.Name FROM Lehrer l "
+				+ "JOIN Berechtigung USING(LehrerID) "
+				+ "JOIN Kurs k USING(KursID) "
+				+ "WHERE l.LehrerID = ?";
+
+		try {
+			
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, lehrerID);
+			rs = stat.executeQuery();
+
+			while (rs.next()) {
+
+				Kurs obj = new Kurs();
+
+				obj.setID(rs.getInt("KursID"));
+				obj.setName(rs.getString("Name"));
+
+				list.add(obj);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - Kurse von Lehrer");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+
+		return list;
+	}
 
 	public Lehrer getLehrer(String bn) {
 

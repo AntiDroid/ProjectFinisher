@@ -21,13 +21,12 @@
 </head>
 <body>
 <%
-// Braugsch eig lei Parameter String schuelerName und ArrayList<String> kursListe übergebn
-String schuelerName = (String) session.getAttribute("schuelerName");
+String studentenName = (String) session.getAttribute("schuelerName");
 %>
 
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<div id="schuelerName" class="navbar-brand"><%= schuelerName %></div>
+		<div id="studentenName" class="navbar-brand"><%= studentenName %></div>
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
 	</div>
 </div>
@@ -35,10 +34,9 @@ String schuelerName = (String) session.getAttribute("schuelerName");
 <div class="container text-center">
 	<h1 class="">Meine Kurse</h1>
 	<ul class="bigFont list-unstyled ">
-		<li><a href="#">Kurs1</a></li>
 		<% 
 		ArrayList<String> kurse = null;
-		kurse = (ArrayList<String>)session.getAttribute("kursListe");
+		kurse = (ArrayList<String>) session.getAttribute("kursListe");
 		if(kurse != null){
 			for(String k : kurse){ %>
 				<li><a href="KursServlet?kursName=<%= k %>"><%= k %></a></li>
