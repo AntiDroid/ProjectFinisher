@@ -10,6 +10,7 @@ import models.Kurs;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+
 import database.DBManager;
 
 public class FoliensatzTest {
@@ -42,60 +43,58 @@ public class FoliensatzTest {
 
 		// Standard
 		for (int i = 0; i < fSätze.length; i++)
-			fSätze[i].setName(names1[i]);
+			fSätze[i] = new Foliensatz(kurs.getID(), kurs, names1[i]);
 		for (Foliensatz fs : fSätze)
 			conn.save(fs);
 
 		// Überprüfung - normal
 		ArrayList<Foliensatz> fsListe = conn.getFoliensätze(kurs);
-
+		assertTrue(fsListe.size() == 3);
+		
 		for (int i = 0; i < fsListe.size(); i++)
-			assertTrue(fsListe.get(i).getName().equals(names1[i])
-					&& fsListe.get(i).getID() == (i + 1));
+			assertTrue(fsListe.get(i).getName().equals(names1[i]));
 
 		// Änderung
 		for (int i = 0; i < fSätze.length; i++)
 			fSätze[i].setName(names2[i]);
-		for (Foliensatz fs : fsListe)
+		for (Foliensatz fs : fSätze)
 			conn.save(fs);
 
 		// Überprüfung - Änderung
 		fsListe.clear();
 		fsListe = conn.getFoliensätze(kurs);
-
+		assertTrue(fsListe.size() == 3);
+		
 		for (int i = 0; i < fsListe.size(); i++)
-			assertTrue(fsListe.get(i).getName().equals(names2[i])
-					&& fsListe.get(i).getID() == (i + 1));
+			assertTrue(fsListe.get(i).getName().equals(names2[i]));
 	}
-
+	
 	@Test
 	public void testKursDelete() {
 
 		for (int i = 0; i < fSätze.length; i++)
-			fSätze[i].setName(names1[i]);
-
+			fSätze[i] = new Foliensatz(kurs.getID(), kurs, names1[i]);
 		for (Foliensatz fs : fSätze)
 			conn.save(fs);
 
 		conn.delete(fSätze[1]);
 
 		ArrayList<Foliensatz> fsListe = conn.getFoliensätze(kurs);
-
+		assertTrue(fsListe.size() == 2);
+		
 		for (int i = 0; i < fsListe.size(); i++)
-			assertTrue(!fsListe.get(i).getName().equals(fSätze[1].getName())
-					&& fsListe.get(i).getID() != 2);
+			assertTrue(!fsListe.get(i).getName().equals(fSätze[1].getName()));
 
 		conn.delete(fSätze[0]);
 		conn.delete(fSätze[2]);
 
 		assertTrue(conn.getFoliensätze(kurs).isEmpty());
 	}
-
+	
 	@AfterClass
 	public static void end() {
 
 		conn.delete(kurs);
-
 		conn.dispose();
 	}
 }

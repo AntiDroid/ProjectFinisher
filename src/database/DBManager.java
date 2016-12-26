@@ -46,7 +46,7 @@ public class DBManager {
 
 			ResultSet rs = null;
 			Statement statGetID = null;
-			String sql = "INSERT INTO Auswahlbereich VALUES (?, ?, ?, ?, ?, ?)";
+			String sql = "INSERT INTO Auswahlbereich VALUES(?, ?, ?, ?, ?, ?)";
 			
 			try {
 
@@ -231,7 +231,7 @@ public class DBManager {
 			String sql = "UPDATE Foliensatz SET KursID = ?, Name = ? WHERE FoliensatzID = ?";
 
 			try {
-
+				
 				stat = conn.prepareStatement(sql);
 				stat.setInt(1, f.getKursID());
 				stat.setString(2, f.getName());
@@ -320,12 +320,12 @@ public class DBManager {
 
 	public void delete(Kurs k) {
 
-		String sql = "DELETE FROM Kurs WHERE KursID = ?";
+		String sql = "DELETE FROM Kurs WHERE Name = ?";
 
 		try {
 
 			PreparedStatement stat = conn.prepareStatement(sql);
-			stat.setInt(1, k.getID());
+			stat.setString(1, k.getName());
 			stat.execute();
 
 		} catch (SQLException e) {

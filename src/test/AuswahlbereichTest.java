@@ -66,13 +66,13 @@ public class AuswahlbereichTest {
 
 		// Überprüfung - normal
 		ArrayList<Auswahlbereich> abListe = conn.getAuswahlbereiche(folie);
-
+		assertTrue(abListe.size() == 3);
+		
 		for (int i = 0; i < abListe.size(); i++)
 			assertTrue(abListe.get(i).getObenLinksX() == xOben1[i]
 					&& abListe.get(i).getObenLinksY() == yOben1[i]
 					&& abListe.get(i).getUntenRechtsX() == xUnten1[i]
-					&& abListe.get(i).getUntenRechtsY() == yUnten1[i]
-					&& abListe.get(i).getID() == (i + 1));
+					&& abListe.get(i).getUntenRechtsY() == yUnten1[i]);
 	
 		// Änderung
 		for (int i = 0; i < aBereiche.length; i++) {
@@ -87,13 +87,13 @@ public class AuswahlbereichTest {
 		// Überprüfung - Änderung
 		abListe.clear();
 		abListe = conn.getAuswahlbereiche(folie);
-
+		assertTrue(abListe.size() == 3);
+		
 		for (int i = 0; i < abListe.size(); i++)
 			assertTrue(abListe.get(i).getObenLinksX() == xOben2[i]
 					&& abListe.get(i).getObenLinksY() == yOben2[i]
 					&& abListe.get(i).getUntenRechtsX() == xUnten2[i]
-					&& abListe.get(i).getUntenRechtsY() == yUnten2[i]
-					&& abListe.get(i).getID() == (i + 1));
+					&& abListe.get(i).getUntenRechtsY() == yUnten2[i]);
 	}
 
 	@Test
@@ -111,13 +111,13 @@ public class AuswahlbereichTest {
 		conn.delete(aBereiche[1]);
 
 		ArrayList<Auswahlbereich> abListe = conn.getAuswahlbereiche(folie);
-
+		assertTrue(abListe.size() == 2);
+		
 		for (int i = 0; i < abListe.size(); i++)
 			assertTrue(abListe.get(i).getObenLinksX() != xOben1[1]
 					&& abListe.get(i).getObenLinksY() != yOben1[1]
 					&& abListe.get(i).getUntenRechtsX() != xUnten1[1]
-					&& abListe.get(i).getUntenRechtsY() != yUnten1[1]
-					&& abListe.get(i).getID() != 2);
+					&& abListe.get(i).getUntenRechtsY() != yUnten1[1]);
 
 		conn.delete(aBereiche[0]);
 		conn.delete(aBereiche[2]);
@@ -129,7 +129,6 @@ public class AuswahlbereichTest {
 	public static void end() {
 
 		conn.delete(kurs);
-
 		conn.dispose();
 	}
 }
