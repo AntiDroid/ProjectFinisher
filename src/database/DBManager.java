@@ -99,6 +99,347 @@ public class DBManager {
 		}
 	}
 
+	public void save(Folie f) {
+	
+		PreparedStatement stat = null;
+		
+		if (f.getID() < 0) {
+	
+			ResultSet rs = null;
+			Statement statGetID = null;
+			String sql = "INSERT INTO Folie VALUES (?, ?, ?, ?)";
+	
+			try {
+	
+				stat = conn.prepareStatement(sql);
+				stat.setString(1, null);
+				stat.setInt(2, f.getFoliensatzID());
+				stat.setString(3, f.getfPath());
+				stat.setString(4, String.valueOf(f.getFolienTyp()));
+				stat.execute();
+	
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
+	
+				if (rs.next())
+					f.setID(rs.getInt(1));
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Insertproblem - Folie");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+			
+		} else {
+	
+			String sql = "UPDATE Folie SET FoliensatzID = ?, fPath = ?, Folientyp = ? WHERE FolienID = ?";
+	
+			try {
+	
+				stat = conn.prepareStatement(sql);
+				stat.setInt(1, f.getFoliensatzID());
+				stat.setString(2, f.getfPath());
+				stat.setString(3, String.valueOf(f.getFolienTyp()));
+				stat.setInt(4, f.getID());
+				stat.execute();
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Updateproblem - Folie");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+		}
+	}
+
+	public void save(Foliensatz f) {
+	
+		PreparedStatement stat = null;
+		
+		if (f.getID() < 0) {
+	
+			ResultSet rs = null;
+			Statement statGetID = null;
+			String sql = "INSERT INTO Foliensatz VALUES (?, ?, ?)";
+	
+			try {
+	
+				stat = conn.prepareStatement(sql);
+				stat.setString(1, null);
+				stat.setInt(2, f.getKursID());
+				stat.setString(3, f.getName());
+				stat.execute();
+	
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
+	
+				if (rs.next())
+					f.setID(rs.getInt(1));
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Insertproblem - Foliensatz");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+			
+		} else {
+	
+			String sql = "UPDATE Foliensatz SET KursID = ?, Name = ? WHERE FoliensatzID = ?";
+	
+			try {
+				
+				stat = conn.prepareStatement(sql);
+				stat.setInt(1, f.getKursID());
+				stat.setString(2, f.getName());
+				stat.setInt(3, f.getID());
+				stat.execute();
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Updateproblem - Foliensatz");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+		}
+	}
+
+	public void save(Kurs k) {
+	
+		PreparedStatement stat = null;
+		
+		if (k.getID() < 0) {
+	
+			ResultSet rs = null;
+			Statement statGetID = null;
+			String sql = "INSERT INTO Kurs VALUES (?, ?)";
+	
+			try {
+	
+				stat = conn.prepareStatement(sql);
+				stat.setString(1, null);
+				stat.setString(2, k.getName());
+				stat.execute();
+	
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
+	
+				if (rs.next())
+					k.setID(rs.getInt(1));
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Insertproblem - Kurs");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+			
+		} else {
+	
+			String sql = "UPDATE Kurs SET Name = ? WHERE KursID = ?";
+	
+			try {
+	
+				stat = conn.prepareStatement(sql);
+				stat.setString(1, k.getName());
+				stat.setInt(2, k.getID());
+				stat.execute();
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Updateproblem - Kurs");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+		}
+	}
+
+	public void save(Lehrer p) {
+	
+		PreparedStatement stat = null;
+		
+		if (p.getID() < 0) {
+	
+			ResultSet rs = null;
+			Statement statGetID = null;
+			String sql = "INSERT INTO Lehrer VALUES (?, ?, ?, ?, ?)";
+	
+			try {
+	
+				stat = conn.prepareStatement(sql);
+				stat.setString(1, null);
+				stat.setString(2, p.getBenutzername());
+				stat.setString(3, p.getVorname());
+				stat.setString(4, p.getNachname());
+				stat.setString(5, p.getPasswort());
+				stat.execute();
+	
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
+	
+				if (rs.next())
+					p.setID(rs.getInt(1));
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Insertproblem - Lehrer");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+			
+		} else {
+	
+			String sql = "UPDATE Lehrer SET Vorname = ?, Nachname = ?, Passwort = ? WHERE LehrerID = ?";
+	
+			try {
+	
+				stat = conn.prepareStatement(sql);
+				stat.setString(1, p.getVorname());
+				stat.setString(2, p.getNachname());
+				stat.setString(3, p.getPasswort());
+				stat.setInt(4, p.getID());
+				stat.execute();
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Updateproblem - Lehrer");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+		}
+	
+	}
+
+	public void save(Student st) {
+	
+		PreparedStatement stat = null;
+		
+		if (st.getID() < 0) {
+	
+			ResultSet rs = null;
+			Statement statGetID = null;
+			String sql = "INSERT INTO Student VALUES (?, ?, ?, ?, ?)";
+	
+			try {
+	
+				stat = conn.prepareStatement(sql);
+				stat.setString(1, null);
+				stat.setString(2, st.getBenutzername());
+				stat.setString(3, st.getVorname());
+				stat.setString(4, st.getNachname());
+				stat.setString(5, st.getPasswort());
+				stat.execute();
+	
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
+	
+				if (rs.next()) 
+					st.setID(rs.getInt(1));
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Insertproblem - Student");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+			
+		} else {
+	
+			String sql = "UPDATE Student SET Vorname = ?, Nachname = ?, Passwort = ? WHERE StudentenID = ?";
+	
+			try {
+	
+				stat = conn.prepareStatement(sql);
+				stat.setString(1, st.getVorname());
+				stat.setString(2, st.getNachname());
+				stat.setString(3, st.getPasswort());
+				stat.setInt(4, st.getID());
+				stat.execute();
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Updateproblem - Student");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+			
+		}
+	}
+
+	public void save(Uservoting u) {
+	
+		PreparedStatement stat = null;
+		
+		if (u.getID() < 0) {
+	
+			ResultSet rs = null;
+			Statement statGetID = null;
+			String sql = "INSERT INTO Uservoting VALUES (?, ?, ?, ?, ?, ?, ?)";
+	
+			try {
+	
+				stat = conn.prepareStatement(sql);
+				stat.setString(1, null);
+				stat.setString(2, u.getSessionID());
+				stat.setInt(3, u.getStudentenID());
+				stat.setInt(4, u.getFolienID());
+				stat.setInt(5, u.getKoordX());
+				stat.setInt(6, u.getKoordY());
+				stat.setString(7, u.getAuswahloption());
+				stat.execute();
+	
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
+	
+				if (rs.next())
+					u.setID(rs.getInt(1));
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Insertproblem - Uservoting");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+			
+		} else {
+	
+			String sql = "UPDATE Uservoting SET SessionID = ?, StudentenID = ?, FolienID = ?, "
+					+ "KoordX = ?, KoordY = ?, Auswahloption = ? WHERE VotingID = ?";
+	
+			try {
+	
+				stat = conn.prepareStatement(sql);
+				stat.setString(1, u.getSessionID());
+				stat.setInt(2, u.getStudentenID());
+				stat.setInt(3, u.getFolienID());
+				stat.setInt(4, u.getKoordX());
+				stat.setInt(5, u.getKoordY());
+				stat.setString(6, u.getAuswahloption());
+				stat.setInt(7, u.getID());
+				stat.execute();
+	
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Updateproblem - Uservoting");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+		}
+	}
+
 	public void delete(Auswahlbereich a) {
 
 		PreparedStatement stat = null;
@@ -115,62 +456,6 @@ public class DBManager {
 			System.out.println("Deleteproblem - Auswahlbereich");
 		} finally {
 		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-		}
-	}
-
-	public void save(Folie f) {
-
-		PreparedStatement stat = null;
-		
-		if (f.getID() < 0) {
-
-			ResultSet rs = null;
-			Statement statGetID = null;
-			String sql = "INSERT INTO Folie VALUES (?, ?, ?, ?)";
-
-			try {
-
-				stat = conn.prepareStatement(sql);
-				stat.setString(1, null);
-				stat.setInt(2, f.getFoliensatzID());
-				stat.setString(3, f.getfPath());
-				stat.setString(4, String.valueOf(f.getFolienTyp()));
-				stat.execute();
-
-				statGetID = conn.createStatement();
-				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
-
-				if (rs.next())
-					f.setID(rs.getInt(1));
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Folie");
-			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
-			}
-			
-		} else {
-
-			String sql = "UPDATE Folie SET FoliensatzID = ?, fPath = ?, Folientyp = ? WHERE FolienID = ?";
-
-			try {
-
-				stat = conn.prepareStatement(sql);
-				stat.setInt(1, f.getFoliensatzID());
-				stat.setString(2, f.getfPath());
-				stat.setString(3, String.valueOf(f.getFolienTyp()));
-				stat.setInt(4, f.getID());
-				stat.execute();
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Folie");
-			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			}
 		}
 	}
 
@@ -193,60 +478,6 @@ public class DBManager {
 		}
 	}
 
-	public void save(Foliensatz f) {
-
-		PreparedStatement stat = null;
-		
-		if (f.getID() < 0) {
-
-			ResultSet rs = null;
-			Statement statGetID = null;
-			String sql = "INSERT INTO Foliensatz VALUES (?, ?, ?)";
-
-			try {
-
-				stat = conn.prepareStatement(sql);
-				stat.setString(1, null);
-				stat.setInt(2, f.getKursID());
-				stat.setString(3, f.getName());
-				stat.execute();
-
-				statGetID = conn.createStatement();
-				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
-
-				if (rs.next())
-					f.setID(rs.getInt(1));
-				
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Foliensatz");
-			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
-			}
-			
-		} else {
-
-			String sql = "UPDATE Foliensatz SET KursID = ?, Name = ? WHERE FoliensatzID = ?";
-
-			try {
-				
-				stat = conn.prepareStatement(sql);
-				stat.setInt(1, f.getKursID());
-				stat.setString(2, f.getName());
-				stat.setInt(3, f.getID());
-				stat.execute();
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Foliensatz");
-			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			}
-		}
-	}
-
 	public void delete(Foliensatz f) {
 
 		PreparedStatement stat = null;
@@ -266,58 +497,6 @@ public class DBManager {
 		}
 	}
 
-	public void save(Kurs k) {
-
-		PreparedStatement stat = null;
-		
-		if (k.getID() < 0) {
-
-			ResultSet rs = null;
-			Statement statGetID = null;
-			String sql = "INSERT INTO Kurs VALUES (?, ?)";
-
-			try {
-
-				stat = conn.prepareStatement(sql);
-				stat.setString(1, null);
-				stat.setString(2, k.getName());
-				stat.execute();
-
-				statGetID = conn.createStatement();
-				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
-
-				if (rs.next())
-					k.setID(rs.getInt(1));
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Kurs");
-			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
-			}
-			
-		} else {
-
-			String sql = "UPDATE Kurs SET Name = ? WHERE KursID = ?";
-
-			try {
-
-				stat = conn.prepareStatement(sql);
-				stat.setString(1, k.getName());
-				stat.setInt(2, k.getID());
-				stat.execute();
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Kurs");
-			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			}
-		}
-	}
-
 	public void delete(Kurs k) {
 
 		String sql = "DELETE FROM Kurs WHERE Name = ?";
@@ -332,64 +511,6 @@ public class DBManager {
 			e.printStackTrace();
 			System.out.println("Deleteproblem - Kurs");
 		}
-	}
-
-	public void save(Lehrer p) {
-
-		PreparedStatement stat = null;
-		
-		if (p.getID() < 0) {
-
-			ResultSet rs = null;
-			Statement statGetID = null;
-			String sql = "INSERT INTO Lehrer VALUES (?, ?, ?, ?, ?)";
-
-			try {
-
-				stat = conn.prepareStatement(sql);
-				stat.setString(1, null);
-				stat.setString(2, p.getBenutzername());
-				stat.setString(3, p.getVorname());
-				stat.setString(4, p.getNachname());
-				stat.setString(5, p.getPasswort());
-				stat.execute();
-
-				statGetID = conn.createStatement();
-				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
-
-				if (rs.next())
-					p.setID(rs.getInt(1));
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Lehrer");
-			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
-			}
-			
-		} else {
-
-			String sql = "UPDATE Lehrer SET Vorname = ?, Nachname = ?, Passwort = ? WHERE LehrerID = ?";
-
-			try {
-
-				stat = conn.prepareStatement(sql);
-				stat.setString(1, p.getVorname());
-				stat.setString(2, p.getNachname());
-				stat.setString(3, p.getPasswort());
-				stat.setInt(4, p.getID());
-				stat.execute();
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Lehrer");
-			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			}
-		}
-
 	}
 
 	public void delete(Lehrer l) {
@@ -411,64 +532,6 @@ public class DBManager {
 		}
 	}
 
-	public void save(Student st) {
-
-		PreparedStatement stat = null;
-		
-		if (st.getID() < 0) {
-
-			ResultSet rs = null;
-			Statement statGetID = null;
-			String sql = "INSERT INTO Student VALUES (?, ?, ?, ?, ?)";
-
-			try {
-
-				stat = conn.prepareStatement(sql);
-				stat.setString(1, null);
-				stat.setString(2, st.getBenutzername());
-				stat.setString(3, st.getVorname());
-				stat.setString(4, st.getNachname());
-				stat.setString(5, st.getPasswort());
-				stat.execute();
-
-				statGetID = conn.createStatement();
-				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
-
-				if (rs.next()) 
-					st.setID(rs.getInt(1));
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Student");
-			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
-			}
-			
-		} else {
-
-			String sql = "UPDATE Student SET Vorname = ?, Nachname = ?, Passwort = ? WHERE StudentenID = ?";
-
-			try {
-
-				stat = conn.prepareStatement(sql);
-				stat.setString(1, st.getVorname());
-				stat.setString(2, st.getNachname());
-				stat.setString(3, st.getPasswort());
-				stat.setInt(4, st.getID());
-				stat.execute();
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Student");
-			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			}
-			
-		}
-	}
-
 	public void delete(Student s) {
 
 		PreparedStatement stat = null;
@@ -487,69 +550,6 @@ public class DBManager {
 		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 		
-	}
-
-	public void save(Uservoting u) {
-
-		PreparedStatement stat = null;
-		
-		if (u.getID() < 0) {
-
-			ResultSet rs = null;
-			Statement statGetID = null;
-			String sql = "INSERT INTO Uservoting VALUES (?, ?, ?, ?, ?, ?, ?)";
-
-			try {
-
-				stat = conn.prepareStatement(sql);
-				stat.setString(1, null);
-				stat.setString(2, u.getSessionID());
-				stat.setInt(3, u.getStudentenID());
-				stat.setInt(4, u.getFolienID());
-				stat.setInt(5, u.getKoordX());
-				stat.setInt(6, u.getKoordY());
-				stat.setString(7, u.getAuswahloption());
-				stat.execute();
-
-				statGetID = conn.createStatement();
-				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
-
-				if (rs.next())
-					u.setID(rs.getInt(1));
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Uservoting");
-			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
-			}
-			
-		} else {
-
-			String sql = "UPDATE Uservoting SET SessionID = ?, StudentenID = ?, FolienID = ?, "
-					+ "KoordX = ?, KoordY = ?, Auswahloption = ? WHERE VotingID = ?";
-
-			try {
-
-				stat = conn.prepareStatement(sql);
-				stat.setString(1, u.getSessionID());
-				stat.setInt(2, u.getStudentenID());
-				stat.setInt(3, u.getFolienID());
-				stat.setInt(4, u.getKoordX());
-				stat.setInt(5, u.getKoordY());
-				stat.setString(6, u.getAuswahloption());
-				stat.setInt(7, u.getID());
-				stat.execute();
-
-			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Uservoting");
-			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			}
-		}
 	}
 
 	public void delete(Uservoting u) {
@@ -753,33 +753,6 @@ public class DBManager {
 		return list;
 	}
 
-	public boolean isKursBeteiligt(Kurs kurs, Student student) {
-
-		PreparedStatement stat = null;
-		ResultSet rs = null;
-		String sql = "SELECT * FROM Kursteilnahme WHERE KursID = ? AND StudentenID = ?";
-
-		try {
-
-			stat = conn.prepareStatement(sql);
-			stat.setInt(kurs.getID(), student.getID());
-
-			rs = stat.executeQuery();
-
-			if (rs.next())
-				return true;
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - isKursBeteiligt");
-		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-		}
-
-		return false;
-	}
-
 	public Lehrer getLehrer(String bn) {
 
 		PreparedStatement stat = null;
@@ -917,5 +890,88 @@ public class DBManager {
 		}
 
 		return -1;
+	}
+
+	public boolean isKursBeteiligt(Kurs kurs, Student student) {
+	
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Kursteilnahme WHERE KursID = ? AND StudentenID = ?";
+	
+		try {
+	
+			stat = conn.prepareStatement(sql);
+			stat.setInt(kurs.getID(), student.getID());
+	
+			rs = stat.executeQuery();
+	
+			if (rs.next())
+				return true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - isKursBeteiligt");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+	
+		return false;
+	}
+
+	public boolean isStudent(String benutzer, String pw) {
+		
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Student WHERE Benutzername = ? AND Passwort = ?";
+	
+		try {
+	
+			stat = conn.prepareStatement(sql);
+			stat.setString(1, benutzer);
+			stat.setString(2, pw);
+	
+			rs = stat.executeQuery();
+	
+			if (rs.next())
+				return true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - isStudent");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+	
+		return false;
+	}
+	
+	public boolean isLehrer(String benutzer, String pw) {
+		
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Lehrer WHERE Benutzername = ? AND Passwort = ?";
+	
+		try {
+	
+			stat = conn.prepareStatement(sql);
+			stat.setString(1, benutzer);
+			stat.setString(2, pw);
+	
+			rs = stat.executeQuery();
+	
+			if (rs.next())
+				return true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - isLehrer");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+	
+		return false;
 	}
 }
