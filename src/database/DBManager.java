@@ -40,13 +40,17 @@ public class DBManager {
 
 	public void save(Auswahlbereich a) {
 
+		PreparedStatement stat = null;
+		
 		if (a.getID() < 0) {
 
+			ResultSet rs = null;
+			Statement statGetID = null;
 			String sql = "INSERT INTO Auswahlbereich VALUES (?, ?, ?, ?, ?, ?)";
-
+			
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
 				stat.setInt(2, a.getFolienID());
 				stat.setInt(3, a.getObenLinksX());
@@ -55,24 +59,28 @@ public class DBManager {
 				stat.setInt(6, a.getUntenRechtsY());
 				stat.execute();
 
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
 
-				if (rs.next()) {
+				if (rs.next())
 					a.setID(rs.getInt(1));
-				}
-
+				
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Insertproblem - Auswahlbereich");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
 			}
+			
 		} else {
 
 			String sql = "UPDATE Auswahlbereich SET FolienID = ?, EckeOLX = ?, EckeOLY = ?, EckeURX = ?, EckeURY = ? WHERE BereichID = ?";
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setInt(1, a.getFolienID());
 				stat.setInt(2, a.getObenLinksX());
 				stat.setInt(3, a.getObenLinksY());
@@ -84,59 +92,73 @@ public class DBManager {
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Updateproblem - Auswahlbereich");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 			}
+			
 		}
 	}
 
 	public void delete(Auswahlbereich a) {
 
+		PreparedStatement stat = null;
 		String sql = "DELETE FROM Auswahlbereich WHERE BereichID = ?";
 
 		try {
 
-			PreparedStatement stat = conn.prepareStatement(sql);
+			stat = conn.prepareStatement(sql);
 			stat.setInt(1, a.getID());
 			stat.execute();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Deleteproblem - Auswahlbereich");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 	}
 
 	public void save(Folie f) {
 
+		PreparedStatement stat = null;
+		
 		if (f.getID() < 0) {
 
+			ResultSet rs = null;
+			Statement statGetID = null;
 			String sql = "INSERT INTO Folie VALUES (?, ?, ?, ?)";
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
 				stat.setInt(2, f.getFoliensatzID());
 				stat.setString(3, f.getfPath());
 				stat.setString(4, String.valueOf(f.getFolienTyp()));
 				stat.execute();
 
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
 
-				if (rs.next()) {
+				if (rs.next())
 					f.setID(rs.getInt(1));
-				}
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Insertproblem - Folie");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
 			}
+			
 		} else {
 
 			String sql = "UPDATE Folie SET FoliensatzID = ?, fPath = ?, Folientyp = ? WHERE FolienID = ?";
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setInt(1, f.getFoliensatzID());
 				stat.setString(2, f.getfPath());
 				stat.setString(3, String.valueOf(f.getFolienTyp()));
@@ -146,58 +168,71 @@ public class DBManager {
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Updateproblem - Folie");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 			}
 		}
 	}
 
 	public void delete(Folie f) {
 
+		PreparedStatement stat = null;
 		String sql = "DELETE FROM Folie WHERE FolienID = ?";
 
 		try {
 
-			PreparedStatement stat = conn.prepareStatement(sql);
+			stat = conn.prepareStatement(sql);
 			stat.setInt(1, f.getID());
 			stat.execute();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Deleteproblem - Folie");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 	}
 
 	public void save(Foliensatz f) {
 
+		PreparedStatement stat = null;
+		
 		if (f.getID() < 0) {
 
+			ResultSet rs = null;
+			Statement statGetID = null;
 			String sql = "INSERT INTO Foliensatz VALUES (?, ?, ?)";
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
 				stat.setInt(2, f.getKursID());
 				stat.setString(3, f.getName());
 				stat.execute();
 
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
 
-				if (rs.next()) {
+				if (rs.next())
 					f.setID(rs.getInt(1));
-				}
-
+				
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Insertproblem - Foliensatz");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
 			}
+			
 		} else {
 
 			String sql = "UPDATE Foliensatz SET KursID = ?, Name = ? WHERE FoliensatzID = ?";
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setInt(1, f.getKursID());
 				stat.setString(2, f.getName());
 				stat.setInt(3, f.getID());
@@ -206,57 +241,70 @@ public class DBManager {
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Updateproblem - Foliensatz");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 			}
 		}
 	}
 
 	public void delete(Foliensatz f) {
 
+		PreparedStatement stat = null;
 		String sql = "DELETE FROM Foliensatz WHERE FoliensatzID = ?";
 
 		try {
 
-			PreparedStatement stat = conn.prepareStatement(sql);
+			stat = conn.prepareStatement(sql);
 			stat.setInt(1, f.getID());
 			stat.execute();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Deleteproblem - Foliensatz");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 	}
 
 	public void save(Kurs k) {
 
+		PreparedStatement stat = null;
+		
 		if (k.getID() < 0) {
 
+			ResultSet rs = null;
+			Statement statGetID = null;
 			String sql = "INSERT INTO Kurs VALUES (?, ?)";
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
 				stat.setString(2, k.getName());
 				stat.execute();
 
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
 
-				if (rs.next()) {
+				if (rs.next())
 					k.setID(rs.getInt(1));
-				}
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Insertproblem - Kurs");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
 			}
+			
 		} else {
 
 			String sql = "UPDATE Kurs SET Name = ? WHERE KursID = ?";
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setString(1, k.getName());
 				stat.setInt(2, k.getID());
 				stat.execute();
@@ -264,6 +312,8 @@ public class DBManager {
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Updateproblem - Kurs");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 			}
 		}
 	}
@@ -286,13 +336,17 @@ public class DBManager {
 
 	public void save(Lehrer p) {
 
+		PreparedStatement stat = null;
+		
 		if (p.getID() < 0) {
 
+			ResultSet rs = null;
+			Statement statGetID = null;
 			String sql = "INSERT INTO Lehrer VALUES (?, ?, ?, ?, ?)";
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
 				stat.setString(2, p.getBenutzername());
 				stat.setString(3, p.getVorname());
@@ -300,24 +354,28 @@ public class DBManager {
 				stat.setString(5, p.getPasswort());
 				stat.execute();
 
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
 
-				if (rs.next()) {
+				if (rs.next())
 					p.setID(rs.getInt(1));
-				}
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Insertproblem - Lehrer");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
 			}
+			
 		} else {
 
 			String sql = "UPDATE Lehrer SET Vorname = ?, Nachname = ?, Passwort = ? WHERE LehrerID = ?";
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setString(1, p.getVorname());
 				stat.setString(2, p.getNachname());
 				stat.setString(3, p.getPasswort());
@@ -327,6 +385,8 @@ public class DBManager {
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Updateproblem - Lehrer");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 			}
 		}
 
@@ -334,29 +394,36 @@ public class DBManager {
 
 	public void delete(Lehrer l) {
 
+		PreparedStatement stat = null;
 		String sql = "DELETE FROM Lehrer WHERE LehrerID = ?";
 
 		try {
 
-			PreparedStatement stat = conn.prepareStatement(sql);
+			stat = conn.prepareStatement(sql);
 			stat.setInt(1, l.getID());
 			stat.execute();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Deleteproblem - Lehrer");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 	}
 
 	public void save(Student st) {
 
+		PreparedStatement stat = null;
+		
 		if (st.getID() < 0) {
 
+			ResultSet rs = null;
+			Statement statGetID = null;
 			String sql = "INSERT INTO Student VALUES (?, ?, ?, ?, ?)";
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
 				stat.setString(2, st.getBenutzername());
 				stat.setString(3, st.getVorname());
@@ -364,24 +431,28 @@ public class DBManager {
 				stat.setString(5, st.getPasswort());
 				stat.execute();
 
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
 
-				if (rs.next()) {
+				if (rs.next()) 
 					st.setID(rs.getInt(1));
-				}
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Insertproblem - Student");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
 			}
+			
 		} else {
 
 			String sql = "UPDATE Student SET Vorname = ?, Nachname = ?, Passwort = ? WHERE StudentenID = ?";
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setString(1, st.getVorname());
 				stat.setString(2, st.getNachname());
 				stat.setString(3, st.getPasswort());
@@ -391,35 +462,46 @@ public class DBManager {
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Updateproblem - Student");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 			}
+			
 		}
 	}
 
 	public void delete(Student s) {
 
+		PreparedStatement stat = null;
 		String sql = "DELETE FROM Student WHERE StudentenID = ?";
 
 		try {
 
-			PreparedStatement stat = conn.prepareStatement(sql);
+			stat = conn.prepareStatement(sql);
 			stat.setInt(1, s.getID());
 			stat.execute();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Deleteproblem - Student");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 		}
+		
 	}
 
 	public void save(Uservoting u) {
 
+		PreparedStatement stat = null;
+		
 		if (u.getID() < 0) {
 
+			ResultSet rs = null;
+			Statement statGetID = null;
 			String sql = "INSERT INTO Uservoting VALUES (?, ?, ?, ?, ?, ?, ?)";
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
 				stat.setString(2, u.getSessionID());
 				stat.setInt(3, u.getStudentenID());
@@ -429,17 +511,21 @@ public class DBManager {
 				stat.setString(7, u.getAuswahloption());
 				stat.execute();
 
-				Statement stmt = conn.createStatement();
-				ResultSet rs = stmt.executeQuery("SELECT LAST_INSERT_ID()");
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
 
-				if (rs.next()) {
+				if (rs.next())
 					u.setID(rs.getInt(1));
-				}
 
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Insertproblem - Uservoting");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
 			}
+			
 		} else {
 
 			String sql = "UPDATE Uservoting SET SessionID = ?, StudentenID = ?, FolienID = ?, "
@@ -447,7 +533,7 @@ public class DBManager {
 
 			try {
 
-				PreparedStatement stat = conn.prepareStatement(sql);
+				stat = conn.prepareStatement(sql);
 				stat.setString(1, u.getSessionID());
 				stat.setInt(2, u.getStudentenID());
 				stat.setInt(3, u.getFolienID());
@@ -460,23 +546,28 @@ public class DBManager {
 			} catch (SQLException e) {
 				e.printStackTrace();
 				System.out.println("Updateproblem - Uservoting");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 			}
 		}
 	}
 
 	public void delete(Uservoting u) {
 
+		PreparedStatement stat = null;
 		String sql = "DELETE FROM Uservoting WHERE VotingID = ?";
 
 		try {
 
-			PreparedStatement stat = conn.prepareStatement(sql);
+			stat = conn.prepareStatement(sql);
 			stat.setInt(1, u.getID());
 			stat.execute();
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Deleteproblem - Uservoting");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 	}
 
@@ -484,14 +575,16 @@ public class DBManager {
 
 		ArrayList<Auswahlbereich> list = new ArrayList<Auswahlbereich>();
 
+		PreparedStatement stat = null;
+		ResultSet rs = null;
 		String sql = "SELECT * FROM Auswahlbereich WHERE FolienID = ?";
 
 		try {
 
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, folie.getID());
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, folie.getID());
 
-			ResultSet rs = stmt.executeQuery();
+			rs = stat.executeQuery();
 
 			while (rs.next()) {
 
@@ -507,10 +600,13 @@ public class DBManager {
 
 				list.add(obj);
 			}
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Selectproblem - Auswahlbereiche");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 
 		return list;
@@ -520,21 +616,27 @@ public class DBManager {
 
 		char res = 'X';
 
+		PreparedStatement stat = null;
+		ResultSet rs = null;
 		String sql = "SELECT Berechtigungstyp FROM Berechtigung WHERE LehrerID = ? AND KursID = ?";
+		
 		try {
 
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, lehrer.getID());
-			stmt.setInt(2, kurs.getID());
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, lehrer.getID());
+			stat.setInt(2, kurs.getID());
 
-			ResultSet rs = stmt.executeQuery();
+			rs = stat.executeQuery();
 
 			if (rs.next())
 				res = rs.getString("Berechtigungstyp").charAt(0);
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Selectproblem - Berechtigung");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 
 		return res;
@@ -544,14 +646,16 @@ public class DBManager {
 
 		ArrayList<Folie> list = new ArrayList<Folie>();
 
+		PreparedStatement stat = null;
+		ResultSet rs = null;
 		String sql = "SELECT * FROM Folie WHERE FoliensatzID = ?";
 
 		try {
 
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, fSatz.getID());
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, fSatz.getID());
 
-			ResultSet rs = stmt.executeQuery();
+			rs = stat.executeQuery();
 
 			while (rs.next()) {
 
@@ -569,6 +673,9 @@ public class DBManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Selectproblem - Folien");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 
 		return list;
@@ -578,14 +685,16 @@ public class DBManager {
 
 		ArrayList<Foliensatz> list = new ArrayList<Foliensatz>();
 
+		PreparedStatement stat = null;
+		ResultSet rs = null;
 		String sql = "SELECT * FROM Foliensatz WHERE KursID = ?";
 
 		try {
 
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, kurs.getID());
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, kurs.getID());
 
-			ResultSet rs = stmt.executeQuery();
+			rs = stat.executeQuery();
 
 			while (rs.next()) {
 
@@ -602,6 +711,9 @@ public class DBManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Selectproblem - Foliensätze");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 
 		return list;
@@ -611,12 +723,14 @@ public class DBManager {
 
 		ArrayList<Kurs> list = new ArrayList<Kurs>();
 
+		PreparedStatement stat = null;
+		ResultSet rs = null;
 		String sql = "SELECT * FROM Kurs";
 
 		try {
 
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			ResultSet rs = stmt.executeQuery();
+			stat = conn.prepareStatement(sql);
+			rs = stat.executeQuery();
 
 			while (rs.next()) {
 
@@ -631,6 +745,9 @@ public class DBManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Selectproblem - Kurse");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 
 		return list;
@@ -638,21 +755,26 @@ public class DBManager {
 
 	public boolean isKursBeteiligt(Kurs kurs, Student student) {
 
+		PreparedStatement stat = null;
+		ResultSet rs = null;
 		String sql = "SELECT * FROM Kursteilnahme WHERE KursID = ? AND StudentenID = ?";
 
 		try {
 
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(kurs.getID(), student.getID());
+			stat = conn.prepareStatement(sql);
+			stat.setInt(kurs.getID(), student.getID());
 
-			ResultSet rs = stmt.executeQuery();
+			rs = stat.executeQuery();
 
 			if (rs.next())
 				return true;
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Selectproblem - isKursBeteiligt");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 
 		return false;
@@ -660,14 +782,16 @@ public class DBManager {
 
 	public Lehrer getLehrer(String bn) {
 
+		PreparedStatement stat = null;
+		ResultSet rs = null;
 		String sql = "SELECT * FROM Lehrer WHERE Benutzername = ?";
 		Lehrer obj = new Lehrer();
 
 		try {
 
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setString(1, bn);
-			ResultSet rs = stmt.executeQuery();
+			stat = conn.prepareStatement(sql);
+			stat.setString(1, bn);
+			rs = stat.executeQuery();
 
 			if (rs.next()) {
 				obj.setID(rs.getInt("LehrerID"));
@@ -680,6 +804,9 @@ public class DBManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Selectproblem - Lehrer");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 
 		return obj;
@@ -687,14 +814,16 @@ public class DBManager {
 
 	public Student getStudent(String bn) {
 
+		PreparedStatement stat = null;
+		ResultSet rs = null;
 		String sql = "SELECT * FROM Student WHERE Benutzername = ?";
 		Student obj = new Student();
 
 		try {
 
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setString(1, bn);
-			ResultSet rs = stmt.executeQuery();
+			stat = conn.prepareStatement(sql);
+			stat.setString(1, bn);
+			rs = stat.executeQuery();
 
 			if (rs.next()) {
 				obj.setID(rs.getInt("StudentenID"));
@@ -707,6 +836,9 @@ public class DBManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Selectproblem - Student");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 
 		return obj;
@@ -717,15 +849,17 @@ public class DBManager {
 
 		ArrayList<Uservoting> list = new ArrayList<Uservoting>();
 
+		PreparedStatement stat = null;
+		ResultSet rs = null;
 		String sql = "SELECT * FROM Uservoting WHERE StudentenID = ? AND FolienID = ?";
 
 		try {
 
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, student.getID());
-			stmt.setInt(2, folie.getID());
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, student.getID());
+			stat.setInt(2, folie.getID());
 
-			ResultSet rs = stmt.executeQuery();
+			rs = stat.executeQuery();
 
 			while (rs.next()) {
 
@@ -747,6 +881,9 @@ public class DBManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Selectproblem - Uservotings");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 
 		return list;
@@ -754,24 +891,29 @@ public class DBManager {
 
 	public int getLetzteAktiveFolienID(int lID, int fSatzID, int fID) {
 
+		PreparedStatement stat = null;
+		ResultSet rs = null;
 		String sql = "SELECT LetzteFolieID FROM LetzteAktiveFolie WHERE LehrerID = ?"
 				+ " AND FoliensatzID = ? AND LetzteFolieID = ?";
 
 		try {
 
-			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, lID);
-			stmt.setInt(2, fSatzID);
-			stmt.setInt(3, fID);
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, lID);
+			stat.setInt(2, fSatzID);
+			stat.setInt(3, fID);
 
-			ResultSet rs = stmt.executeQuery();
+			rs = stat.executeQuery();
 
 			if (rs.next())
 				return rs.getInt("LetzteFolieID");
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Selectproblem - letzte aktive Folie");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
 		}
 
 		return -1;
