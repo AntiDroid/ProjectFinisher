@@ -12,8 +12,6 @@ import models.Kurs;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import database.ConnectionPool;
 import database.DBManager;
 
 public class AuswahlbereichTest {

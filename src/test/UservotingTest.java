@@ -3,8 +3,6 @@ package test;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
-
-import models.Auswahlbereich;
 import models.Folie;
 import models.Foliensatz;
 import models.Kurs;
@@ -14,8 +12,6 @@ import models.Uservoting;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import database.ConnectionPool;
 import database.DBManager;
 
 public class UservotingTest {

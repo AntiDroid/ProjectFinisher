@@ -22,7 +22,7 @@
 <body>
 <%
 // Braugsch eig lei Parameter String schuelerName und ArrayList<String> kursListe übergebn
-String schuelerName = session.getAttribute("schuelerName");
+String schuelerName = (String) session.getAttribute("schuelerName");
 %>
 
 <div class="navbar navbar-inverse navbar-static-top">
