@@ -72,9 +72,9 @@ else{
 	        <h4 class="modal-title">In neuen Kurs eintragen</h4>
 	      </div>
 	      <div class="modal-body">
-	        <form action="EintragenServlet" method="post">
+	        <form action="KursEintragenServlet" method="post">
 	        	<label>Geben Sie die KursID ein:</label>
-	        	<input type="text" name="kursEintragung">
+	        	<input type="text" name="kursname">
 	        	<input class="btn btn-primary btn-xs" type="submit" name="senden" value="Eintragen">
 	        </form>
 	      </div>

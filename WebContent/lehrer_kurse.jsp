@@ -73,7 +73,7 @@ else{
 	      </div>
 	      <div class="modal-body">
 
-	        <form class="text-center" action="" method="post">
+	        <form class="text-center" action="KursErstellenServlet" method="post">
 	        	<label>Kursname:</label>
 	        	<input type="text" name="newKursName"><br/>
 	        	<label>Kurspasswort:</label>

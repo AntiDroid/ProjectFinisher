@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @WebServlet("/LogoutServlet")
-public class LogoutServlet extends HttpServlet {
+public class Logout extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -37,7 +37,9 @@ public class LogoutServlet extends HttpServlet {
     	//invalidate the session if exists
     	HttpSession session = request.getSession(false);
     	
-    	System.out.println("User="+session.getAttribute("user"));
+		Session.sessions.remove(session.getId());
+    	
+    	//System.out.println("User="+session.getAttribute("user"));
     	
     	if(session != null)
     		session.invalidate();

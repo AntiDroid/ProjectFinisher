@@ -17,7 +17,7 @@ import models.Student;
 import database.DBManager;
 
 @WebServlet("/LoginServlet")
-public class LoginServlet extends HttpServlet {
+public class Login extends HttpServlet {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -36,11 +36,13 @@ public class LoginServlet extends HttpServlet {
 			
 			HttpSession session = request.getSession();
 			
+			Session.sessions.put(session.getId(), new Session(session, benutzer));
+			
 			//Session-Dauer bis ungültig (Sekunden)
 			session.setMaxInactiveInterval(15);
 			Cookie userName = new Cookie("user", benutzer);
 			
-			//Sekunden
+			//Cookie-Lebensdauer
 			userName.setMaxAge(15);
 			response.addCookie(userName);
 			
@@ -53,6 +55,9 @@ public class LoginServlet extends HttpServlet {
 		else if(dbm.isLehrer(benutzer, pw)){
 			
 			HttpSession session = request.getSession();
+			
+			Session.sessions.put(session.getId(), new Session(session, benutzer));
+			
 			//Session-Dauer bis ungültig (Sekunden)
 			session.setMaxInactiveInterval(15);
 			Cookie userName = new Cookie("user", benutzer);
@@ -64,7 +69,7 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("user", l.getVorname()+" "+l.getNachname());				
 			session.setAttribute("kursListe", getKursNamenListe( dbm.getKurseLehrer(l.getID()) ) );
 			
-			response.sendRedirect("studenten_kurse.jsp");
+			response.sendRedirect("lehrer_kurse.jsp");
 		}
 		else
 			response.sendRedirect("login.html");
