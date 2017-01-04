@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,46 +29,57 @@ public class LoginServlet extends HttpServlet {
 
 		DBManager dbm = new DBManager();
 		
-		HttpSession session = request.getSession();
-		
 		String benutzer = request.getParameter("user");
 		String pw = request.getParameter("pw");
 		
 		if(dbm.isStudent(benutzer, pw)){
 			
+			HttpSession session = request.getSession();
+			
+			//Session-Dauer bis ungültig (Sekunden)
+			session.setMaxInactiveInterval(15);
+			Cookie userName = new Cookie("user", benutzer);
+			
+			//Sekunden
+			userName.setMaxAge(15);
+			response.addCookie(userName);
+			
 			Student s = dbm.getStudent(benutzer);
-			session.setAttribute("studentenName", s.getVorname()+" "+s.getNachname());
+			session.setAttribute("user", s.getVorname()+" "+s.getNachname());				
+			session.setAttribute("kursListe", getKursNamenListe( dbm.getKurseStudent(s.getID()) ) );
 			
-			ArrayList<Kurs> liste = dbm.getKurseStudent(s.getID());
-			ArrayList<String> listeNeu = new ArrayList<String>();
-			for(Kurs k: liste)
-				listeNeu.add(k.getName());
-					
-			session.setAttribute("kursListe", listeNeu);
-			
-			response.sendRedirect("schueler_kurse.jsp");
+			response.sendRedirect("studenten_kurse.jsp");
 		}
 		else if(dbm.isLehrer(benutzer, pw)){
 			
+			HttpSession session = request.getSession();
+			//Session-Dauer bis ungültig (Sekunden)
+			session.setMaxInactiveInterval(15);
+			Cookie userName = new Cookie("user", benutzer);
+			//Sekunden
+			userName.setMaxAge(15);
+			response.addCookie(userName);
+			
 			Lehrer l = dbm.getLehrer(benutzer);
-			session.setAttribute("lehrerName", l.getVorname()+" "+l.getNachname());
+			session.setAttribute("user", l.getVorname()+" "+l.getNachname());				
+			session.setAttribute("kursListe", getKursNamenListe( dbm.getKurseLehrer(l.getID()) ) );
 			
-			ArrayList<Kurs> liste = dbm.getKurseLehrer(l.getID());
-			
-			System.out.println(liste.size());
-			
-			ArrayList<String> listeNeu = new ArrayList<String>();
-			for(Kurs k: liste)
-				listeNeu.add(k.getName());
-					
-			session.setAttribute("kursListe", listeNeu);
-			
-			response.sendRedirect("lehrer_kurse.jsp");
+			response.sendRedirect("studenten_kurse.jsp");
 		}
 		else
 			response.sendRedirect("login.html");
 		
 		dbm.dispose();
+	}
+	
+	public ArrayList<String> getKursNamenListe(ArrayList<Kurs> kurse){
+		
+		ArrayList<String> namen = new ArrayList<String>();
+		
+		for(Kurs k: kurse)
+			namen.add(k.getName());
+		
+		return namen;
 	}
 
 }

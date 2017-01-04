@@ -21,13 +21,30 @@
 </head>
 <body>
 <%
-String studentenName = (String) session.getAttribute("schuelerName");
+String user = null;
+if(session.getAttribute("user") == null){
+	response.sendRedirect("login.html");
+}
+else{
+	user = (String) session.getAttribute("user");
+	String userName = null;
+	String sessionID = null;
+	Cookie[] cookies = request.getCookies();
+	if(cookies !=null){
+		for(Cookie cookie : cookies){
+			if(cookie.getName().equals("user")) userName = cookie.getValue();
+			if(cookie.getName().equals("JSESSIONID")) sessionID = cookie.getValue();
+		}
+	}
+}
 %>
 
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<div id="studentenName" class="navbar-brand"><%= studentenName %></div>
+		<div id="user" class="navbar-brand"><%= user %></div>
+		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
+		</form>
 	</div>
 </div>
 
