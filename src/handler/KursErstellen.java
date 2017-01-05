@@ -45,8 +45,8 @@ public class KursErstellen extends HttpServlet {
 		// Nur nehmen, wenn existiert
 		HttpSession s = request.getSession(false);
 
-		// Wenn es bereits ausgetimet ist
-		if (s == null) {
+		// Wenn es bereits ausgetimet ist oder ein solcher Kurs bereits existiert
+		if (s == null || kursExists) {
 			response.sendRedirect("lehrer_kurse.jsp");
 			return;
 		}

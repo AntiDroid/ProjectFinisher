@@ -23,8 +23,7 @@ public class KursEintragen extends HttpServlet {
 		doPost(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		DBManager dbm = new DBManager();
 
@@ -44,8 +43,8 @@ public class KursEintragen extends HttpServlet {
 		// Nur nehmen, wenn existiert
 		HttpSession s = request.getSession(false);
 
-		// Wenn Session nicht existiert (Time-Out)
-		if (s == null) {
+		// Wenn es bereits ausgetimet ist oder ein solcher Kurs nicht existiert
+		if (addKurs == null || s == null) {
 			response.sendRedirect("studenten_kurse.jsp");
 			return;
 		}
