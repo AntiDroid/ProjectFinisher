@@ -48,13 +48,11 @@ public class KursErstellen extends HttpServlet {
 		// Wenn es bereits ausgetimet ist oder ein solcher Kurs bereits existiert
 		if (s == null || kursExists) {
 			response.sendRedirect("lehrer_kurse.jsp");
-			return;
 		}
+		else if (!kursExists) {
 
-		String userName = (String) s.getAttribute("benutzer");
-
-		if (!kursExists) {
-
+			String userName = (String) s.getAttribute("benutzer");
+			
 			Kurs k = new Kurs(kursName);
 			dbm.save(k);
 

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.Client;
 import models.Kurs;
 import models.Lehrer;
 import models.Student;
@@ -41,33 +42,21 @@ public class Login extends HttpServlet {
 		} else if (dbm.isStudent(benutzer, pw)) {
 
 			Student s = dbm.getStudent(benutzer);
+			ArrayList<String> kursListe = getKursnamen(dbm.getKurseStudent(s.getID()));
 
 			// Create a session object if it is already not created.
 			HttpSession session = request.getSession(true);
-
-			session.setAttribute("benutzer", benutzer);
-
-			// Inaktivität in Serverinteraktion bis Session erlischt (Sekunden)
-			session.setMaxInactiveInterval(15);
-
-			session.setAttribute("user", s.getVorname() + " " + s.getNachname());
-			session.setAttribute("kursListe", getKursnamen(dbm.getKurseStudent(s.getID())));
+			doStuff(benutzer, s, kursListe, session);
 
 			response.sendRedirect("studenten_kurse.jsp");
 		} else if (dbm.isLehrer(benutzer, pw)) {
 
 			Lehrer l = dbm.getLehrer(benutzer);
+			ArrayList<String> kursListe = getKursnamen(dbm.getKurseLehrer(l.getID()));
 
 			// Create a session object if it is already not created.
 			HttpSession session = request.getSession(true);
-
-			session.setAttribute("benutzer", benutzer);
-
-			// Inaktivität in Serverinteraktion bis Session erlischt (Sekunden)
-			session.setMaxInactiveInterval(15);
-
-			session.setAttribute("user", l.getVorname() + " " + l.getNachname());
-			session.setAttribute("kursListe", getKursnamen(dbm.getKurseLehrer(l.getID())));
+			doStuff(benutzer, l, kursListe, session);
 
 			response.sendRedirect("lehrer_kurse.jsp");
 		} else
@@ -84,6 +73,16 @@ public class Login extends HttpServlet {
 			namen.add(k.getName());
 
 		return namen;
+	}
+	
+	public void doStuff(String benutzer, Client c, ArrayList<String> kursListe, HttpSession session){
+		
+		session.setAttribute("benutzer", benutzer);
+		// Inaktivität in Serverinteraktion bis Session erlischt (Sekunden)
+		session.setMaxInactiveInterval(15);
+		session.setAttribute("user", c.getVorname() + " " + c.getNachname());
+		session.setAttribute("kursListe", kursListe);
+		
 	}
 
 }

@@ -19,6 +19,9 @@ public class DBManager {
 
 	Connection conn;
 
+	//	ev die System.out.println durch Einträge mit 
+	//	java.util.Logging oder log4j ersetzen, auch e.printStackTrace()
+	
 	public DBManager() {
 
 		try {

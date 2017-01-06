@@ -15,7 +15,7 @@ public class ConnectionPool {
 
 	public static ConnectionPool getInstance() {
 
-		if (instance == null){
+		if (instance == null) {
 			instance = new ConnectionPool();
 			instance.InitializeConnectionPool();
 		}
@@ -29,18 +29,23 @@ public class ConnectionPool {
 		return cpds.getConnection();
 	}
 
+	// Ev. noch die Connection-Daten (DB-url, user, pw) herausziehen in eine
+	// .properties-Datei.
+	// Diese könnte man dann ins src-Verzeichnis geben und wird
+	// automatisch in WEB-INF/classes kopiert
+	// ----
 	// MUSS EINMAL AUFGERUFEN WERDEN -> ServletContext
 	public void InitializeConnectionPool() {
-		
-		 try {
+
+		try {
 			cpds.setDriverClass("com.mysql.jdbc.Driver");
-		 } catch (PropertyVetoException e) {
+		} catch (PropertyVetoException e) {
 			e.printStackTrace();
-		 }
-		 
-		 cpds.setJdbcUrl("jdbc:mysql://localhost/interaktivefolien");
-		 cpds.setUser("root");
-		 cpds.setPassword("");
+		}
+
+		cpds.setJdbcUrl("jdbc:mysql://localhost/interaktivefolien");
+		cpds.setUser("root");
+		cpds.setPassword("");
 
 		// the settings below are optional -- c3p0 can work with defaults
 		// cpds.setMinPoolSize(5);
