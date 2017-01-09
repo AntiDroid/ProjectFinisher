@@ -32,7 +32,6 @@ public class KursErstellen extends HttpServlet {
 		String kursName = request.getParameter("newKursName");
 		// String kursPass = request.getParameter("newKursPass");
 		ArrayList<Kurs> kursListe = dbm.getKurse();
-
 		boolean kursExists = false;
 
 		for (Kurs k : kursListe) {
@@ -46,9 +45,8 @@ public class KursErstellen extends HttpServlet {
 		HttpSession s = request.getSession(false);
 
 		// Wenn es bereits ausgetimet ist oder ein solcher Kurs bereits existiert
-		if (s == null || kursExists) {
+		if (s == null || kursExists) 
 			response.sendRedirect("lehrer_kurse.jsp");
-		}
 		else if (!kursExists) {
 
 			String userName = (String) s.getAttribute("benutzer");

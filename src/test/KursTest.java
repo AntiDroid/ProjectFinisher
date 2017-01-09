@@ -27,7 +27,7 @@ public class KursTest {
 
 		kurse = new Kurs[3];
 		for (int i = 0; i < kurse.length; i++)
-			kurse[i] = new Kurs();
+			kurse[i] = new Kurs("");
 	}
 
 	@Test
@@ -36,9 +36,10 @@ public class KursTest {
 		//Standard
 		for (int i = 0; i < kurse.length; i++)
 			kurse[i].setName(names1[i]);
+		
 		for (Kurs k : kurse)
 			conn.save(k);
-
+		
 		//Überprüfung - normal
 		ArrayList<Kurs> kListe = conn.getKurse();
 
@@ -48,19 +49,21 @@ public class KursTest {
 		
 		//Änderung
 		for (int i = 0; i < kurse.length; i++)
-			kurse[i].setName(names2[i]);
+			kurse[i] = new Kurs(names2[i]);
 		for (Kurs k : kurse)
 			conn.save(k);
 
 		//Überprüfung - Änderung
 		kListe.clear();
 		kListe = conn.getKurse();
+		
+		assertTrue(!conn.getKurse().isEmpty());
 
 		for (int i = 0; i < kListe.size(); i++)
 			assertTrue(kListe.get(i).getName().equals(names2[i])
-					&& kListe.get(i).getID() == (i + 1));
+					&& kListe.get(i).getID() == (i + 4));
 	}
-
+	/*
 	@Test
 	public void testKursDelete() {
 
@@ -92,4 +95,5 @@ public class KursTest {
 
 		conn.dispose();
 	}
+	*/
 }

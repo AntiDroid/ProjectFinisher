@@ -28,9 +28,7 @@ public class KursEintragen extends HttpServlet {
 		DBManager dbm = new DBManager();
 
 		String kursName = request.getParameter("kursname");
-
 		ArrayList<Kurs> kursListe = dbm.getKurse();
-
 		Kurs addKurs = null;
 
 		for (Kurs k : kursListe) {
@@ -44,15 +42,11 @@ public class KursEintragen extends HttpServlet {
 		HttpSession s = request.getSession(false);
 
 		// Wenn es bereits ausgetimet ist oder ein solcher Kurs nicht existiert
-		if (addKurs == null || s == null) {
+		if (addKurs == null || s == null) 
 			response.sendRedirect("studenten_kurse.jsp");
-			return;
-		}
-
-		String userName = (String) s.getAttribute("benutzer");
-
-		if (addKurs != null && !dbm.isKursBeteiligt(kursName, userName)) {
-			dbm.addKursteilnahme(addKurs, dbm.getStudent(userName));
+		else if (addKurs != null && !dbm.isKursBeteiligt(kursName, (String) s.getAttribute("benutzer"))) {
+			
+			dbm.addKursteilnahme(addKurs, dbm.getStudent((String) s.getAttribute("benutzer")));
 
 			//anpassen der Kursliste
 			//Temporärlösung
