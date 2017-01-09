@@ -79,6 +79,7 @@ public class Login extends HttpServlet {
 		
 		session.setAttribute("benutzer", benutzer);
 		// Inaktivität in Serverinteraktion bis Session erlischt (Sekunden)
+		// Später in web.xml auslagern
 		session.setMaxInactiveInterval(15);
 		session.setAttribute("user", c.getVorname() + " " + c.getNachname());
 		session.setAttribute("kursListe", kursListe);

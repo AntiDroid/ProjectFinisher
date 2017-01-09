@@ -45,10 +45,12 @@ public class KursErstellen extends HttpServlet {
 		HttpSession s = request.getSession(false);
 
 		// Wenn es bereits ausgetimet ist oder ein solcher Kurs bereits existiert
-		if (s == null || kursExists) 
+		if (s == null || kursExists){
+			dbm.dispose();
 			response.sendRedirect("lehrer_kurse.jsp");
-		else if (!kursExists) {
-
+			return;
+		}
+		else {
 			String userName = (String) s.getAttribute("benutzer");
 			
 			Kurs k = new Kurs(kursName);
@@ -64,10 +66,10 @@ public class KursErstellen extends HttpServlet {
 			kurse.add(k.getName());
 			s.setAttribute("kursListe", kurse);
 
+			dbm.dispose();
 			response.sendRedirect("lehrer_kurse.jsp");
+			return;
 		}
-
-		dbm.dispose();
 	}
 
 }

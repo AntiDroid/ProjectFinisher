@@ -42,8 +42,12 @@ public class KursEintragen extends HttpServlet {
 		HttpSession s = request.getSession(false);
 
 		// Wenn es bereits ausgetimet ist oder ein solcher Kurs nicht existiert
-		if (addKurs == null || s == null) 
+		if (addKurs == null || s == null) {
+			
+			dbm.dispose();
 			response.sendRedirect("studenten_kurse.jsp");
+			return;
+		}
 		else if (addKurs != null && !dbm.isKursBeteiligt(kursName, (String) s.getAttribute("benutzer"))) {
 			
 			dbm.addKursteilnahme(addKurs, dbm.getStudent((String) s.getAttribute("benutzer")));
@@ -55,10 +59,13 @@ public class KursEintragen extends HttpServlet {
 			kurse.add(addKurs.getName());
 			s.setAttribute("kursListe", kurse);
 
+			dbm.dispose();
 			response.sendRedirect("studenten_kurse.jsp");
+			return;
 		}
 
 		dbm.dispose();
+		response.sendRedirect("studenten_kurse.jsp");
 	}
 
 }
