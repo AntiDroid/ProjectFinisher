@@ -23,8 +23,8 @@ public abstract class Client {
 		return ID;
 	}
 
-	public void setID(int lehrerID) {
-		this.ID = ID;
+	public void setID(int id) {
+		this.ID = id;
 	}
 
 	public String getNachname() {

@@ -6,8 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({ AuswahlbereichTest.class, FoliensatzTest.class,
-		FolieTest.class, KursTest.class, LehrerTest.class, StudentTest.class,
-		UservotingTest.class })
+		FolieTest.class, KursTest.class, UservotingTest.class })
 
 public class AlleDBTests {
 
