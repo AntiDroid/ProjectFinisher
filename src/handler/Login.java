@@ -59,8 +59,10 @@ public class Login extends HttpServlet {
 			doStuff(benutzer, l, kursListe, session);
 
 			response.sendRedirect("lehrer_kurse.jsp");
-		} else
+		} 
+		else{
 			response.sendRedirect("login.html");
+		}
 
 		dbm.dispose();
 	}
@@ -80,7 +82,7 @@ public class Login extends HttpServlet {
 		session.setAttribute("benutzer", benutzer);
 		// Inaktivität in Serverinteraktion bis Session erlischt (Sekunden)
 		// Später in web.xml auslagern
-		session.setMaxInactiveInterval(15);
+		session.setMaxInactiveInterval(2*60);
 		session.setAttribute("user", c.getVorname() + " " + c.getNachname());
 		session.setAttribute("kursListe", kursListe);
 		
