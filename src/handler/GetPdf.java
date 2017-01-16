@@ -38,7 +38,7 @@ public class GetPdf extends HttpServlet {
 			InputStream fileContent = filePart.getInputStream();
 			
 			File uploads = new File("C:\\Users\\Talip\\Desktop");
-			File file = new File(uploads, "Test.pdf");
+			File file = new File(uploads, fileName);
 
 			Files.copy(fileContent, file.toPath());
 			
