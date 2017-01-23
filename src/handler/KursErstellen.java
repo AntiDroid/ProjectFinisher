@@ -41,11 +41,19 @@ public class KursErstellen extends HttpServlet {
 			}
 		}
 
+		String benutzer = request.getParameter("user");
+		String pw = request.getParameter("pw");
+		
 		// Nur nehmen, wenn existiert
 		HttpSession s = request.getSession(false);
-
+		
+		if(dbm.isLehrer(benutzer, pw)){
+			dbm.dispose();
+			response.sendRedirect("login.html");
+			return;
+		}
 		// Wenn es bereits ausgetimet ist oder ein solcher Kurs bereits existiert
-		if (s == null || kursExists){
+		else if (s == null || kursExists){
 			dbm.dispose();
 			response.sendRedirect("lehrer_kurse.jsp");
 			return;

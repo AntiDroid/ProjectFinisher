@@ -37,7 +37,7 @@ public class GetPdf extends HttpServlet {
 			String fileName = Paths.get(filePart.getSubmittedFileName()) .getFileName().toString(); // MSIE fix.
 			InputStream fileContent = filePart.getInputStream();
 			
-			File uploads = new File("C:\\Users\\Talip\\Desktop");
+			File uploads = new File("C:\\Users\\ndsts_000\\Desktop");
 			File file = new File(uploads, fileName);
 
 			Files.copy(fileContent, file.toPath());

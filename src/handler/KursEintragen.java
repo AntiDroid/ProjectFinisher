@@ -41,9 +41,16 @@ public class KursEintragen extends HttpServlet {
 		// Nur nehmen, wenn existiert
 		HttpSession s = request.getSession(false);
 
+		String benutzer = request.getParameter("user");
+		String pw = request.getParameter("pw");
+		
+		if(dbm.isStudent(benutzer, pw)){
+			dbm.dispose();
+			response.sendRedirect("login.html");
+			return;
+		}
 		// Wenn es bereits ausgetimet ist oder ein solcher Kurs nicht existiert
-		if (addKurs == null || s == null) {
-			
+		else if (addKurs == null || s == null) {			
 			dbm.dispose();
 			response.sendRedirect("studenten_kurse.jsp");
 			return;
