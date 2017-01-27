@@ -3,33 +3,44 @@ package handler;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import javax.websocket.OnClose;
+import javax.websocket.OnError;
+import javax.websocket.OnMessage;
+import javax.websocket.OnOpen;
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
+
+import jdk.nashorn.internal.parser.JSONParser;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import models.Kurs;
 import database.DBManager;
 
-@WebServlet("/KursEintragenServlet")
-public class KursEintragen extends HttpServlet {
+@ServerEndpoint("/KursEintragen")
+public class KursEintragen {
 
-	private static final long serialVersionUID = 1L;
-
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		doPost(request, response);
+	@OnOpen
+	public void onOpen(){
+		
 	}
-
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+   
+	// Nachricht schicken
+	// session.getBasicRemote().sendText("Du bist: " +c.getName()+ "\n");
+	
+	@OnMessage
+	public void onMessage(Session session, String message) {
+	   
 		DBManager dbm = new DBManager();
-
-		String kursName = request.getParameter("kursname");
 		ArrayList<Kurs> kursListe = dbm.getKurse();
+		
 		Kurs addKurs = null;
+		
+		Gson gson = new Gson();
+		gson.toJson(message);
+		String userName = gson.fromJson("\"userName\"", String.class);
+		String kursName = gson.fromJson("\"kursName\"", String.class);
 
 		for (Kurs k : kursListe) {
 			if (k.getName().equals(kursName)) {
@@ -38,41 +49,28 @@ public class KursEintragen extends HttpServlet {
 			}
 		}
 
-		// Nur nehmen, wenn existiert
-		HttpSession s = request.getSession(false);
-
-		String benutzer = request.getParameter("user");
-		String pw = request.getParameter("pw");
-		
-		if(dbm.isStudent(benutzer, pw)){
-			dbm.dispose();
-			response.sendRedirect("login.html");
-			return;
-		}
-		// Wenn es bereits ausgetimet ist oder ein solcher Kurs nicht existiert
-		else if (addKurs == null || s == null) {			
-			dbm.dispose();
-			response.sendRedirect("studenten_kurse.jsp");
-			return;
-		}
-		else if (addKurs != null && !dbm.isKursBeteiligt(kursName, (String) s.getAttribute("benutzer"))) {
-			
-			dbm.addKursteilnahme(addKurs, dbm.getStudent((String) s.getAttribute("benutzer")));
+		if (addKurs != null && !dbm.isKursBeteiligt(kursName, userName)) {
+			dbm.addKursteilnahme(addKurs, dbm.getStudent(userName));
 
 			//anpassen der Kursliste
-			//Temporärlösung
-			@SuppressWarnings("unchecked")
-			ArrayList<String> kurse = (ArrayList<String>) s.getAttribute("kursListe");
-			kurse.add(addKurs.getName());
-			s.setAttribute("kursListe", kurse);
-
-			dbm.dispose();
-			response.sendRedirect("studenten_kurse.jsp");
-			return;
+			try {
+				session.getBasicRemote().sendText("<li><a href=\"KursServlet?kursName=<%= k %>\"><%= k %></a></li>");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
-
+		
 		dbm.dispose();
-		response.sendRedirect("studenten_kurse.jsp");
 	}
-
+	
+	@OnError
+	public void onError(Throwable t){
+		System.out.println("ERROR");
+	}
+   
+	@OnClose
+	public void onClose(){
+		System.out.println("STOP");
+	}
 }
+
