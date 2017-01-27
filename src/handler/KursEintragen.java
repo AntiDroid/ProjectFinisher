@@ -14,6 +14,7 @@ import jdk.nashorn.internal.parser.JSONParser;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 
 import models.Kurs;
 import database.DBManager;
@@ -38,9 +39,10 @@ public class KursEintragen {
 		Kurs addKurs = null;
 		
 		Gson gson = new Gson();
+		JsonObject jsonData = gson.fromJson( message, JsonObject.class);
 		gson.toJson(message);
-		String userName = gson.fromJson("\"userName\"", String.class);
-		String kursName = gson.fromJson("\"kursName\"", String.class);
+		String userName = jsonData.get("userName").getAsString();
+		String kursName = jsonData.get("kursName").getAsString();
 
 		for (Kurs k : kursListe) {
 			if (k.getName().equals(kursName)) {
