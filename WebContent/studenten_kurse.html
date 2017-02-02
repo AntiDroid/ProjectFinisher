@@ -11,7 +11,27 @@
 	<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="style.css">
 	<script type="text/javascript">
+		var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/KursEintragen");
+	
+		socket.onopen = function() {
+			console.log("Websocketverbindung hergestellt :)");
+		};
 		
+		socket.onmessage = function(evt) {
+			//document.getElementById("gottenText").innerHTML = evt.data;
+		};
+		
+		socket.onerror = function(evt) {
+			console.log("Websocketverbindung konnte nicht hergestellt werden :(");
+		};
+		
+		socket.onclose = function()
+	    {
+			
+	    };
+
+	    var userName = "orcun";
+
 	</script>
 	<style type="text/css">
 		
@@ -43,11 +63,10 @@
 	        <h4 class="modal-title">In neuen Kurs eintragen</h4>
 	      </div>
 	      <div class="modal-body">
-	        <form action="EintragenServlet" method="post">
 	        	<label>Geben Sie die KursID ein:</label>
-	        	<input type="text" name="kursEintragung">
-	        	<input class="btn btn-primary btn-xs" type="submit" name="senden" value="Eintragen">
-	        </form>
+	        	<input id="kursId" type="text" name="kursId">
+	        	<button class="btn btn-primary btn-xs" name="senden" onclick="kursEintragen()">Eintragen</button>
+	        	<div id="eintragenStat"></div>
 	      </div>
 	      <div class="modal-footer">
 	        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
@@ -58,6 +77,16 @@
 	</div>
 </div>
 	
+	
+<script type="text/javascript">
+	function kursEintragen(){
+		if(document.getElementById("kursId").value != ""){
+			var kursId = document.getElementById("kursId").value;
+			socket.send("{ 'userName':"+userName+", 'kursName':"+kursId+" }");
+		}
+		
+	}
+</script>
 <script src="jquery/jquery-3.1.1.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 </body>
