@@ -1,7 +1,9 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -149,7 +151,7 @@
 
 		<div class="col-md-2">
 
-		<div style="font-size: 20px">Foliensätze:</div>
+		<div style="font-size: 20px">FoliensÃ¤tze:</div>
 		<select id="folienSaetze" class="form-control" size="24">
 			<option class="folienOption" value="1" selected>Foliensatz1</option>
 			<option class="folienOption" value="2">Foliensatz2</option>
@@ -173,7 +175,7 @@
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+		        <button type="button" class="btn btn-default" data-dismiss="modal">SchlieÃen</button>
 		      </div>
 		    </div>
 
@@ -185,7 +187,7 @@
 		<div class="col-md-10">
 			<div class="row"></div>
 				<div class="folienNavDiv text-center">
-					<button class="folienNavBtn btn btn-xs">zurück</button>
+					<button class="folienNavBtn btn btn-xs">zurÃ¼ck</button>
 					<span>7 Seiten</span>
 					<button class="folienNavBtn btn btn-xs">vor</button>
 				</div>
@@ -242,7 +244,7 @@
 							<button class="btn btn-success">Auf diese Folie<br/>wechseln</button>
 							</div>
 							<div class="col-md-6 text-right">
-							<button class="btn btn-xs btn-default verticalMiddle">Folie<br/>löschen!</button>
+							<button class="btn btn-xs btn-default verticalMiddle">Folie<br/>lÃ¶schen!</button>
 							</div>
 						</div>
 					</div>
@@ -279,7 +281,7 @@
 								</div>
 								<div class="col-md-6" style="top: 5px;">
 									<button class="btn btn-sm btn-danger intBereichButton">Neuer interaktiver<br/>Bereich</button>
-									<button class="btn btn-xs btn-default intBereichButton" disabled>interaktiven Bereich<br/>löschen</button>
+									<button class="btn btn-xs btn-default intBereichButton" disabled>interaktiven Bereich<br/>lÃ¶schen</button>
 								</div>
 							</div>
 						</div>

@@ -1,7 +1,9 @@
-<!DOCTYPE html>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-	<meta charset="UTF-8">
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -53,10 +55,10 @@
 
 	<div class="row">
 		<div class="col-xs-6">
-			<button class="btn text-left" disabled>Marker<br/>Löschen</button>
+			<button class="btn text-left" disabled>Marker<br/>LÃ¶schen</button>
 		</div>
 		<div class="col-xs-6">
-			<button class="btn btn-success text-right submitButton" disabled>Bestätigen</button>
+			<button class="btn btn-success text-right submitButton" disabled>BestÃ¤tigen</button>
 		</div>
 	</div>
 </div>
