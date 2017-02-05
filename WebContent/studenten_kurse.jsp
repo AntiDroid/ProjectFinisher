@@ -47,7 +47,7 @@
 		kurse = (ArrayList<Kurs>) session.getAttribute("kursListe");
 		if(kurse != null){
 			for(Kurs k : kurse){ %>
-				<li><a href="KursServlet?kursId=<%= k.getID() %>"><%= k %></a></li>
+				<li><a href="KursServlet?kursId=<%= k.getID() %>"><%= k.getName() %></a></li>
 		<% }} %>
 	</ul>
 

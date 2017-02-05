@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.ArrayList"%>
+    pageEncoding="UTF-8" import="java.util.ArrayList, models.Kurs"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -43,11 +43,11 @@
 	<h1 class="">Meine Kurse</h1>
 	<ul class="bigFont list-unstyled ">
 		<% 
-		ArrayList<String> kurse = null;
-		kurse = (ArrayList<String>) session.getAttribute("kursListe");
+		ArrayList<Kurs> kurse = null;
+		kurse = (ArrayList<Kurs>) session.getAttribute("kursListe");
 		if(kurse != null){
-			for(String k : kurse){ %>
-				<li><a href="KursServlet?kursName=<%= k %>"><%= k %></a></li>
+			for(Kurs k : kurse){ %>
+				<li><a href="KursServlet?kursName=<%= k.getID() %>"><%= k.getName() %></a></li>
 		<% }} %>
 	</ul>
 
