@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import models.Kurs;
 import models.Lehrer;
+import models.Student;
 import database.DBManager;
 
 @WebServlet("/KursEintragenServlet")
@@ -56,13 +57,13 @@ public class KursEintragen extends HttpServlet {
 		}
 		else if (addKurs != null && !dbm.isKursBeteiligt(kursName, (String) s.getAttribute("benutzer"))) {
 			
-			dbm.addKursteilnahme(addKurs, dbm.getStudent((String) s.getAttribute("benutzer")));
+			dbm.addKursteilnahme(addKurs, (Student) s.getAttribute("benutzer"));
 
 			//anpassen der Kursliste
 			//Temporärlösung
 			@SuppressWarnings("unchecked")
-			ArrayList<String> kurse = (ArrayList<String>) s.getAttribute("kursListe");
-			kurse.add(addKurs.getName());
+			ArrayList<Kurs> kurse = (ArrayList<Kurs>) s.getAttribute("kursListe");
+			kurse.add(addKurs);
 			s.setAttribute("kursListe", kurse);
 
 			dbm.dispose();
