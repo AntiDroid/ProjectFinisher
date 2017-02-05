@@ -45,7 +45,7 @@ public class Login extends HttpServlet {
 
 			// Create a session object if it is already not created.
 			HttpSession session = request.getSession(true);
-			doStuff(benutzer, s, dbm.getKurseStudent(s.getID()), session);
+			doStuff(s, dbm.getKurseStudent(s.getID()), session);
 			session.setAttribute("type", "S");
 			response.sendRedirect("studenten_kurse.jsp");
 		} else if (dbm.isLehrer(benutzer, pw)) {
@@ -54,7 +54,7 @@ public class Login extends HttpServlet {
 
 			// Create a session object if it is already not created.
 			HttpSession session = request.getSession(true);
-			doStuff(benutzer, l, dbm.getKurseLehrer(l.getID()), session);
+			doStuff(l, dbm.getKurseLehrer(l.getID()), session);
 			session.setAttribute("type", "L");
 			response.sendRedirect("lehrer_kurse.jsp");
 		} 
@@ -65,13 +65,12 @@ public class Login extends HttpServlet {
 		dbm.dispose();
 	}
 	
-	public void doStuff(String benutzer, Client c, ArrayList<?> kursListe, HttpSession session){
+	public void doStuff(Client c, ArrayList<?> kursListe, HttpSession session){
 		
-		session.setAttribute("benutzer", benutzer);
+		session.setAttribute("benutzer", c);
 		// Inaktivität in Serverinteraktion bis Session erlischt (Sekunden)
 		// Später in web.xml auslagern
 		session.setMaxInactiveInterval(2*60);
-		session.setAttribute("user", c.getVorname() + " " + c.getNachname());
 		session.setAttribute("kursListe", kursListe);
 	}
 
