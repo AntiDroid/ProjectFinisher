@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.ArrayList"%>
+    pageEncoding="UTF-8" import="java.util.ArrayList, models.Kurs"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,13 +21,13 @@
 </head>
 <body>
 <%
-String user = null;
-if(session.getAttribute("user") == null){
-	response.sendRedirect("login.jsp");
-}
-else{
-	user = (String) session.getAttribute("user");
-}
+	String user = null;
+	if(session.getAttribute("user") == null){
+		response.sendRedirect("login.jsp");
+	}
+	else{
+		user = (String) session.getAttribute("user");
+	}
 %>
 
 <div class="navbar navbar-inverse navbar-static-top">
@@ -43,11 +43,11 @@ else{
 	<h1 class="">Meine Kurse</h1>
 	<ul class="bigFont list-unstyled ">
 		<% 
-		ArrayList<String> kurse = null;
-		kurse = (ArrayList<String>) session.getAttribute("kursListe");
+		ArrayList<Kurs> kurse = null;
+		kurse = (ArrayList<Kurs>) session.getAttribute("kursListe");
 		if(kurse != null){
-			for(String k : kurse){ %>
-				<li><a href="KursServlet?kursName=<%= k %>"><%= k %></a></li>
+			for(Kurs k : kurse){ %>
+				<li><a href="KursServlet?kursId=<%= k.getID() %>"><%= k %></a></li>
 		<% }} %>
 	</ul>
 
@@ -69,6 +69,7 @@ else{
 	        	<br/>
 	        	<label>Passwort:</label>
 	        	<input type="text" name="kurspw">
+	        	<br/>
 	        	<input class="btn btn-primary btn-xs" type="submit" name="senden" value="Eintragen">
 	        </form>
 	      </div>
