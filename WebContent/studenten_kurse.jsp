@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="java.util.ArrayList, models.Kurs"%>
+    pageEncoding="UTF-8" import="java.util.ArrayList, models.*"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -21,18 +21,21 @@
 </head>
 <body>
 <%
-	String user = null;
-	if(session.getAttribute("user") == null){
+	Client user = null;
+	if(session.getAttribute("benutzer") == null){
 		response.sendRedirect("login.jsp");
 	}
 	else{
-		user = (String) session.getAttribute("user");
+		user = (Client) session.getAttribute("benutzer");
+		if(user instanceof Lehrer){
+			response.sendRedirect("lehrer_kurse.jsp");
+		}
 	}
 %>
 
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<div id="user" class="navbar-brand"><%= user %></div>
+		<div id="user" class="navbar-brand"><%= user.getVorname()+" "+user.getNachname() %></div>
 		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
 		</form>
