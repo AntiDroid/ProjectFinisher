@@ -14,9 +14,6 @@
 	<link rel="stylesheet" type="text/css" href="slick/slick.css">
   	<link rel="stylesheet" type="text/css" href="slick/slick-theme.css">
 	<link rel="stylesheet" href="style.css">
-	<script type="text/javascript">
-		$("*").
-	</script>
 	<style type="text/css">
 		.form-control{
 			padding: 6px;
@@ -131,8 +128,6 @@
 		}
 
 
-
-
 	</style>
 </head>
 <body>
@@ -151,7 +146,7 @@
 
 		<div class="col-md-2">
 
-		<div style="font-size: 20px">FoliensÃ¤tze:</div>
+		<div style="font-size: 20px">Foliensätze:</div>
 		<select id="folienSaetze" class="form-control" size="24">
 			<option class="folienOption" value="1" selected>Foliensatz1</option>
 			<option class="folienOption" value="2">Foliensatz2</option>
@@ -175,7 +170,7 @@
 		        </form>
 		      </div>
 		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">SchlieÃen</button>
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
 		      </div>
 		    </div>
 
@@ -187,7 +182,7 @@
 		<div class="col-md-10">
 			<div class="row"></div>
 				<div class="folienNavDiv text-center">
-					<button class="folienNavBtn btn btn-xs">zurÃ¼ck</button>
+					<button class="folienNavBtn btn btn-xs">zurück</button>
 					<span>7 Seiten</span>
 					<button class="folienNavBtn btn btn-xs">vor</button>
 				</div>
@@ -233,6 +228,7 @@
 
 				<div class="col-md-8">
 					<!-- Hier sollte noch Canvas her -->
+
 					<img class="folieVorschau" src="imgs/Beispiele/2.png">
 				</div>
 
@@ -241,18 +237,18 @@
 					<div class="row">
 						<div class="folienButtons">
 							<div class="col-md-6 text-left">
-							<button class="btn btn-success">Auf diese Folie<br/>wechseln</button>
+							<button id="useThisFoil" class="btn btn-success">Auf diese Folie<br/>wechseln</button>
 							</div>
 							<div class="col-md-6 text-right">
-							<button class="btn btn-xs btn-default verticalMiddle">Folie<br/>lÃ¶schen!</button>
+							<button id="delThisFoil" class="btn btn-xs btn-default verticalMiddle">Folie<br/>löschen!</button>
 							</div>
 						</div>
 					</div>
 
 					<div class="interaktivSwitchDiv">
-						<div class="material-switch">
+						<div id="intSwitchBtn" class="material-switch">
 							<span class="">Interaktiv: </span>
-                            <input id="interaktivSwitch" type="checkbox" onclick="intSwitch()" hidden/>
+                            <input id="interaktivSwitch" type="checkbox" hidden/>
                             <label for="interaktivSwitch" class="label-primary"></label>
                         </div>
 					</div>
@@ -281,7 +277,7 @@
 								</div>
 								<div class="col-md-6" style="top: 5px;">
 									<button class="btn btn-sm btn-danger intBereichButton">Neuer interaktiver<br/>Bereich</button>
-									<button class="btn btn-xs btn-default intBereichButton" disabled>interaktiven Bereich<br/>lÃ¶schen</button>
+									<button class="btn btn-xs btn-default intBereichButton" disabled>interaktiven Bereich<br/>löschen</button>
 								</div>
 							</div>
 						</div>
@@ -313,21 +309,39 @@
 </div>
 
 
-<script src="jquery/jquery-3.1.1.js"></script>
+<!-- <script src="jquery/jquery-3.1.1.js"></script> -->
 <!-- jquery2 wegn slick -->
 <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
-<script src="./slick/slick.js" type="text/javascript" charset="utf-8"></script>
+<script src="slick/slick.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-$(document).on('ready', function() {
-  $(".center").slick({
-    infinite: false,
-    slidesToShow: 4,
-    slidesToScroll: 3
-  });
+$(document).ready(function(){
+	$(".center").slick({
+	  infinite: false,
+	  slidesToShow: 4,
+	  slidesToScroll: 3
+	});
+
+	if($("#interaktivSwitch").attr("checked")){
+		$("#allIntDiv").show();
+	}
+	else{
+		$("#allIntDiv").hide();
+	}
+
 });
-</script>
-<script type="text/javascript">
+
+$("#interaktivSwitch").change(function() {
+    if(this.checked) {
+        $("#allIntDiv").fadeIn(350);
+    }
+    else{
+		$("#allIntDiv").fadeOut(450);
+	}
+});
+
+
+
 </script>
 
 </body>

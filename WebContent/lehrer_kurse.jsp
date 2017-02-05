@@ -21,13 +21,13 @@
 </head>
 <body>
 <%
-String user = null;
-if(session.getAttribute("user") == null){
-	response.sendRedirect("login.html");
-}
-else{
-	user = (String) session.getAttribute("user");
-}
+	String user = null;
+	if(session.getAttribute("user") == null){
+		response.sendRedirect("login.jsp");
+	}
+	else{
+		user = (String) session.getAttribute("user");
+	}
 %>
 
 <div class="navbar navbar-inverse navbar-static-top">

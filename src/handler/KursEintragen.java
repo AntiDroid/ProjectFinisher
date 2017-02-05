@@ -31,9 +31,9 @@ public class KursEintragen extends HttpServlet {
 		String kurspw = request.getParameter("kurspw");
 		ArrayList<Kurs> kursListe = dbm.getKurse();
 		Kurs addKurs = null;
-
+		
 		for (Kurs k : kursListe) {
-			if (k.getName().equals(kursName) && k.getPasswort().equals(pw)) {
+			if (k.getName().equals(kursName) && k.getPasswort().equals(kurspw)) {
 				addKurs = k;
 				break;
 			}

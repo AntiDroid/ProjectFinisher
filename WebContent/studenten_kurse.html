@@ -87,7 +87,7 @@
 			var kursId = document.getElementById("kursId").value;
 			//Umgekehrte Hochkommafolge
 			// var jsonText = "{ 'userName': '"+userName+"', 'kursName':'"+kursId+"' }"
-			var jsonText = '{ "userName": "'+userName+'", "kursName": "'+kursId+'" }'
+			var jsonText = '{ "userName": "'+userName+'", "kursName": "'+kursId+'" }';
 			var jsonObject = $.parseJSON(jsonText);
 			alert("Kursname: "+jsonObject.kursName);
 			socket.send(jsonText);

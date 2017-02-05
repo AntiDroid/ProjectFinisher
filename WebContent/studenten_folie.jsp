@@ -13,7 +13,9 @@
 	<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="style.css">
 	<script type="text/javascript">
-		
+		var userId = <%=session.getAttribute("userId")%>;
+		var vorname = <%=session.getAttribute("vorname")%>;
+		var nachname = <%=session.getAttribute("nachname")%>;
 	</script>
 	<style type="text/css">
 		.allesContainer{
@@ -36,7 +38,7 @@
 <body>
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<div id="schuelerName" class="navbar-brand">NAME</div>
+		<div id="userName" class="navbar-brand">NAME</div>
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
 	</div>
 </div>
@@ -50,7 +52,7 @@
 	</div>
 
 	<div class="imgDiv">
-			<img src="imgs/Beispiele/2.png"/>
+			<img id="folieImg" src="imgs/Beispiele/2.png"/>
 	</div>
 
 	<div class="row">
@@ -62,8 +64,34 @@
 		</div>
 	</div>
 </div>
-	
+
+
 <script src="jquery/jquery-3.1.1.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+var clickX = 0;
+var clickY = 0;
+
+$('#folieImg').click(function(e)
+		{   
+    		var offset_x = $(this).offset().left - $(window).scrollLeft();
+		    var offset_y = $(this).offset().top - $(window).scrollTop();
+
+		    var x = (e.clientX - offset_x);
+		    var y = (e.clientY - offset_y);
+		    
+		    var imgW = $(this).width();
+		    var imgH = $(this).height();
+		    
+		    var relX = Math.round((x/imgW)*100);
+		    var relY = Math.round((y/imgH)*100);
+		    
+		    clickX = relX;
+		    clickY = relY;
+		    alert("X: " + clickX + " Y: " + clickY);
+
+});
+</script>
 </body>
 </html>

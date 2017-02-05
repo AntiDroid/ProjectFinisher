@@ -51,7 +51,6 @@
 </head>
 <body>
 <div class="container">
-
 	<form class="loginForm" action="LoginServlet" method="post">
 		<h3>Login</h3>
 		<input type="text" name="user" class="form-control" id="usernameInput" placeholder="Username" required autofocus>
