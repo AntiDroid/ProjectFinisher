@@ -73,6 +73,7 @@ public class Login extends HttpServlet {
 		session.setMaxInactiveInterval(2*60);
 		session.setAttribute("user", c.getVorname() + " " + c.getNachname());
 		session.setAttribute("kursListe", kursListe);
+		System.out.println(kursListe.size());
 	}
 
 }

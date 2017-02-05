@@ -763,7 +763,7 @@ public class DBManager {
 
 		PreparedStatement stat = null;
 		ResultSet rs = null;
-		String sql = "SELECT k.KursID, k.Name FROM Student s "
+		String sql = "SELECT k.KursID, k.Name, k.Passwort FROM Student s "
 				+ "JOIN Kursteilnahme USING(StudentenID) "
 				+ "JOIN Kurs k USING(KursID) "
 				+ "WHERE s.StudentenID = ?";
@@ -802,7 +802,7 @@ public class DBManager {
 
 		PreparedStatement stat = null;
 		ResultSet rs = null;
-		String sql = "SELECT k.KursID, k.Name FROM Lehrer l "
+		String sql = "SELECT k.KursID, k.Name, k.Passwort FROM Lehrer l "
 				+ "JOIN Berechtigung USING(LehrerID) "
 				+ "JOIN Kurs k USING(KursID) "
 				+ "WHERE l.LehrerID = ?";

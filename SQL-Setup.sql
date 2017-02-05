@@ -12,9 +12,9 @@ CREATE TABLE Lehrer (
 
 CREATE TABLE Kurs (
         KursID            	int PRIMARY KEY AUTO_INCREMENT,
--- Namenkürzel
         Name              	varchar(30) UNIQUE NOT NULL,
         Passwort            varchar(30) NOT NULL
+        -- Namenkürzel
 );
 
 -- Berechtigungen
