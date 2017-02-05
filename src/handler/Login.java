@@ -38,7 +38,7 @@ public class Login extends HttpServlet {
 		// --Implementierung zu Testzwecken--
 		if (benutzer == null) {
 			System.out.println("So nicht!");
-			response.sendRedirect("login.html");
+			response.sendRedirect("login.jsp");
 		} else if (dbm.isStudent(benutzer, pw)) {
 
 			Student s = dbm.getStudent(benutzer);
@@ -61,7 +61,7 @@ public class Login extends HttpServlet {
 			response.sendRedirect("lehrer_kurse.jsp");
 		} 
 		else{
-			response.sendRedirect("login.html");
+			response.sendRedirect("login.jsp");
 		}
 
 		dbm.dispose();

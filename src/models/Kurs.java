@@ -4,7 +4,7 @@ public class Kurs {
 
 	private int kursID;
 	
-	private String name;
+	private String name, passwort;
 	
 	public Kurs(String n) {
 		this.kursID = -1;
@@ -36,6 +36,14 @@ public class Kurs {
 		Kurs k = (Kurs) o;
 		
 		return (this.kursID == k.kursID) && (this.getName() == k.getName());
+	}
+
+	public String getPasswort() {
+		return passwort;
+	}
+
+	public void setPasswort(String passwort) {
+		this.passwort = passwort;
 	}
 	
 }

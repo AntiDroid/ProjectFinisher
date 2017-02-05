@@ -12,7 +12,9 @@ CREATE TABLE Lehrer (
 
 CREATE TABLE Kurs (
         KursID            	int PRIMARY KEY AUTO_INCREMENT,
-        Name              	varchar(30) UNIQUE NOT NULL
+-- Namenkürzel
+        Name              	varchar(30) UNIQUE NOT NULL,
+        Passwort            varchar(30) NOT NULL
 );
 
 -- Berechtigungen
@@ -97,9 +99,9 @@ CREATE TABLE Uservoting (
 INSERT INTO Student VALUES(null, 'Student1', 'Talip', 'Vural', 'stud');
 INSERT INTO Lehrer VALUES(null, 'Lehrer1', 'Orcun', 'Döger', 'lehr');
 
-INSERT INTO Kurs VALUES(null, 'Mathe');
-INSERT INTO Kurs VALUES(null, 'Englisch');
-INSERT INTO Kurs VALUES(null, 'Deutsch');
+INSERT INTO Kurs VALUES(null, 'Mathe', 'PW');
+INSERT INTO Kurs VALUES(null, 'Englisch', 'PW');
+INSERT INTO Kurs VALUES(null, 'Deutsch', 'PW');
 
 -- 								ID, Kurs, Student
 INSERT INTO Kursteilnahme VALUES(null, 1, 1);

@@ -741,6 +741,7 @@ public class DBManager {
 
 				obj.setID(rs.getInt("KursID"));
 				obj.setName(rs.getString("Name"));
+				obj.setPasswort(rs.getString("Passwort"));
 
 				list.add(obj);
 			}
@@ -779,6 +780,7 @@ public class DBManager {
 
 				obj.setID(rs.getInt("KursID"));
 				obj.setName(rs.getString("Name"));
+				obj.setPasswort(rs.getString("Passwort"));
 
 				list.add(obj);
 			}
@@ -817,6 +819,7 @@ public class DBManager {
 
 				obj.setID(rs.getInt("KursID"));
 				obj.setName(rs.getString("Name"));
+				obj.setPasswort(rs.getString("Passwort"));
 
 				list.add(obj);
 			}

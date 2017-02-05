@@ -49,7 +49,7 @@ public class KursErstellen extends HttpServlet {
 		
 		if(dbm.isLehrer(benutzer, pw)){
 			dbm.dispose();
-			response.sendRedirect("login.html");
+			response.sendRedirect("login.jsp");
 			return;
 		}
 		// Wenn es bereits ausgetimet ist oder ein solcher Kurs bereits existiert
