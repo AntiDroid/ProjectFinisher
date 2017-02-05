@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import models.Kurs;
+import models.Lehrer;
 import database.DBManager;
 
 @WebServlet("/KursEintragenServlet")
@@ -42,7 +43,7 @@ public class KursEintragen extends HttpServlet {
 		// Nur nehmen, wenn existiert
 		HttpSession s = request.getSession(false);
 		
-		if(!s.getAttribute("type").equals("S")){
+		if(!(s.getAttribute("benutzer") instanceof Student)){
 			dbm.dispose();
 			response.sendRedirect("login.jsp");
 			return;

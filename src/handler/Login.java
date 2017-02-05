@@ -46,7 +46,6 @@ public class Login extends HttpServlet {
 			// Create a session object if it is already not created.
 			HttpSession session = request.getSession(true);
 			doStuff(s, dbm.getKurseStudent(s.getID()), session);
-			session.setAttribute("type", "S");
 			response.sendRedirect("studenten_kurse.jsp");
 		} else if (dbm.isLehrer(benutzer, pw)) {
 
@@ -55,7 +54,6 @@ public class Login extends HttpServlet {
 			// Create a session object if it is already not created.
 			HttpSession session = request.getSession(true);
 			doStuff(l, dbm.getKurseLehrer(l.getID()), session);
-			session.setAttribute("type", "L");
 			response.sendRedirect("lehrer_kurse.jsp");
 		} 
 		else{
