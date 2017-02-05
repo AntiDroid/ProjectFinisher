@@ -33,6 +33,8 @@ public class KursEintragen {
 	@OnMessage
 	public void onMessage(Session session, String message) {
 	   
+		System.out.println(message);
+		
 		DBManager dbm = new DBManager();
 		ArrayList<Kurs> kursListe = dbm.getKurse();
 		
@@ -44,6 +46,9 @@ public class KursEintragen {
 		String userName = jsonData.get("userName").getAsString();
 		String kursName = jsonData.get("kursName").getAsString();
 
+		System.out.println(userName);
+		System.out.println(kursName);
+		
 		for (Kurs k : kursListe) {
 			if (k.getName().equals(kursName)) {
 				addKurs = k;

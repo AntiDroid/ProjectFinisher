@@ -23,7 +23,7 @@
 <%
 String user = null;
 if(session.getAttribute("user") == null){
-	response.sendRedirect("login.html");
+	response.sendRedirect("login.jsp");
 }
 else{
 	user = (String) session.getAttribute("user");
