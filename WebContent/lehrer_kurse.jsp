@@ -27,6 +27,9 @@
 	}
 	else{
 		user = (Client) session.getAttribute("benutzer");
+		if(user instanceof Student){
+			response.sendRedirect("studenten_kurse.jsp");
+		}
 	}
 %>
 
