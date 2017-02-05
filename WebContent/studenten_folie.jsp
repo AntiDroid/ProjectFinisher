@@ -39,7 +39,9 @@
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
 		<div id="userName" class="navbar-brand">NAME</div>
+		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
+		</form>
 	</div>
 </div>
 
