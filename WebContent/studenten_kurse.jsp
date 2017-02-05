@@ -64,8 +64,11 @@ else{
 	      </div>
 	      <div class="modal-body">
 	        <form action="KursEintragenServlet" method="post">
-	        	<label>Geben Sie die KursID ein:</label>
+	        	<label>Kursname:</label>
 	        	<input type="text" name="kursname">
+	        	<br/>
+	        	<label>Passwort:</label>
+	        	<input type="text" name="kurspw">
 	        	<input class="btn btn-primary btn-xs" type="submit" name="senden" value="Eintragen">
 	        </form>
 	      </div>
