@@ -30,6 +30,8 @@ public class KursErstellen extends HttpServlet {
 		DBManager dbm = new DBManager();
 
 		String kursName = request.getParameter("newKursName");
+		String kursPW = request.getParameter("newKursPass");
+		
 		// String kursPass = request.getParameter("newKursPass");
 		ArrayList<Kurs> kursListe = dbm.getKurse();
 		boolean kursExists = false;
@@ -61,7 +63,7 @@ public class KursErstellen extends HttpServlet {
 		else {
 			String userName = (String) s.getAttribute("benutzer");
 			
-			Kurs k = new Kurs(kursName);
+			Kurs k = new Kurs(kursName, kursPW);
 			dbm.save(k);
 
 			Lehrer l = dbm.getLehrer(userName);

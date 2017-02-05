@@ -6,10 +6,11 @@ public class Kurs {
 	
 	private String name, passwort;
 	
-	public Kurs(String n) {
+	public Kurs(String n, String pw) {
 		this.kursID = -1;
 		
 		this.name = n;
+		this.passwort = pw;
 	}
 
 	public Kurs() {

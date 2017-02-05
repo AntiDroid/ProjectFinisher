@@ -220,13 +220,14 @@ public class DBManager {
 	
 			ResultSet rs = null;
 			Statement statGetID = null;
-			String sql = "INSERT INTO Kurs VALUES (?, ?)";
+			String sql = "INSERT INTO Kurs VALUES (?, ?, ?)";
 	
 			try {
 	
 				stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
 				stat.setString(2, k.getName());
+				stat.setString(3, k.getPasswort());
 				stat.execute();
 	
 				statGetID = conn.createStatement();
@@ -246,13 +247,14 @@ public class DBManager {
 			
 		} else {
 	
-			String sql = "UPDATE Kurs SET Name = ? WHERE KursID = ?";
+			String sql = "UPDATE Kurs SET Name = ?, Passwort = ? WHERE KursID = ?";
 	
 			try {
 	
 				stat = conn.prepareStatement(sql);
 				stat.setString(1, k.getName());
-				stat.setInt(2, k.getID());
+				stat.setString(2, k.getPasswort());
+				stat.setInt(3, k.getID());
 				stat.execute();
 	
 			} catch (SQLException e) {
