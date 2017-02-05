@@ -55,7 +55,7 @@ public class KursEintragen extends HttpServlet {
 			response.sendRedirect("studenten_kurse.jsp");
 			return;
 		}
-		else if (addKurs != null && !dbm.isKursBeteiligt(kursName, (String) s.getAttribute("benutzer"))) {
+		else if (addKurs != null && !dbm.isKursBeteiligt(kursName, ((Student) s.getAttribute("benutzer")).getBenutzername())) {
 			
 			dbm.addKursteilnahme(addKurs, (Student) s.getAttribute("benutzer"));
 
