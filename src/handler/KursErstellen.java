@@ -42,9 +42,6 @@ public class KursErstellen extends HttpServlet {
 				break;
 			}
 		}
-
-		String benutzer = request.getParameter("user");
-		String pw = request.getParameter("pw");
 		
 		// Nur nehmen, wenn existiert
 		HttpSession s = request.getSession(false);
@@ -72,8 +69,8 @@ public class KursErstellen extends HttpServlet {
 			//anpassen der Kursliste
 			//Temporärlösung
 			@SuppressWarnings("unchecked")
-			ArrayList<String> kurse = (ArrayList<String>) s.getAttribute("kursListe");
-			kurse.add(k.getName());
+			ArrayList<Kurs> kurse = (ArrayList<Kurs>) s.getAttribute("kursListe");
+			kurse.add(k);
 			s.setAttribute("kursListe", kurse);
 
 			dbm.dispose();
