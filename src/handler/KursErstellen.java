@@ -47,7 +47,7 @@ public class KursErstellen extends HttpServlet {
 		// Nur nehmen, wenn existiert
 		HttpSession s = request.getSession(false);
 		
-		if(dbm.isLehrer(benutzer, pw)){
+		if(!s.getAttribute("type").equals("L")){
 			dbm.dispose();
 			response.sendRedirect("login.jsp");
 			return;

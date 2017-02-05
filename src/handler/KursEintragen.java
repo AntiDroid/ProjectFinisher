@@ -41,11 +41,8 @@ public class KursEintragen extends HttpServlet {
 
 		// Nur nehmen, wenn existiert
 		HttpSession s = request.getSession(false);
-
-		String benutzer = request.getParameter("user");
-		String pw = request.getParameter("pw");
 		
-		if(dbm.isStudent(benutzer, pw)){
+		if(!s.getAttribute("type").equals("S")){
 			dbm.dispose();
 			response.sendRedirect("login.jsp");
 			return;
