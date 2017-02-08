@@ -91,6 +91,7 @@
 	var nachname = "<%=user.getNachname()%>";
 	
 	var kursId = <%=kursId%>;
+	console.log("kursId "+kursId);
 	
 	if(vorname != null && nachname != null){
 		$("#userName").html(vorname+" "+nachname);
