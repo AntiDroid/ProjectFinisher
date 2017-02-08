@@ -88,12 +88,12 @@ public class MessageHandler {
 
 class KursInfoRequestMessage {
 	
-	private String respType;
+	private String type;
 	private String kursName;
 	private String lehrerName;
 	
 	public KursInfoRequestMessage(String rT, String kN, String lN){
-		this.respType = rT;
+		this.type = rT;
 		this.kursName = kN;
 		this.lehrerName = lN;
 	}
