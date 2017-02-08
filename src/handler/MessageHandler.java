@@ -17,7 +17,7 @@ import models.Kurs;
 import models.Lehrer;
 import database.DBManager;
 
-@ServerEndpoint("/XKursEintragenServlet")
+@ServerEndpoint("/MessageHandler")
 public class MessageHandler {
 
 	@OnOpen
