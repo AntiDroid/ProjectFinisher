@@ -114,21 +114,23 @@
 	
 	socket.onmessage = function(evt) 
 	{
+		
 		var msg = $.parseJSON(evt.data);
 		
 		if(msg.type == "lehrerName"){
-			$("lehrerName").html = msg.name;
+			$("#lehrerName").html = msg.name;
 		}
 		else if(msg.type == "kursName"){
-			$("kursName").html = msg.name;
+			$("#kursName").html = msg.name;
 		}
 		else if(msg.type == "folienName"){
-			$("folienName").html = msg.name;
+			$("#folienName").html = msg.name;
 		}
 		
 		else if(msg.type == ""){
 			
 		}
+		
 	};
 	
 
@@ -140,8 +142,6 @@ $(document).ready(function(){
 	
 
 });
-
-
 
 var clickX = 0;
 var clickY = 0;
