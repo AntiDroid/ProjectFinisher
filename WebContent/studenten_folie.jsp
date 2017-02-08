@@ -5,6 +5,7 @@
 <head>
 	<%
 	Client user = null;
+	int kursId = 0;
 	if(session.getAttribute("benutzer") == null){
 		response.sendRedirect("login.jsp");
 	}
@@ -12,6 +13,9 @@
 		user = (Client) session.getAttribute("benutzer");
 		if(user instanceof Lehrer){
 			response.sendRedirect("lehrer_kurse.jsp");
+		}
+		if(session.getAttribute("kursId") != null){
+			kursId = (int) session.getAttribute("kursId");
 		}
 	}
 	%>
@@ -85,6 +89,8 @@
 	var vorname = "<%=user.getVorname()%>";
 	var nachname = "<%=user.getNachname()%>";
 	
+	var kursId = <%=kursId%>;
+	
 	if(vorname != null && nachname != null){
 		$("#userName").html(vorname+" "+nachname);
 	}
@@ -100,6 +106,7 @@
 	socket.onopen = function() 
 	{
 		console.log("Websocketverbindung hergestellt :)");
+		
 	};
 	
 	socket.onerror = function(evt) 
