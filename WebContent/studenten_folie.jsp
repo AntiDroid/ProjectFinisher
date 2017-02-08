@@ -1,8 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="models.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+	<%
+	Client user = null;
+	if(session.getAttribute("benutzer") == null){
+		response.sendRedirect("login.jsp");
+	}
+	else{
+		user = (Client) session.getAttribute("benutzer");
+		if(user instanceof Lehrer){
+			response.sendRedirect("lehrer_kurse.jsp");
+		}
+	}
+	%>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,9 +25,6 @@
 	<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="style.css">
 	<script type="text/javascript">
-		var userId = <%=session.getAttribute("userId")%>;
-		var vorname = <%=session.getAttribute("vorname")%>;
-		var nachname = <%=session.getAttribute("nachname")%>;
 	</script>
 	<style type="text/css">
 		.allesContainer{
@@ -36,9 +45,10 @@
 	</style>
 </head>
 <body>
+
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<div id="userName" class="navbar-brand">NAME</div>
+		<div id="userName" class="navbar-brand"></div>
 		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
 		</form>
@@ -71,6 +81,67 @@
 <script src="jquery/jquery-3.1.1.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
+	var userId = "<%=user.getID()%>";
+	var vorname = "<%=user.getVorname()%>";
+	var nachname = "<%=user.getNachname()%>";
+	
+	if(vorname != null && nachname != null){
+		$("#userName").html(vorname+" "+nachname);
+	}
+	else{
+		$("#userName").html("kein Name");
+	}
+</script>
+
+<script type="text/javascript">
+
+	var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/WSStudentFolie");
+	
+	socket.onopen = function() 
+	{
+		console.log("Websocketverbindung hergestellt :)");
+	};
+	
+	socket.onerror = function(evt) 
+	{
+		console.log("Websocketverbindung konnte nicht hergestellt werden :(");
+	};
+	
+	socket.onclose = function()
+	{
+		
+	};
+	
+	socket.onmessage = function(evt) 
+	{
+		var msg = $.parseJSON(evt.data);
+		
+		if(msg.type == "lehrerName"){
+			$("lehrerName").html = msg.name;
+		}
+		else if(msg.type == "kursName"){
+			$("kursName").html = msg.name;
+		}
+		else if(msg.type == "folienName"){
+			$("folienName").html = msg.name;
+		}
+		
+		else if(msg.type == ""){
+			
+		}
+	};
+	
+
+</script>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	
+	
+
+});
+
+
 
 var clickX = 0;
 var clickY = 0;
@@ -94,6 +165,8 @@ $('#folieImg').click(function(e)
 		    alert("X: " + clickX + " Y: " + clickY);
 
 });
+
+
 </script>
 </body>
 </html>

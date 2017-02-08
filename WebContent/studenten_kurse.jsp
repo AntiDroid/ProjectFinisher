@@ -3,6 +3,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<%
+	Client user = null;
+	if(session.getAttribute("benutzer") == null){
+		response.sendRedirect("login.jsp");
+	}
+	else{
+		user = (Client) session.getAttribute("benutzer");
+		if(user instanceof Lehrer){
+			response.sendRedirect("lehrer_kurse.jsp");
+		}
+	}
+	%>
 	<meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -20,22 +32,10 @@
 	</style>
 </head>
 <body>
-<%
-	Client user = null;
-	if(session.getAttribute("benutzer") == null){
-		response.sendRedirect("login.jsp");
-	}
-	else{
-		user = (Client) session.getAttribute("benutzer");
-		if(user instanceof Lehrer){
-			response.sendRedirect("lehrer_kurse.jsp");
-		}
-	}
-%>
 
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<div id="user" class="navbar-brand"><%= user.getVorname()+" "+user.getNachname() %></div>
+		<div id="userName" class="navbar-brand"><%= user.getVorname()+" "+user.getNachname() %></div>
 		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
 		</form>

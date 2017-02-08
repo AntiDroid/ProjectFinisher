@@ -134,7 +134,7 @@
 <!--Navbar-->
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<span id="lehrerName" class="navbar-brand">NAME</span>
+		<span id="userName" class="navbar-brand">NAME</span>
 		<span class="navbar-brand" style="font-size: 10px;">0 Studenten Online</span>
 		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>

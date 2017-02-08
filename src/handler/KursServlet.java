@@ -27,7 +27,7 @@ public class KursServlet extends HttpServlet {
 
 		DBManager dbm = new DBManager();
 		
-		response.sendRedirect("studenten_kurse");
+		response.sendRedirect("studenten_folie.jsp");
 		
 		dbm.dispose();
 	}
