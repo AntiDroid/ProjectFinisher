@@ -70,6 +70,7 @@
 	<div class="imgDiv">
 			<img id="folieImg" src="imgs/Beispiele/2.png"/>
 	</div>
+	<img id="pin" src="imgs/pin.png" style="display: none; position: absolute;" />
 
 	<div class="row">
 		<div class="col-xs-6">
@@ -101,12 +102,15 @@
 
 <script type="text/javascript">
 
-	var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/WSStudentFolie");
+	var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
 	
 	socket.onopen = function() 
 	{
 		console.log("Websocketverbindung hergestellt :)");
 		
+		var kursInfoRequest = {type:"kursInfoRequest", userId: userId, kursId: kursId};
+		var kursInfoRequestJson = JSON.stringify(kursInfoRequest);
+		socket.send(kursInfoRequestJson);
 	};
 	
 	socket.onerror = function(evt) 
@@ -124,18 +128,9 @@
 		
 		var msg = $.parseJSON(evt.data);
 		
-		if(msg.type == "lehrerName"){
-			$("#lehrerName").html = msg.name;
-		}
-		else if(msg.type == "kursName"){
-			$("#kursName").html = msg.name;
-		}
-		else if(msg.type == "folienName"){
-			$("#folienName").html = msg.name;
-		}
-		
-		else if(msg.type == ""){
-			
+		if(msg.type == "kursInfo"){
+			$("#kursName").html = msg.kursName;
+			$("#lehrerName").html = msg.lehrerName;
 		}
 		
 	};
@@ -169,7 +164,10 @@ $('#folieImg').click(function(e)
 		    
 		    clickX = relX;
 		    clickY = relY;
-		    alert("X: " + clickX + " Y: " + clickY);
+		    
+		    
+		    $('#pin').css('left', e.pageX).css('top', e.pageY-25).show();
+		    
 
 });
 
