@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import models.Client;
-import models.Kurs;
 import models.Lehrer;
 import models.Student;
 import database.DBManager;
