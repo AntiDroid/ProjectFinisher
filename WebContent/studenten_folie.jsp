@@ -46,6 +46,11 @@
 			padding: 12px 7px;
 			float: right;
 		}
+		
+		#kursName{
+			font-weight: bold;
+		}
+		
 	</style>
 </head>
 <body>
@@ -63,7 +68,7 @@
 
 	<div class="row">
 		<div id="lehrerName" class="text-left col-sm-4">Lehrer</div>
-		<div id="kursName" class="text-center col-sm-4"><b>Kursname</b></div>
+		<div id="kursName" class="text-center col-sm-4">Kursname</div>
 		<div id="folienName" class="text-right col-sm-4">Folienname</div>
 	</div>
 
@@ -125,12 +130,11 @@
 	
 	socket.onmessage = function(evt) 
 	{
-		console.log("message bekommen")
 		var msg = $.parseJSON(evt.data);
 		
 		if(msg.type == "kursInfo"){
-			$("#kursName").html = msg.kursName;
-			$("#lehrerName").html = msg.lehrerName;
+			$("#kursName").html(msg.kursName);
+			$("#lehrerName").html(msg.lehrerName);
 		}
 		
 	};
