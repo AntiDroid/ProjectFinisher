@@ -48,8 +48,8 @@ public class KursEintragen extends HttpServlet {
 			response.sendRedirect("login.jsp");
 			return;
 		}
-		// Wenn es bereits ausgetimet ist oder ein solcher Kurs nicht existiert
-		else if (addKurs == null || s == null) {			
+		// Wenn ein solcher Kurs nicht existiert
+		else if (addKurs == null) {			
 			dbm.dispose();
 			response.sendRedirect("studenten_kurse.jsp");
 			return;

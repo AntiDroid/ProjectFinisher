@@ -7,7 +7,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import models.Lehrer;
+import models.Student;
 import database.DBManager;
 
 @WebServlet("/KursServlet")
@@ -24,9 +27,24 @@ public class KursServlet extends HttpServlet {
 
 		DBManager dbm = new DBManager();
 		
-		response.sendRedirect("studenten_folie.jsp");
+		int kursId = Integer.parseInt(request.getParameter("kursId"));
+		HttpSession session = request.getSession(true);
 		
-		dbm.dispose();
+		if(session == null || kursId == 0){
+			dbm.dispose();
+			response.sendRedirect("login.jsp");
+		}
+		else if(session.getAttribute("benutzer") instanceof Student){
+			session.setAttribute("kursId", kursId);
+			dbm.dispose();
+			response.sendRedirect("studenten_folie.jsp");
+		}
+		else if(session.getAttribute("benutzer") instanceof Lehrer){
+			session.setAttribute("kursId", kursId);
+			dbm.dispose();
+			response.sendRedirect("lehrer_folie.jsp");
+		}
+		
 	}
 
 }

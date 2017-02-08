@@ -17,7 +17,7 @@ import models.Kurs;
 import database.DBManager;
 
 @ServerEndpoint("/XKursEintragenServlet")
-public class Websocket {
+public class MessageHandler {
 
 	@OnOpen
 	public void onOpen(){
@@ -31,33 +31,15 @@ public class Websocket {
 	public void onMessage(Session session, String message) {
 	   
 		DBManager dbm = new DBManager();
-		ArrayList<Kurs> kursListe = dbm.getKurse();
-		
-		Kurs addKurs = null;
 		
 		Gson gson = new Gson();
 		JsonObject jsonData = gson.fromJson( message, JsonObject.class);
 		gson.toJson(message);
-		String userName = jsonData.get("userName").getAsString();
-		String kursName = jsonData.get("kursName").getAsString();
-
-		for (Kurs k : kursListe) {
-			if (k.getName().equals(kursName)) {
-				addKurs = k;
-				break;
-			}
-		}
-
-		if (addKurs != null && !dbm.isKursBeteiligt(kursName, userName)) {
-			dbm.addKursteilnahme(addKurs, dbm.getStudent(userName));
-
-			//anpassen der Kursliste
-			try {
-				session.getBasicRemote().sendText("<li><a href=\"KursServlet?kursName=<%= k %>\"><%= k %></a></li>");
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		
+		session.getP
+		
+		String type = jsonData.get("type").getAsString();
+		String msg = jsonData.get("msg").getAsString();
 		
 		dbm.dispose();
 	}

@@ -51,7 +51,7 @@ public class KursErstellen extends HttpServlet {
 			response.sendRedirect("login.jsp");
 			return;
 		}
-		// Wenn es bereits ausgetimet ist oder ein solcher Kurs bereits existiert
+		// Wenn ein solcher Kurs bereits existiert
 		else if (s == null || kursExists){
 			dbm.dispose();
 			response.sendRedirect("lehrer_kurse.jsp");
