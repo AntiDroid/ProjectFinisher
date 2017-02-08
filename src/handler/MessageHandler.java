@@ -66,7 +66,6 @@ public class MessageHandler {
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
