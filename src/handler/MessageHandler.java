@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import models.Kurs;
+import models.Lehrer;
 import database.DBManager;
 
 @ServerEndpoint("/XKursEintragenServlet")
@@ -33,13 +34,44 @@ public class MessageHandler {
 		DBManager dbm = new DBManager();
 		
 		Gson gson = new Gson();
-		JsonObject jsonData = gson.fromJson( message, JsonObject.class);
+		JsonObject jsonData = gson.fromJson(message, JsonObject.class);
 		gson.toJson(message);
 		
-		session.getP
-		
 		String type = jsonData.get("type").getAsString();
-		String msg = jsonData.get("msg").getAsString();
+		
+		switch(type){
+		
+		case "kursInfoRequest":
+			
+			String studentId = jsonData.get("userId").getAsString();
+			String kursId = jsonData.get("kursId").getAsString();
+			
+			String respType = "kursInfo";
+			String kursName = "";
+			String lehrerName = "";
+			
+			ArrayList<Kurs> kListe = dbm.getKurseStudent(Integer.parseInt(studentId));
+			
+			for(Kurs k: kListe){
+				if(k.getID() == Integer.parseInt(kursId)){
+					kursName = k.getName();
+				}
+			}
+			
+			ArrayList<Lehrer> lehrerListe = dbm.getKurslehrer(Integer.parseInt(kursId));
+			lehrerName = lehrerListe.get(0).getVorname()+" "+lehrerListe.get(0).getNachname();
+			
+			KursInfoRequestMessage responseObj = new KursInfoRequestMessage(respType, kursName, lehrerName);
+			
+			try {
+				session.getBasicRemote().sendText(gson.toJson(responseObj));
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			break;
+		}
 		
 		dbm.dispose();
 	}
@@ -55,3 +87,16 @@ public class MessageHandler {
 	}
 }
 
+class KursInfoRequestMessage {
+	
+	private String respType;
+	private String kursName;
+	private String lehrerName;
+	
+	public KursInfoRequestMessage(String rT, String kN, String lN){
+		this.respType = rT;
+		this.kursName = kN;
+		this.lehrerName = lN;
+	}
+	
+}
