@@ -13,6 +13,7 @@ import javax.websocket.server.ServerEndpoint;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
+import models.Auswahlbereich;
 import models.Kurs;
 import models.Lehrer;
 import database.DBManager;
@@ -42,23 +43,26 @@ public class MessageHandler {
 		switch(type){
 		
 		case "kursInfoRequest":
-			
+		{
 			String studentId = jsonData.get("userId").getAsString();
 			String kursId = jsonData.get("kursId").getAsString();
+			
+			int studentID = Integer.parseInt(studentId);
+			int kursID = Integer.parseInt(kursId);
 			
 			String respType = "kursInfo";
 			String kursName = "";
 			String lehrerName = "";
 			
-			ArrayList<Kurs> kListe = dbm.getKurseStudent(Integer.parseInt(studentId));
+			ArrayList<Kurs> kListe = dbm.getKurseStudent(studentID);
 			
 			for(Kurs k: kListe){
-				if(k.getID() == Integer.parseInt(kursId)){
+				if(k.getID() == kursID){
 					kursName = k.getName();
 				}
 			}
 			
-			ArrayList<Lehrer> lehrerListe = dbm.getKurslehrer(Integer.parseInt(kursId));
+			ArrayList<Lehrer> lehrerListe = dbm.getKurslehrer(kursID);
 			lehrerName = lehrerListe.get(0).getVorname()+" "+lehrerListe.get(0).getNachname();
 			
 			KursInfoRequestMessage responseObj = new KursInfoRequestMessage(respType, kursName, lehrerName);
@@ -68,6 +72,46 @@ public class MessageHandler {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
+			ArrayList<Session> sessionList = Message.kursSessions.get(kursID);
+			
+			if(sessionList == null){
+				ArrayList<Session> sL = new ArrayList<Session>();
+				sL.add(session);
+				Message.kursSessions.put(kursID, sL);
+			}
+			else{
+				if(!sessionList.contains(session))
+					Message.kursSessions.get(kursID).add(session);
+			}
+			
+			break;
+		}
+		case "folienUpdateRequest":
+		{	
+			String folienId = jsonData.get("folienId").getAsString();
+			String kursId = jsonData.get("kursId").getAsString();
+			
+			int folienID = Integer.parseInt(folienId);
+			int kursID = Integer.parseInt(kursId);
+			
+			String respType = "folienUpdate";
+			String fSatzName = "";
+			boolean interaktiv;
+			boolean isHeatplot = false;
+			ArrayList<Auswahlbereich> bereichList = new ArrayList<Auswahlbereich>();
+			
+			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(respType, folienId, fSatzName, interaktiv, isHeatplot, bereichList);
+			
+			try {
+				session.getBasicRemote().sendText(gson.toJson(responseObj));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			break;
+		}
+		default:
 			
 			break;
 		}
@@ -86,16 +130,33 @@ public class MessageHandler {
 	}
 }
 
-class KursInfoRequestMessage {
+class KursInfoRequestMessage extends Message {
 	
-	private String type;
-	private String kursName;
-	private String lehrerName;
+	String kursName;
+	String lehrerName;
 	
 	public KursInfoRequestMessage(String rT, String kN, String lN){
-		this.type = rT;
+		super(rT);
 		this.kursName = kN;
 		this.lehrerName = lN;
 	}
+}
+
+class FolienUpdateRequestMessage extends Message {
 	
+	String type;
+	int folienId;
+	String fSatzName = "";
+	boolean interaktiv;
+	boolean isHeatplot = false;
+	ArrayList<Auswahlbereich> bereichList = new ArrayList<Auswahlbereich>();
+	
+	public FolienUpdateRequestMessage(String rT, int fID, String fSN, boolean interaktiv, boolean iHp, ArrayList<Auswahlbereich> bl){
+		super(rT);
+		this.folienId = fID;
+		this.fSatzName = fSN;
+		this.interaktiv = interaktiv;
+		this.isHeatplot = iHp;
+		this.bereichList = bl;
+	}
 }

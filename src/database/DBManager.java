@@ -878,6 +878,99 @@ public class DBManager {
 		return list;
 	}
 
+	public Folie getFolie(int folienID) {
+
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Folie WHERE FolienID = ?";
+		Folie obj = new Folie();
+
+		try {
+
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, folienID);
+			rs = stat.executeQuery();
+
+			if (rs.next()) {
+				obj.setID(folienID);
+				obj.setFSatz(this.getFoliensatz(rs.getInt("FoliensatzID")));
+				obj.setFoliensatzID(rs.getInt("FoliensatzID"));
+				obj.setfPath(rs.getString("fPath"));
+				obj.setFolienTyp(rs.getString("FolienTyp").charAt(0));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - Folie");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+
+		return obj;
+	}
+	
+	public Foliensatz getFoliensatz(int folienSatzID) {
+
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Folie f JOIN Foliensatz USING(FoliensatzID) WHERE f.FolienID = ?";
+		Foliensatz obj = new Foliensatz();
+
+		try {
+
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, folienSatzID);
+			rs = stat.executeQuery();
+
+			if (rs.next()) {
+				obj.setID(folienSatzID);
+				obj.setKurs(this.getKurs(rs.getInt("KursID")));
+				obj.setKursID(rs.getInt("KursID"));
+				obj.setName(rs.getString("Name"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - Foliensatz");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+
+		return obj;
+	}
+	
+	public Kurs getKurs(int kursID) {
+
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Kurs WHERE KursID = ?";
+		Kurs obj = new Kurs();
+
+		try {
+
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, kursID);
+			rs = stat.executeQuery();
+
+			if (rs.next()) {
+				obj.setID(kursID);
+				obj.setName(rs.getString("Name"));
+				obj.setPasswort(rs.getString("Passwort"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - Kurs");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+
+		return obj;
+	}
+	
 	public Lehrer getLehrer(String bn) {
 
 		PreparedStatement stat = null;

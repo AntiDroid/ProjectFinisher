@@ -1,28 +1,17 @@
 package handler;
 
-public class Message {
+import java.util.ArrayList;
+import java.util.HashMap;
 
-	private String messageType;
-	private Object message;
+import javax.websocket.Session;
+
+public abstract class Message {
 	
-	public Message(String mT, Object m){
-		this.messageType = mT;
-		this.message = m;
-	}
-
-	public String getMessageType() {
-		return messageType;
-	}
-
-	public void setMessageType(String messageType) {
-		this.messageType = messageType;
-	}
-
-	public Object getMessage() {
-		return message;
-	}
-
-	public void setMessage(Object message) {
-		this.message = message;
+	static public HashMap<Integer, ArrayList<Session>> kursSessions;
+	
+	String type;
+	
+	public Message(String t){
+		this.type = t;
 	}
 }
