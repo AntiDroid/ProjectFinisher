@@ -1,0 +1,5 @@
+studentenfolieseitn:
+<- kursInfoRequest || userId, kursId
+-> kursInfo || kursName, lehrerName
+
+-> folienUpdate || folienId, folienName, interaktiv(bool){heatplot(bool), bereiche(bool){anzahlBereiche(int), ber1X(int), ber1Y(int), ber2X..(soviele wie anzahlBereiche)}}

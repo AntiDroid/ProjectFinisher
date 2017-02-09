@@ -82,7 +82,7 @@
 			<button class="btn text-left" disabled>Marker<br/>LÃ¶schen</button>
 		</div>
 		<div class="col-xs-6">
-			<button class="btn btn-success text-right submitButton" disabled>BestÃ¤tigen</button>
+			<button id="bestaetigen" class="btn btn-success text-right submitButton" disabled>BestÃ¤tigen</button>
 		</div>
 	</div>
 </div>
@@ -171,7 +171,7 @@ $('#folieImg').click(function(e)
 		    
 		    
 		    $('#pin').css('left', e.pageX).css('top', e.pageY-25).show();
-		    
+		    $("#bestaetigen").removeAttr("disabled");
 
 });
 
