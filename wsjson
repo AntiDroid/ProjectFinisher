@@ -2,4 +2,8 @@ studentenfolieseitn:
 <- kursInfoRequest || userId, kursId
 -> kursInfo || kursName, lehrerName
 
--> folienUpdate || folienId, folienName, interaktiv(bool){heatplot(bool), bereiche(bool){anzahlBereiche(int), ber1X(int), ber1Y(int), ber2X..(soviele wie anzahlBereiche)}}
+-> folienUpdate || folienId, fSatzName, interaktiv(bool)if true{isHeatplot(bool)else{bereichList(Auswahlwahlbereich}}
+
+
+lehrerfolienseite:
+<- folienUpdateRequest || folienId, kursId
