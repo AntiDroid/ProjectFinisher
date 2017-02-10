@@ -1,8 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="models.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+	<%
+	Client user = null;
+	int kursId = 0;
+	if(session.getAttribute("benutzer") == null){
+		response.sendRedirect("login.jsp");
+	}
+	else{
+		user = (Client) session.getAttribute("benutzer");
+		if(user instanceof Student){
+			response.sendRedirect("studenten_kurse.jsp");
+		}
+		if(session.getAttribute("kursId") != null){
+			kursId = (int) session.getAttribute("kursId");
+		}
+		else response.sendRedirect("lehrer_kurse.jsp");
+	}
+	%>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -134,7 +151,7 @@
 <!--Navbar-->
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<span id="userName" class="navbar-brand">NAME</span>
+		<span id="userName" class="navbar-brand"></span>
 		<span class="navbar-brand" style="font-size: 10px;">0 Studenten Online</span>
 		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
@@ -294,7 +311,7 @@
 									</select>
 								</div>
 								<div class="col-md-6" style="top: 30px;">
-									<button class="btn btn-sm btn-info intBereichButton verticalMiddle">Histogramm<br/>erzeugen</button>
+									<button id="histoBtn" class="btn btn-sm btn-info intBereichButton verticalMiddle" ">Histogramm<br/>erzeugen</button>
 								</div>
 							</div>
 						</div>
@@ -317,34 +334,19 @@
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="slick/slick.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-$(document).ready(function(){
-	$(".center").slick({
-	  infinite: false,
-	  slidesToShow: 4,
-	  slidesToScroll: 3
-	});
-
-	if($("#interaktivSwitch").attr("checked")){
-		$("#allIntDiv").show();
+	var userId = "<%=user.getID()%>";
+	var vorname = "<%=user.getVorname()%>";
+	var nachname = "<%=user.getNachname()%>";
+	
+	var kursId = <%=kursId%>;
+	
+	if(vorname != null && nachname != null){
+		$("#userName").html(vorname+" "+nachname);
 	}
 	else{
-		$("#allIntDiv").hide();
+		$("#userName").html("kein Name");
 	}
-
-});
-
-$("#interaktivSwitch").change(function() {
-    if(this.checked) {
-        $("#allIntDiv").fadeIn(350);
-    }
-    else{
-		$("#allIntDiv").fadeOut(450);
-	}
-});
-
-
-
 </script>
-
+<script src="lehrer_folien.js"></script>
 </body>
 </html>

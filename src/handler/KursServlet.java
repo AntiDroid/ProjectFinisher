@@ -42,7 +42,7 @@ public class KursServlet extends HttpServlet {
 		else if(session.getAttribute("benutzer") instanceof Lehrer){
 			session.setAttribute("kursId", kursId);
 			dbm.dispose();
-			response.sendRedirect("lehrer_folie.jsp");
+			response.sendRedirect("lehrer_folien.jsp");
 		}
 		
 	}

@@ -17,6 +17,7 @@
 		if(session.getAttribute("kursId") != null){
 			kursId = (int) session.getAttribute("kursId");
 		}
+		else response.sendRedirect("studenten_kurse.jsp");
 	}
 	%>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -73,7 +74,7 @@
 	</div>
 
 	<div class="imgDiv">
-			<img id="folieImg" src="imgs/Beispiele/2.png"/>
+			<img id="folienImg" src="imgs/Beispiele/2.png"/>
 	</div>
 	<img id="pin" src="imgs/pin.png" style="display: none; position: absolute;" />
 
@@ -82,7 +83,7 @@
 			<button class="btn text-left" disabled>Marker<br/>LÃ¶schen</button>
 		</div>
 		<div class="col-xs-6">
-			<button class="btn btn-success text-right submitButton" disabled>BestÃ¤tigen</button>
+			<button id="bestaetigen" class="btn btn-success text-right submitButton" disabled>BestÃ¤tigen</button>
 		</div>
 	</div>
 </div>
@@ -104,78 +105,6 @@
 		$("#userName").html("kein Name");
 	}
 </script>
-
-<script type="text/javascript">
-
-	var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
-	
-	socket.onopen = function() 
-	{
-		console.log("Websocketverbindung hergestellt :)");
-		
-		var kursInfoRequest = {type:"kursInfoRequest", userId: userId, kursId: kursId};
-		var kursInfoRequestJson = JSON.stringify(kursInfoRequest);
-		socket.send(kursInfoRequestJson);
-	};
-	
-	socket.onerror = function(evt) 
-	{
-		console.log("Websocketverbindung konnte nicht hergestellt werden :(");
-	};
-	
-	socket.onclose = function()
-	{
-		
-	};
-	
-	socket.onmessage = function(evt) 
-	{
-		var msg = $.parseJSON(evt.data);
-		
-		if(msg.type == "kursInfo"){
-			$("#kursName").html(msg.kursName);
-			$("#lehrerName").html(msg.lehrerName);
-		}
-		
-	};
-	
-
-</script>
-
-<script type="text/javascript">
-$(document).ready(function(){
-	
-	
-
-});
-
-var clickX = 0;
-var clickY = 0;
-
-$('#folieImg').click(function(e)
-		{   
-    		var offset_x = $(this).offset().left - $(window).scrollLeft();
-		    var offset_y = $(this).offset().top - $(window).scrollTop();
-
-		    var x = (e.clientX - offset_x);
-		    var y = (e.clientY - offset_y);
-		    
-		    var imgW = $(this).width();
-		    var imgH = $(this).height();
-		    
-		    var relX = Math.round((x/imgW)*100);
-		    var relY = Math.round((y/imgH)*100);
-		    
-		    clickX = relX;
-		    clickY = relY;
-		    
-		    
-		    $('#pin').css('left', e.pageX).css('top', e.pageY-25).show();
-		    
-
-});
-
-
-</script>
+<script src="studenten_folie.js"></script>
 </body>
 </html>
