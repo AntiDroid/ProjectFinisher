@@ -6,6 +6,8 @@
 	<%
 	Client user = null;
 	int kursId = 0;
+	
+	
 	if(session.getAttribute("benutzer") == null){
 		response.sendRedirect("login.jsp");
 	}

@@ -6,6 +6,8 @@ $(document).ready(function() {
 var interaktiv = false;
 var heatplot = false;
 var bereiche = false;
+var bereichList = []; // obenLinksX, obenLinksY, untenRechtsX, untenRechtsY
+
 
 // Websocket
 var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
@@ -24,10 +26,24 @@ socket.onopen = function() {
 
 socket.onerror = function(evt) {
 	console.log("Websocketverbindung konnte nicht hergestellt werden :(");
+	
+	var socketEnde = {
+			type : "socketEnde",
+			userId : userId,
+			kursId : kursId
+		};
+	var socketEndeJson = JSON.stringify(socketEnde);
+	socket.send(socketEndeJson);
 };
 
 socket.onclose = function() {
-
+	var socketEnde = {
+			type : "socketEnde",
+			userId : userId,
+			kursId : kursId
+		};
+	var socketEndeJson = JSON.stringify(socketEnde);
+	socket.send(socketEndeJson);
 };
 
 // Onmessages
@@ -42,7 +58,7 @@ socket.onmessage = function(evt) {
 		heatplot = false;
 		bereiche = false;
 
-		$("#folienImg").attr("src", "ImgServ?id=" + msg.folienId);
+		$("#folienImg").attr("src", "ImgServlet?id=" + msg.folienId);
 		$("#lehrerName").html(msg.lehrerName);
 		$("#folienName").html(msg.fSatzName);
 
@@ -52,9 +68,7 @@ socket.onmessage = function(evt) {
 				heatplot = true;
 			} else {
 				bereiche = true;
-				for (var int = 0; int < msg.bereichList.length; int++) {
-					// shit zu machen
-				}
+				bereichList = msg.bereichList;
 			}
 		}
 	}
@@ -81,6 +95,7 @@ $('#folienImg').click(function(e) {
 	clickX = relX;
 	clickY = relY;
 
+	// mit bereichlist überprüfen...
 	$('#pin').css('left', e.pageX).css('top', e.pageY - 25).show();
 	$("#bestaetigen").removeAttr("disabled");
 
