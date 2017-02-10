@@ -2,6 +2,7 @@ package handler;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -14,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import models.Auswahlbereich;
+import models.Folie;
 import models.Kurs;
 import models.Lehrer;
 import database.DBManager;
@@ -95,19 +97,39 @@ public class MessageHandler {
 			int folienID = Integer.parseInt(folienId);
 			int kursID = Integer.parseInt(kursId);
 			
-			String respType = "folienUpdate";
-			String fSatzName = "";
-			boolean interaktiv;
-			boolean isHeatplot = false;
-			ArrayList<Auswahlbereich> bereichList = new ArrayList<Auswahlbereich>();
+			Folie f = dbm.getFolie(folienID);
 			
-			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(respType, folienId, fSatzName, interaktiv, isHeatplot, bereichList);
+			// zu viele Daten durch Verschachtelung?
+			// was wenn Websocket auf Client-Seite Verbindung verliert? Liste wird nicht korrigiert
+			// Socket - Equals?
+			
+			String respType = "folienUpdate";
+			String fSatzName = f.getfSatz().getName();
+			boolean interaktiv = (f.getFolienTyp() == 'A') ;
+			boolean isHeatplot = (f.getFolienTyp() == 'H' && interaktiv);
+			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(f);
+			
+			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(respType, folienID, fSatzName, interaktiv, isHeatplot, bereichList);
 			
 			try {
-				session.getBasicRemote().sendText(gson.toJson(responseObj));
+				
+				for(Session s: Message.kursSessions.get(kursID)){
+					s.getBasicRemote().sendText(gson.toJson(responseObj));
+				}
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
+			break;
+		}
+		
+		case "socketEnde":
+		{
+			String kursId = jsonData.get("kursId").getAsString();
+			int kursID = Integer.parseInt(kursId);
+			
+			Message.kursSessions.get(kursID).remove(session);
 			
 			break;
 		}
@@ -127,6 +149,17 @@ public class MessageHandler {
 	@OnClose
 	public void onClose(){
 		System.out.println("STOP");
+	}
+}
+
+abstract class Message {
+	
+	static public HashMap<Integer, ArrayList<Session>> kursSessions;
+	
+	String type;
+	
+	public Message(String t){
+		this.type = t;
 	}
 }
 

@@ -40,6 +40,7 @@ CREATE TABLE Foliensatz (
 -- Heatplot 		- H
 -- Choice  			- C
 -- Multiple Choice 	- M
+-- Anzeige 			- A
 CREATE TABLE Folie (
         FolienID            int PRIMARY KEY AUTO_INCREMENT,
         FoliensatzID		int NOT NULL,
