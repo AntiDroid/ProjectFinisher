@@ -5,6 +5,7 @@ $(document).ready(function() {
 
 var folieAktiv = true;
 var pinSet = false;
+var beantwortet = false;
 
 var interaktiv = false;
 var heatplot = false;
@@ -67,6 +68,7 @@ socket.onmessage = function(evt) {
 		}
 	} else if (msg.type == "folienUpdate") {
 		folieAktiv = true;
+		beantwortet = false;
 		interaktiv = false;
 		heatplot = false;
 		bereiche = false;
@@ -84,13 +86,28 @@ socket.onmessage = function(evt) {
 				bereichList = msg.bereichList;
 			}
 		}
+		
+		folienReset();
 	}
 
 };
 
+//Functions
+
+function folienReset(){
+	var clickX = 0;
+	var clickY = 0;
+	$('#pin').hide;
+	$("#bestaetigen").attr("disabled");
+}
+
+
+//Klicks
+
 // Klick auf Folie
 var clickX = 0;
 var clickY = 0;
+var bereichNr = 0;
 
 $('#folienImg').click(function(e) {
 	
@@ -114,6 +131,7 @@ $('#folienImg').click(function(e) {
 			if(relX >= bereichList[i].obenLinksX && relX <= bereichList[i].untenRechtsX){
 				if(relY >= bereichList[i].obenLinksY && relY <= bereichList[i].untenRechtsY){
 					inBereich = true;
+					bereichNr = i;
 					break;
 				}
 			}
@@ -134,7 +152,37 @@ $('#folienImg').click(function(e) {
 			$('#pin').hide;
 			$("#bestaetigen").attr("disabled");
 		}
+	}
+});
 
+$('#bestaetigen').click(function(e) {
+	beantwortet = true;
+	
+	if(bereiche){
+		var bereichAntwort = {
+				type : "bereichAntwort",
+				userId : userId,
+				kursId : kursId,
+				bereichNr : bereichNr,
+				posX : clickX,
+				posY : clickY
+			};
+		var bereichAntwortJson = JSON.stringify(bereichAntwort);
+		socket.send(bereichAntwortJson);
+	}
+	else if(heatplot){
+		var heatplotAntwort = {
+				type : "heatplotAntwort",
+				userId : userId,
+				kursId : kursId,
+				posX : clickX,
+				posY : clickY
+			};
+		var heatplotAntwortJson = JSON.stringify(heatplotAntwort);
+		socket.send(heatplotAntwortJson);
 	}
 	
+	$("#bestaetigen").attr("disabled");
 });
+
+

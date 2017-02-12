@@ -16,7 +16,22 @@ studentenfolieseitn:
 		else{
 		bereichList(Auswahlwahlbereich}}
 
-
+<- Beantwortung:
+		var bereichAntwort = {
+				type : "bereichAntwort",
+				userId : userId,
+				kursId : kursId,
+				bereichNr : bereichNr,
+				posX : clickX,
+				posY : clickY
+			}
+		var heatplotAntwort = {
+				type : "heatplotAntwort",
+				userId : userId,
+				kursId : kursId,
+				posX : clickX,
+				posY : clickY
+			};
 
 
 
@@ -25,3 +40,4 @@ lehrerfolienseite:
 	folienId
 	kursId
 -> siehe folienUpdate
+
