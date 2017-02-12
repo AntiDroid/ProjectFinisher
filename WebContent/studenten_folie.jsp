@@ -76,7 +76,7 @@
 	</div>
 
 	<div class="imgDiv">
-			<img id="folienImg" src="imgs/Beispiele/1.png"/>
+			<img id="folienImg" src="ImgServlet"/>
 	</div>
 	<img id="pin" src="imgs/pin.png" style="display: none; position: absolute;" />
 

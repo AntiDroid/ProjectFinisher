@@ -24,7 +24,7 @@ public class ImgServlet extends HttpServlet {
 		try {
 
 			response.setContentType("image/jpg");
-			BufferedImage bi = ImageIO.read(new File("C:\\Users\\ndsts_000\\workspaceEE\\ProjectFinisher\\WebContent\\imgs\\Beispiele\\7.png"));
+			BufferedImage bi = ImageIO.read(new File(getServletContext().getRealPath("imgs/Beispiele/7.png")));
 
 			Graphics g = bi.getGraphics();
 
