@@ -3,6 +3,9 @@ $(document).ready(function() {
 
 });
 
+var folieAktiv = true;
+var pinSet = false;
+
 var interaktiv = false;
 var heatplot = false;
 var bereiche = false;
@@ -53,7 +56,17 @@ socket.onmessage = function(evt) {
 	if (msg.type == "kursInfo") {
 		$("#kursName").html(msg.kursName);
 		$("#lehrerName").html(msg.lehrerName);
+		if(msg.folieAktiv){
+			var folienRequest = {
+					type : "folienRequest",
+					userId : userId,
+					kursId : kursId
+				};
+			var kursInfoRequestJson = JSON.stringify(folienRequest);
+			socket.send(folienRequestJson);
+		}
 	} else if (msg.type == "folienUpdate") {
+		folieAktiv = true;
 		interaktiv = false;
 		heatplot = false;
 		bereiche = false;
@@ -80,23 +93,48 @@ var clickX = 0;
 var clickY = 0;
 
 $('#folienImg').click(function(e) {
-	var offset_x = $(this).offset().left - $(window).scrollLeft();
-	var offset_y = $(this).offset().top - $(window).scrollTop();
+	
+	if(folieAktiv){
+		var offset_x = $(this).offset().left - $(window).scrollLeft();
+		var offset_y = $(this).offset().top - $(window).scrollTop();
+	
+		var x = (e.clientX - offset_x);
+		var y = (e.clientY - offset_y);
+	
+		var imgW = $(this).width();
+		var imgH = $(this).height();
+	
+		var relX = Math.round((x / imgW) * 100);
+		var relY = Math.round((y / imgH) * 100);
+	
+		
+		// mit bereichlist überprüfen...
+		var inBereich = false;
+		for (var i = 0; i < bereichList.length; i++) {
+			if(relX >= bereichList[i].obenLinksX && relX <= bereichList[i].untenRechtsX){
+				if(relY >= bereichList[i].obenLinksY && relY <= bereichList[i].untenRechtsY){
+					inBereich = true;
+					break;
+				}
+			}
+		}
+		
+		if(inBereich) { 
+			clickX = relX;
+			clickY = relY;
+			pinSet = true; 
+		}
+		else { pinSet = false; }
+		
+		if(pinSet){
+			$('#pin').css('left', e.pageX).css('top', e.pageY - 25).show();
+			$("#bestaetigen").removeAttr("disabled");
+		}
+		if(!pinSet){
+			$('#pin').hide;
+			$("#bestaetigen").attr("disabled");
+		}
 
-	var x = (e.clientX - offset_x);
-	var y = (e.clientY - offset_y);
-
-	var imgW = $(this).width();
-	var imgH = $(this).height();
-
-	var relX = Math.round((x / imgW) * 100);
-	var relY = Math.round((y / imgH) * 100);
-
-	clickX = relX;
-	clickY = relY;
-
-	// mit bereichlist überprüfen...
-	$('#pin').css('left', e.pageX).css('top', e.pageY - 25).show();
-	$("#bestaetigen").removeAttr("disabled");
-
+	}
+	
 });

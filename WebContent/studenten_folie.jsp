@@ -7,7 +7,6 @@
 	Client user = null;
 	int kursId = 0;
 	
-	
 	if(session.getAttribute("benutzer") == null){
 		response.sendRedirect("login.jsp");
 	}
@@ -21,6 +20,7 @@
 		}
 		else response.sendRedirect("studenten_kurse.jsp");
 	}
+	
 	%>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -76,7 +76,7 @@
 	</div>
 
 	<div class="imgDiv">
-			<img id="folienImg" src="imgs/Beispiele/2.png"/>
+			<img id="folienImg" src="imgs/Beispiele/1.png"/>
 	</div>
 	<img id="pin" src="imgs/pin.png" style="display: none; position: absolute;" />
 
@@ -94,6 +94,7 @@
 <script src="jquery/jquery-3.1.1.js"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
+
 	var userId = "<%=user.getID()%>";
 	var vorname = "<%=user.getVorname()%>";
 	var nachname = "<%=user.getNachname()%>";
