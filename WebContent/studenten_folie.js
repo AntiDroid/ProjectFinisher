@@ -4,6 +4,7 @@ $(document).ready(function() {
 });
 
 var folieAktiv = true;
+var folienId = 0;
 var pinSet = false;
 var beantwortet = false;
 
@@ -57,42 +58,45 @@ socket.onmessage = function(evt) {
 	if (msg.type == "kursInfo") {
 		$("#kursName").html(msg.kursName);
 		$("#lehrerName").html(msg.lehrerName);
-		if(msg.folieAktiv){
-			var folienRequest = {
-					type : "folienRequest",
-					userId : userId,
-					kursId : kursId
-				};
-			var kursInfoRequestJson = JSON.stringify(folienRequest);
-			socket.send(folienRequestJson);
+		if(msg.folie != null){
+			folienUpdate(msg);
 		}
 	} else if (msg.type == "folienUpdate") {
-		folieAktiv = true;
-		beantwortet = false;
-		interaktiv = false;
-		heatplot = false;
-		bereiche = false;
-
-		$("#folienImg").attr("src", "ImgServlet?id=" + msg.folienId);
-		$("#lehrerName").html(msg.lehrerName);
-		$("#folienName").html(msg.fSatzName);
-
-		if (msg.interaktiv) {
-			interaktiv = true;
-			if (msg.isHeatplot) {
-				heatplot = true;
-			} else {
-				bereiche = true;
-				bereichList = msg.bereichList;
-			}
-		}
-		
-		folienReset();
+		folienUpdate(msg);
 	}
 
 };
 
+
 //Functions
+
+function folienUpdate(msg) {
+	folieAktiv = true;
+	beantwortet = false;
+	interaktiv = false;
+	heatplot = false;
+	bereiche = false;
+	folienId = msg.folie.folienID;
+	
+	$("#folienImg").attr("src", "ImgServlet?id=" + msg.folie.folienID);
+	$("#lehrerName").html(msg.lehrerName);
+	$("#folienName").html(msg.folie.fSatz.name);
+
+	if (msg.folie.folienTyp = 'H') {
+		interaktiv = true;
+		heatplot = true;
+	}
+	else if(msg.folie.folienTyp = 'C' || 'M'){
+		interaktiv = true;
+		bereiche = true;
+		bereichList = msg.bereichList;
+	}
+	else{
+		interaktiv = false;
+	}
+	
+	folienReset();
+}
 
 function folienReset(){
 	var clickX = 0;
@@ -163,6 +167,7 @@ $('#bestaetigen').click(function(e) {
 				type : "bereichAntwort",
 				userId : userId,
 				kursId : kursId,
+				folienId : folienId,
 				bereichNr : bereichNr,
 				posX : clickX,
 				posY : clickY
@@ -175,6 +180,7 @@ $('#bestaetigen').click(function(e) {
 				type : "heatplotAntwort",
 				userId : userId,
 				kursId : kursId,
+				folienId : folienId,
 				posX : clickX,
 				posY : clickY
 			};
@@ -184,5 +190,4 @@ $('#bestaetigen').click(function(e) {
 	
 	$("#bestaetigen").attr("disabled");
 });
-
 

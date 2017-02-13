@@ -185,6 +185,8 @@
 		        <form class="text-center" action="" method="post">
 		        	<label></label>
 		        	<input type="file" accept=".pdf" name="pdfDatei" value=".pdf">
+		        	<label>Foliensatzname:</label>
+		        	<input type="text" name="fSatzName">
 		        	<input class="btn btn-primary btn-sm innerUploadBtn" type="submit" name="senden" value="Hochladen">
 		        </form>
 		      </div>

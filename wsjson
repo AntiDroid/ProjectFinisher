@@ -38,5 +38,6 @@ lehrerfolienseite:
 <- folienUpdateRequest
 	folienId
 	kursId
+	sessionId
 -> siehe folienUpdate
 
