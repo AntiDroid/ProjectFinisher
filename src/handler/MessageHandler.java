@@ -18,6 +18,8 @@ import models.Auswahlbereich;
 import models.Folie;
 import models.Kurs;
 import models.Lehrer;
+import models.Student;
+import models.Uservoting;
 import database.DBManager;
 
 @ServerEndpoint("/MessageHandler")
@@ -52,18 +54,19 @@ public class MessageHandler {
 		
 		case "kursInfoRequest":
 		{
-			String studentId = jsonData.get("userId").getAsString();
-			String kursId = jsonData.get("kursId").getAsString();
-			
-			int studentID = Integer.parseInt(studentId);
-			int kursID = Integer.parseInt(kursId);
+			int studentID = jsonData.get("userId").getAsInt();
+			int kursID = jsonData.get("kursId").getAsInt();
 			
 			String respType = "kursInfo";
 			String kursName = "";
 			String lehrerName = "";
 			Folie f = Message.aktiveFolie.get(kursID);
-			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(f);
+			ArrayList<Auswahlbereich> bereichList = null;
 			
+			if(f != null){
+				bereichList = dbm.getAuswahlbereiche(f);
+			}
+				
 			ArrayList<Kurs> kList = dbm.getKurseStudent(studentID);
 			
 			for(Kurs k: kList){
@@ -99,11 +102,8 @@ public class MessageHandler {
 		}
 		case "folienUpdateRequest":
 		{	
-			String folienId = jsonData.get("folienId").getAsString();
-			String kursId = jsonData.get("kursId").getAsString();
-			
-			int folienID = Integer.parseInt(folienId);
-			int kursID = Integer.parseInt(kursId);
+			int folienID = jsonData.get("folienId").getAsInt();
+			int kursID = jsonData.get("kursId").getAsInt();
 			
 			// zu viele Daten durch Verschachtelung?
 			// was wenn Websocket auf Client-Seite Verbindung verliert? Liste wird nicht korrigiert
@@ -129,13 +129,38 @@ public class MessageHandler {
 			break;
 		}
 		
+		case "bereichAntwort":
+		{
+			int userId = jsonData.get("userId").getAsInt();
+			int kursId = jsonData.get("kursId").getAsInt();
+			int folienId = jsonData.get("folienId").getAsInt();
+			int posX = jsonData.get("posX").getAsInt();
+			int posY = jsonData.get("posY").getAsInt();
+			String ao = jsonData.get("auswahloption").getAsString();
+			String sesID = jsonData.get("sessionId").getAsString();
+		
+			Uservoting uv = new Uservoting(sesID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);
+			dbm.save(uv);
+			
+			break;
+		}
+		
+		case "heatplotAntwort":
+		{
+			int userId = jsonData.get("userId").getAsInt();
+			int kursId = jsonData.get("kursId").getAsInt();
+			int posX = jsonData.get("posX").getAsInt();
+			int posY = jsonData.get("posY").getAsInt();		
+			
+			
+			break;
+		}
+		
 		case "socketEnde":
 		{
-			String kursId = jsonData.get("kursId").getAsString();
-			int kursID = Integer.parseInt(kursId);
+			int kursID = jsonData.get("kursId").getAsInt();
 			
 			Message.kursSessions.get(kursID).remove(session);
-			
 			break;
 		}
 		default:

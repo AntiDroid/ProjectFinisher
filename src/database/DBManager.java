@@ -1002,6 +1002,38 @@ public class DBManager {
 
 		return obj;
 	}
+	
+	public Lehrer getLehrer(int lehrerID) {
+
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Lehrer WHERE LehrerID = ?";
+		Lehrer obj = new Lehrer();
+
+		try {
+
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, lehrerID);
+			rs = stat.executeQuery();
+
+			if (rs.next()) {
+				obj.setID(lehrerID);
+				obj.setBenutzername(rs.getString("Benutzername"));
+				obj.setVorname(rs.getString("Vorname"));
+				obj.setNachname(rs.getString("Nachname"));
+				obj.setPasswort(rs.getString("Passwort"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - Lehrer");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+
+		return obj;
+	}
 
 	public Student getStudent(String bn) {
 
@@ -1035,6 +1067,38 @@ public class DBManager {
 		return obj;
 	}
 
+	public Student getStudent(int studentID) {
+
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Student WHERE StudentenID = ?";
+		Student obj = new Student();
+
+		try {
+
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, studentID);
+			rs = stat.executeQuery();
+
+			if (rs.next()) {
+				obj.setID(studentID);
+				obj.setBenutzername(rs.getString("Benutzername"));
+				obj.setVorname(rs.getString("Vorname"));
+				obj.setNachname(rs.getString("Nachname"));
+				obj.setPasswort(rs.getString("Passwort"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - Student");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+
+		return obj;
+	}
+	
 	// # was wenn alle Uservotings einer folie und session gebraucht werden?
 	public ArrayList<Uservoting> getUservotings(Student student, Folie folie) {
 

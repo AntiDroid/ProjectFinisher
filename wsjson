@@ -6,6 +6,7 @@ studentenfolieseitn:
 -> kursInfo:
 	kursName
 	lehrerName
+______________________________
 
 -> folienUpdate
 	folienId
@@ -15,25 +16,23 @@ studentenfolieseitn:
 		isHeatplot(bool)
 		else{
 		bereichList(Auswahlwahlbereich}}
+______________________________
 
 <- Beantwortung:
 		var bereichAntwort = {
-				type : "bereichAntwort",
-				userId : userId,
-				kursId : kursId,
-				bereichNr : bereichNr,
-				posX : clickX,
-				posY : clickY
+				userId
+				kursId
+				bereichNr
+				posX
+				posY
 			}
 		var heatplotAntwort = {
-				type : "heatplotAntwort",
-				userId : userId,
-				kursId : kursId,
-				posX : clickX,
-				posY : clickY
+				userId
+				kursId
+				posX
+				posY
 			};
-
-
+______________________________
 
 lehrerfolienseite:
 <- folienUpdateRequest
