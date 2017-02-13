@@ -23,6 +23,12 @@ import database.DBManager;
 @ServerEndpoint("/MessageHandler")
 public class MessageHandler {
 
+	// Folientyp
+	// Heatplot 		- H
+	// Choice  			- C
+	// Multiple Choice 	- M
+	// reine Anzeige 	- A
+	
 	@OnOpen
 	public void onOpen(){
 		
@@ -55,10 +61,12 @@ public class MessageHandler {
 			String respType = "kursInfo";
 			String kursName = "";
 			String lehrerName = "";
+			Folie f = Message.aktiveFolie.get(kursID);
+			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(f);
 			
-			ArrayList<Kurs> kListe = dbm.getKurseStudent(studentID);
+			ArrayList<Kurs> kList = dbm.getKurseStudent(studentID);
 			
-			for(Kurs k: kListe){
+			for(Kurs k: kList){
 				if(k.getID() == kursID){
 					kursName = k.getName();
 				}
@@ -67,7 +75,7 @@ public class MessageHandler {
 			ArrayList<Lehrer> lehrerListe = dbm.getKurslehrer(kursID);
 			lehrerName = lehrerListe.get(0).getVorname()+" "+lehrerListe.get(0).getNachname();
 			
-			KursInfoRequestMessage responseObj = new KursInfoRequestMessage(respType, kursName, lehrerName);
+			KursInfoRequestMessage responseObj = new KursInfoRequestMessage(respType, kursName, lehrerName, f, bereichList);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -97,19 +105,16 @@ public class MessageHandler {
 			int folienID = Integer.parseInt(folienId);
 			int kursID = Integer.parseInt(kursId);
 			
-			Folie f = dbm.getFolie(folienID);
-			
 			// zu viele Daten durch Verschachtelung?
 			// was wenn Websocket auf Client-Seite Verbindung verliert? Liste wird nicht korrigiert
 			// Socket - Equals?
 			
 			String respType = "folienUpdate";
-			String fSatzName = f.getfSatz().getName();
-			boolean interaktiv = (f.getFolienTyp() == 'A') ;
-			boolean isHeatplot = (f.getFolienTyp() == 'H' && interaktiv);
+			Folie f = dbm.getFolie(folienID);
 			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(f);
+			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(respType, f, bereichList);
 			
-			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(respType, folienID, fSatzName, interaktiv, isHeatplot, bereichList);
+			Message.aktiveFolie.put(kursID, f);
 			
 			try {
 				
@@ -155,6 +160,7 @@ public class MessageHandler {
 abstract class Message {
 	
 	static public HashMap<Integer, ArrayList<Session>> kursSessions;
+	static public HashMap<Integer, Folie> aktiveFolie;
 	
 	String type;
 	
@@ -167,29 +173,26 @@ class KursInfoRequestMessage extends Message {
 	
 	String kursName;
 	String lehrerName;
+	Folie folie;
+	ArrayList<Auswahlbereich> bereichList;
 	
-	public KursInfoRequestMessage(String rT, String kN, String lN){
+	public KursInfoRequestMessage(String rT, String kN, String lN, Folie f, ArrayList<Auswahlbereich> bl){
 		super(rT);
 		this.kursName = kN;
 		this.lehrerName = lN;
+		this.folie = f;
+		this.bereichList = bl;
 	}
 }
 
 class FolienUpdateRequestMessage extends Message {
 	
-	String type;
-	int folienId;
-	String fSatzName = "";
-	boolean interaktiv;
-	boolean isHeatplot = false;
-	ArrayList<Auswahlbereich> bereichList = new ArrayList<Auswahlbereich>();
+	Folie folie;
+	ArrayList<Auswahlbereich> bereichList;
 	
-	public FolienUpdateRequestMessage(String rT, int fID, String fSN, boolean interaktiv, boolean iHp, ArrayList<Auswahlbereich> bl){
+	public FolienUpdateRequestMessage(String rT, Folie f, ArrayList<Auswahlbereich> bl){
 		super(rT);
-		this.folienId = fID;
-		this.fSatzName = fSN;
-		this.interaktiv = interaktiv;
-		this.isHeatplot = iHp;
+		this.folie = f;
 		this.bereichList = bl;
 	}
 }
