@@ -82,10 +82,10 @@
 
 	<div class="row">
 		<div class="col-xs-6">
-			<button class="btn text-left" disabled>Marker<br/>LÃ¶schen</button>
+			<button id="clearBtn" class="btn text-left" disabled>Marker<br/>LÃ¶schen</button>
 		</div>
 		<div class="col-xs-6">
-			<button id="bestaetigen" class="btn btn-success text-right submitButton" disabled>BestÃ¤tigen</button>
+			<button id="submitBtn" class="btn btn-success text-right submitButton" disabled>BestÃ¤tigen</button>
 		</div>
 	</div>
 </div>

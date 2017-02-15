@@ -52,6 +52,30 @@ public class MessageHandler {
 		
 		switch(type){
 		
+		case "lehrerKursInfoRequest":
+		{
+			//TODO
+			/*
+			 * <-  lehrerKursInfoRequest = {
+						userId 
+						kursId
+					};
+				->	lehrerKursInfo
+						folienSatzList:ArrayList<Foliensatz>
+			 */
+		}
+		case "folienSatzRequest":
+		{
+			//TODO
+			/*
+			 * <- folienSatzRequest = {
+							userId
+							folienSatzId
+					};
+				-> folienSatz
+						folienList:ArrayList<Folie>
+			 */
+		}
 		case "kursInfoRequest":
 		{
 			int studentID = jsonData.get("userId").getAsInt();
