@@ -182,7 +182,7 @@
 		        <h4 class="modal-title">PDF Hochladen</h4>
 		      </div>
 		      <div class="modal-body">
-		        <form class="text-center" action="" method="post">
+		        <form class="text-center" action="GetPdfServlet" method="post">
 		        	<label></label>
 		        	<input type="file" accept=".pdf" name="pdfDatei" value=".pdf">
 		        	<label>Foliensatzname:</label>
