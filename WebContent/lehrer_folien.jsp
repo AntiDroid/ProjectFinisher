@@ -35,7 +35,7 @@
 		.form-control{
 			padding: 6px;
 		}
-		.folienOption{
+		.folienSatzOption{
 			padding: 3px 2px;
 		}
 
@@ -166,9 +166,9 @@
 		<div class="col-md-2">
 
 		<div style="font-size: 20px">Foliensätze:</div>
-		<select id="folienSaetze" class="form-control" size="24">
-			<option class="folienOption" value="1" selected>Foliensatz1</option>
-			<option class="folienOption" value="2">Foliensatz2</option>
+		<select id="folienSatzListe" class="form-control" size="24">
+			<option class="folienSatzOption" value="1" selected>Foliensatz1</option>
+			<option class="folienSatzOption" value="2">Foliensatz2</option>
 		</select>
 
 		<button class="btn btn-sm btn-warning outerUploadBtn" data-toggle="modal" data-target="#uploadModal">PDF Hochladen</button>
@@ -204,12 +204,12 @@
 			<div class="row"></div>
 				<div class="folienNavDiv text-center">
 					<button class="folienNavBtn btn btn-xs">zurück</button>
-					<span>7 Seiten</span>
+					<span id="folienNavAnzahl">7 Seiten</span>
 					<button class="folienNavBtn btn btn-xs">vor</button>
 				</div>
 
 				<div class="carouselDiv">
-				  <section class="center slider">
+				  <section id="folienNavThumbs" class="center slider">
 				    <div>
 				      <img class="folieThumbnail" src="imgs/Beispiele/1.png">
 				      <div class="text-center">1</div>

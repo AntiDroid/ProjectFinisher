@@ -1,8 +1,3 @@
-//Wenns document geladen hat
-$(document).ready(function() {
-
-});
-
 var folieAktiv = true;
 var folienId = 0;
 var pinSet = false;
@@ -68,6 +63,12 @@ socket.onmessage = function(evt) {
 };
 
 
+//Wenns document geladen hat
+$(document).ready(function() {
+
+});
+
+
 //Functions
 
 function folienUpdate(msg) {
@@ -102,7 +103,16 @@ function folienReset(){
 	var clickX = 0;
 	var clickY = 0;
 	$('#pin').hide;
-	$("#bestaetigen").attr("disabled");
+	disableButtons();
+}
+
+function enableButtons() {
+	$("#submitBtn").removeAttr("disabled");
+	$("#clearBtn").removeAttr("disabled");
+}
+function disableButtons() {
+	$("#submitBtn").attr("disabled");
+	$("#clearBtn").attr("disabled");
 }
 
 
@@ -150,16 +160,19 @@ $('#folienImg').click(function(e) {
 		
 		if(pinSet){
 			$('#pin').css('left', e.pageX).css('top', e.pageY - 25).show();
-			$("#bestaetigen").removeAttr("disabled");
+			enableButtons();
 		}
 		if(!pinSet){
 			$('#pin').hide;
-			$("#bestaetigen").attr("disabled");
+			disableButtons();
 		}
 	}
 });
 
-$('#bestaetigen').click(function(e) {
+//Klick auf Bestaetigen
+$('#submitBtn').click(function(e) {
+	disableButtons();
+	
 	beantwortet = true;
 	
 	if(bereiche){
@@ -187,7 +200,13 @@ $('#bestaetigen').click(function(e) {
 		var heatplotAntwortJson = JSON.stringify(heatplotAntwort);
 		socket.send(heatplotAntwortJson);
 	}
-	
-	$("#bestaetigen").attr("disabled");
+});
+
+//Klick auf Loeschen
+$('#clearBtn').click(function(e) {
+	disableButtons();
+	$('#pin').hide;
+	clickX = 0;
+	clickY = 0;
 });
 

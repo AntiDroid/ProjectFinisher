@@ -35,6 +35,24 @@ ______________________________
 ______________________________
 
 lehrerfolienseite:
+
+<-  lehrerKursInfoRequest = {
+		userId 
+		kursId
+	};
+->	lehrerKursInfo
+		folienSatzList:ArrayList<Foliensatz>
+
+
+<- folienSatzRequest = {
+			userId
+			folienSatzId
+	};
+-> folienSatz
+		folienList:ArrayList<Folie>
+
+
+
 <- folienUpdateRequest
 	folienId
 	kursId
