@@ -18,7 +18,6 @@ import models.Auswahlbereich;
 import models.Folie;
 import models.Kurs;
 import models.Lehrer;
-import models.Student;
 import models.Uservoting;
 import database.DBManager;
 
@@ -132,7 +131,7 @@ public class MessageHandler {
 		case "bereichAntwort":
 		{
 			int userId = jsonData.get("userId").getAsInt();
-			int kursId = jsonData.get("kursId").getAsInt();
+			//int kursId = jsonData.get("kursId").getAsInt();
 			int folienId = jsonData.get("folienId").getAsInt();
 			int posX = jsonData.get("posX").getAsInt();
 			int posY = jsonData.get("posY").getAsInt();
