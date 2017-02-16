@@ -196,12 +196,15 @@ public class MessageHandler {
 	
 	@OnError
 	public void onError(Throwable t){
-		System.out.println("ERROR");
+		/*
+		System.out.println("MessageHandler-ERROR");
+		System.out.println(t.getMessage());
+		*/
 	}
    
 	@OnClose
 	public void onClose(){
-		System.out.println("STOP");
+		System.out.println("MessageHandler-Close");
 	}
 }
 
