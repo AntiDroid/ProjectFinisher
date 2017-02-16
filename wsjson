@@ -52,6 +52,15 @@ lehrerfolienseite:
 		folienList:ArrayList<Folie>
 
 
+<- folienInfoRequest = {
+			userId
+			folienId
+		};
+->	folienInfo
+		folie:Folie
+		bereichList:ArrayList<Auswahlbereich>
+		?auswertung:ArrayList<Uservoting>
+
 
 <- folienUpdateRequest
 	folienId

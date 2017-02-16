@@ -75,6 +75,20 @@ public class MessageHandler {
 						folienList:ArrayList<Folie>
 			 */
 		}
+		case "folienInfoRequest":
+		{
+			//TODO
+			/*
+			 * <- folienInfoRequest = {
+							userId
+							folienId
+						};
+				->	folienInfo
+						folie:Folie
+						bereichList:ArrayList<Auswahlbereich>
+						?auswertung:ArrayList<Uservoting>
+			 */
+		}
 		case "kursInfoRequest":
 		{
 			int studentID = jsonData.get("userId").getAsInt();

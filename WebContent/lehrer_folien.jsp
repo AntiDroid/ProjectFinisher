@@ -76,11 +76,15 @@
 			filter: invert(70%);
 		}
 
-		.folieVorschau{
+		#folieCanvas{
 			width: 100%;
 			border-style: solid;
 			border-color: #ddd;
 			border-width: 1px;
+		}
+		
+		#canvasDiv{
+			width: 100%;
 		}
 
 		.folienButtons{
@@ -249,8 +253,9 @@
 
 				<div class="col-md-8">
 					<!-- Hier sollte noch Canvas her -->
-
-					<img class="folieVorschau" src="imgs/Beispiele/2.png">
+					<div id="canvasDiv">
+						<canvas id="folieCanvas" class="folieVorschau"></canvas>
+					</div>
 				</div>
 
 				<div class="col-md-4">
@@ -279,15 +284,15 @@
 							 <span class="verticalMiddle">Interaktionsmodus: </span>
 							 <span class="btn-group" data-toggle="buttons">
 				                <span class="btn btn-sm btn-default">
-				                    <input type="radio" value="Bereiche" checked/> Bereiche
+				                    <input id="bereichRadio" type="radio" value="Bereiche" /> Bereiche
 				                </span> 
 				                <span class="btn btn-sm btn-default">
-				                    <input type="radio" value="Heatplot" /> Heatplot
+				                    <input id="heatplotRadio" type="radio" value="Heatplot" /> Heatplot
 				                </span>
 				            </span>
 						</div>
 
-						<div class="intBerDiv">
+						<div id="intBerDiv" class="intBerDiv">
 							<div class="row">
 								<div class="col-md-6">
 									<div class="text-center">Interaktive Bereiche:</div>
