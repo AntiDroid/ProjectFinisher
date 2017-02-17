@@ -69,3 +69,10 @@ lehrerfolienseite:
 	sessionId
 -> siehe folienUpdate
 
+
+<- folienDeleteRequest = {
+			userId
+			kursId
+			folienId
+		};
+-> folienSatz //ums zu aktualisiern

@@ -149,7 +149,7 @@
 		}
 		
 		.xAktiveFolie{
-			border: 3px solid green;
+			border: 3px solid green !important;
 		}
 		
 		.xAusgFolie{
@@ -222,31 +222,31 @@
 				<div class="carouselDiv">
 				  <section id="folienNavThumbs" class="center slider">
 				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/1.png">
+				      <img class="folieThumbnail" src="imgs/Beispiele/1.png" name="1">
 				      <div class="text-center">1</div>
 				    </div>
 				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/2.png">
+				      <img class="folieThumbnail" src="imgs/Beispiele/2.png" name="2">
 				      <div class="text-center">2</div>
 				    </div>
 				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/3.png">
+				      <img class="folieThumbnail" src="imgs/Beispiele/3.png" name="3">
 				      <div class="text-center">3</div>
 				    </div>
 				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/4.png">
+				      <img class="folieThumbnail" src="imgs/Beispiele/4.png" name="4">
 				      <div class="text-center">4</div>
 				    </div>
 				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/5.png">
+				      <img class="folieThumbnail" src="imgs/Beispiele/5.png" name="5">
 				      <div class="text-center">5</div>
 				    </div>
 				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/6.png">
+				      <img class="folieThumbnail" src="imgs/Beispiele/6.png" name="6">
 				      <div class="text-center">6</div>
 				    </div>
 				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/7.png">
+				      <img class="folieThumbnail" src="imgs/Beispiele/7.png" name="7">
 				      <div class="text-center">7</div>
 				    </div>
 				  </section>
@@ -277,55 +277,57 @@
 							</div>
 						</div>
 					</div>
-
-					<div class="interaktivSwitchDiv">
-						<div id="intSwitchBtn" class="material-switch">
-							<span class="">Interaktiv: </span>
-                            <input id="interaktivSwitch" type="checkbox" hidden/>
-                            <label for="interaktivSwitch" class="label-primary"></label>
-                        </div>
-					</div>
-
-					<div id="allIntDiv">
-						<div class="intModusDiv">
-							 <span class="verticalMiddle">Interaktionsmodus: </span>
-							 <span class="btn-group" data-toggle="buttons">
-				                <span class="btn btn-sm btn-default active">
-				                    <input id="bereichRadio" type="radio" name="intModus" value="Bereiche" checked/> Bereiche
-				                </span> 
-				                <span class="btn btn-sm btn-default">
-				                    <input id="heatplotRadio" type="radio" name="intModus" value="Heatplot" /> Heatplot
-				                </span>
-				            </span>
+					
+					<div id="interaktivControlsDiv">
+						<div class="interaktivSwitchDiv">
+							<div id="intSwitchBtn" class="material-switch">
+								<span class="">Interaktiv: </span>
+	                            <input id="interaktivSwitch" type="checkbox" hidden/>
+	                            <label for="interaktivSwitch" class="label-primary"></label>
+	                        </div>
 						</div>
-
-						<div id="intBerDiv" class="intBerDiv">
-							<div class="row">
-								<div class="col-md-6">
-									<div class="text-center">Interaktive Bereiche:</div>
-									<select id="intBereichList" class="fWidth" size="5">
-										<option class="" value="1">1: 5,55;26,90</option>
-										<option class="" value="2">Bereich 2</option>
-									</select>
-								</div>
-								<div class="col-md-6" style="top: 5px;">
-									<button class="btn btn-sm btn-danger intBereichButton">Neuer interaktiver<br/>Bereich</button>
-									<button class="btn btn-xs btn-default intBereichButton" disabled>interaktiven Bereich<br/>löschen</button>
+	
+						<div id="allIntDiv">
+							<div class="intModusDiv">
+								 <span class="verticalMiddle">Interaktionsmodus: </span>
+								 <span class="btn-group" data-toggle="buttons">
+					                <span class="btn btn-sm btn-default active">
+					                    <input id="bereichRadio" type="radio" name="intModus" value="Bereiche" checked/> Bereiche
+					                </span> 
+					                <span class="btn btn-sm btn-default">
+					                    <input id="heatplotRadio" type="radio" name="intModus" value="Heatplot" /> Heatplot
+					                </span>
+					            </span>
+							</div>
+	
+							<div id="intBerDiv" class="intBerDiv">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="text-center">Interaktive Bereiche:</div>
+										<select id="intBereichList" class="fWidth" size="5">
+											<option class="" value="1">1: 5,55;26,90</option>
+											<option class="" value="2">Bereich 2</option>
+										</select>
+									</div>
+									<div class="col-md-6" style="top: 5px;">
+										<button class="btn btn-sm btn-danger intBereichButton">Neuer interaktiver<br/>Bereich</button>
+										<button class="btn btn-xs btn-default intBereichButton" disabled>interaktiven Bereich<br/>löschen</button>
+									</div>
 								</div>
 							</div>
-						</div>
-
-						<div class="auswDiv">
-							<div class="row">
-								<div class="col-md-6">
-									<div class="text-center">Auswertungen:</div>
-									<select id="auswerteList" class="fWidth" size="5">
-										<option class="" value="1">1: 23</option>
-										<option class="" value="2">Auswertung 2</option>
-									</select>
-								</div>
-								<div class="col-md-6" style="top: 30px;">
-									<button id="histoBtn" class="btn btn-sm btn-info intBereichButton verticalMiddle" ">Histogramm<br/>erzeugen</button>
+	
+							<div class="auswDiv">
+								<div class="row">
+									<div class="col-md-6">
+										<div class="text-center">Auswertungen:</div>
+										<select id="auswerteList" class="fWidth" size="5">
+											<option class="" value="1">1: 23</option>
+											<option class="" value="2">Auswertung 2</option>
+										</select>
+									</div>
+									<div class="col-md-6" style="top: 30px;">
+										<button id="histoBtn" class="btn btn-sm btn-info intBereichButton verticalMiddle" ">Histogramm<br/>erzeugen</button>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -348,11 +350,13 @@
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="slick/slick.js" type="text/javascript" charset="utf-8"></script>
 <script type="text/javascript">
-	var userId = "<%=user.getID()%>";
+	var userId = <%=user.getID()%>;
 	var vorname = "<%=user.getVorname()%>";
 	var nachname = "<%=user.getNachname()%>";
 	
 	var kursId = <%=kursId%>;
+	var sessionId = '<%=session.getId()%>';
+	
 	
 	if(vorname != null && nachname != null){
 		$("#userName").html(vorname+" "+nachname);

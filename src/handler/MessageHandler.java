@@ -91,6 +91,17 @@ public class MessageHandler {
 															// aaaber bei aner riesen lister von Uservotings kanns performanceprobleme geben glabi, vlt schickschma lei die koords in a andas objekt
 			 */
 		}
+		case "folienDeleteRequest":
+		{
+			/* TODO
+				 * <- folienDeleteRequest = {
+								userId
+								kursId
+								folienId
+							};
+					-> folienSatz //ums zu aktualisiern
+			 */
+		}
 		case "kursInfoRequest":
 		{
 			int studentID = jsonData.get("userId").getAsInt();
