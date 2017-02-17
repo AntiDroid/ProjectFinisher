@@ -86,7 +86,9 @@ public class MessageHandler {
 				->	folienInfo
 						folie:Folie
 						bereichList:ArrayList<Auswahlbereich>
-						?auswertung:ArrayList<Uservoting>
+						bAuswerteList:ArrayList<Integer> //bei bereichn. da muschma a liste mit anzahl von den ausgewählten breichen schicken. indizes gleich wie bei den auswahlbereichn
+						hAuswerteList:ArrayList<Uservoting> //da kanschma gleis ganze Uservoting gebn, weil i die koordinaten brauch
+															// aaaber bei aner riesen lister von Uservotings kanns performanceprobleme geben glabi, vlt schickschma lei die koords in a andas objekt
 			 */
 		}
 		case "kursInfoRequest":

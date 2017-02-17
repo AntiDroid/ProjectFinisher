@@ -147,7 +147,14 @@
 		.auswDiv{
 			margin: 12px 0;
 		}
-
+		
+		.xAktiveFolie{
+			border: 3px solid green;
+		}
+		
+		.xAusgFolie{
+			border: 2px solid black;
+		}
 
 	</style>
 </head>
@@ -283,11 +290,11 @@
 						<div class="intModusDiv">
 							 <span class="verticalMiddle">Interaktionsmodus: </span>
 							 <span class="btn-group" data-toggle="buttons">
-				                <span class="btn btn-sm btn-default">
-				                    <input id="bereichRadio" type="radio" value="Bereiche" /> Bereiche
+				                <span class="btn btn-sm btn-default active">
+				                    <input id="bereichRadio" type="radio" name="intModus" value="Bereiche" checked/> Bereiche
 				                </span> 
 				                <span class="btn btn-sm btn-default">
-				                    <input id="heatplotRadio" type="radio" value="Heatplot" /> Heatplot
+				                    <input id="heatplotRadio" type="radio" name="intModus" value="Heatplot" /> Heatplot
 				                </span>
 				            </span>
 						</div>
@@ -296,7 +303,7 @@
 							<div class="row">
 								<div class="col-md-6">
 									<div class="text-center">Interaktive Bereiche:</div>
-									<select class="fWidth" size="5">
+									<select id="intBereichList" class="fWidth" size="5">
 										<option class="" value="1">1: 5,55;26,90</option>
 										<option class="" value="2">Bereich 2</option>
 									</select>
@@ -312,7 +319,7 @@
 							<div class="row">
 								<div class="col-md-6">
 									<div class="text-center">Auswertungen:</div>
-									<select class="fWidth" size="5">
+									<select id="auswerteList" class="fWidth" size="5">
 										<option class="" value="1">1: 23</option>
 										<option class="" value="2">Auswertung 2</option>
 									</select>

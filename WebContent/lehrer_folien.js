@@ -64,17 +64,44 @@ socket.onmessage = function(evt) {
 			}
 			else if(msg.folie.folienTyp == 'C'){
 				$("#interaktivSwitch").prop('checked', true);
-				$("#allIntDiv").show();
 				$("#bereichRadio").prop('checked', true);
+				$("#allIntDiv").show();
 				$("#intBerDiv$").show();
+				
+				var bereichList = folie.bereichList;
+				var htmlString = "";
+				for (var i = 0; i < bereichList.length; i++) {
+					var oLX = bereichList[i].obenLinksX;
+					var oLY = bereichList[i].obenLinksY;
+					var uRX = bereichList[i].untenRechtsX;
+					var uRY = bereichList[i].untenRechtsY;
+					htmlString += "<option class='' value='"+i+"'>"+(i+1)+": "+oLX+","+oLY+";"+uRX+","+uRY+"</option>";
+				}
+				$("#intBereichList").html(htmlString);
+				
+				var bAuswerteList = folie.bAuswerteList;
+				var htmlString = "";
+				for (var i = 0; i < bAuswerteList.length; i++) {
+					var wert = bAuswerteList[i];
+					htmlString += "<option class='' value='"+wert+"'>"+(i+1)+": "+wert+"</option>";
+				}
+				$("#auswerteList").html(htmlString);
 			}
 			else if(msg.folie.folienTyp == 'H'){
 				$("#interaktivSwitch").prop('checked', true);
-				$("#allIntDiv").show();
 				$("#heatplotRadio").prop('checked', true);
+				$("#allIntDiv").show();
 				$("#intBerDiv$").hide();
+				
+				var hAuswerteList = folie.hAuswerteList;
+				var htmlString = "";
+				for (var i = 0; i < hAuswerteList.length; i++) {
+					var x = hAuswerteList[i].koordX;
+					var y = hAuswerteList[i].koordY;
+					htmlString += "<option class='' value='"+i+"'>"+(i+1)+": "+x+","+y+"</option>";
+				}
+				$("#auswerteList").html(htmlString);
 			}
-				//TODO YO
 		}
 	}
 	
@@ -133,6 +160,12 @@ $('.folieThumbnail').click(function(e) {
 	socket.send(folienInfoRequestJson);
 	
 	
+	//Ab hier kommts wahrscheinlich in FolienInfo
+	//<------------------------------------>
+	$(".folieThumbnail").removeClass("xAusgFolie");
+	$(this).addClass("xAusgFolie");
+	
+	
 	//CANVAS PROBLEME TODO
 	var canvas = document.getElementById("folieCanvas");
 	canvas.width = $('#canvasDiv').width();
@@ -161,7 +194,7 @@ $(document).ready(function(){
 	  slidesToScroll: 3
 	});
 
-	if($("#interaktivSwitch").attr("checked")){
+	if($("#interaktivSwitch").prop("checked")){
 		$("#allIntDiv").show();
 	}
 	else{
@@ -180,15 +213,13 @@ $("#interaktivSwitch").change(function() {
 	}
 });
 
-//TODO iwie funzts nid ganz
-$("#bereichRadio").change(function() {
-    if(this.checked) {
+$("input[name=intModus]").change(function() {
+    if($(this).val() == "Bereiche") {
         $("#intBerDiv").fadeIn(350);
     }
-});
-$("#heatplotRadio").change(function() {
-    if(this.checked) {
+    else if($(this).val() == "Heatplot") {
         $("#intBerDiv").fadeOut(350);
     }
+    
 });
 

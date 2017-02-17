@@ -59,7 +59,8 @@ lehrerfolienseite:
 ->	folienInfo
 		folie:Folie
 		bereichList:ArrayList<Auswahlbereich>
-		?auswertung:ArrayList<Uservoting>
+		bAuswerteList:ArrayList<Integer>
+		hAuswerteList:ArrayList<Uservoting>
 
 
 <- folienUpdateRequest
