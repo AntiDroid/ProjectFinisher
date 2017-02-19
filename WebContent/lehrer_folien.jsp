@@ -198,7 +198,7 @@
 		        	<input type="file" accept=".pdf" name="pdfDatei" value=".pdf">
 		        	<label>Foliensatzname:</label>
 		        	<input type="text" name="name">
-		        	<input type="text" name="kursId" hidden>
+		        	<input type="text" name="kursId" id="getPdfKursId" hidden>
 		        	<input class="btn btn-primary btn-sm innerUploadBtn" type="submit" name="senden" value="Hochladen">
 		        </form>
 		      </div>
@@ -358,6 +358,7 @@
 	var kursId = <%=kursId%>;
 	var sessionId = "<%=session.getId()%>";
 	
+	$("#getPdfKursId").val(kursId);
 	
 	if(vorname != null && nachname != null){
 		$("#userName").html(vorname+" "+nachname);
