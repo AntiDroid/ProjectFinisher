@@ -688,7 +688,7 @@ public class DBManager {
 		return res;
 	}
 
-	public ArrayList<Folie> getFolien(Foliensatz fSatz) {
+	public ArrayList<Folie> getFolien(int folienSatzID) {
 
 		ArrayList<Folie> list = new ArrayList<Folie>();
 
@@ -699,7 +699,7 @@ public class DBManager {
 		try {
 
 			stat = conn.prepareStatement(sql);
-			stat.setInt(1, fSatz.getID());
+			stat.setInt(1, folienSatzID);
 
 			rs = stat.executeQuery();
 
@@ -708,8 +708,8 @@ public class DBManager {
 				Folie obj = new Folie();
 
 				obj.setID(rs.getInt("FolienID"));
-				obj.setFSatz(fSatz);
-				obj.setFoliensatzID(fSatz.getID());
+				obj.setFSatz(getFoliensatz(folienSatzID));
+				obj.setFoliensatzID(folienSatzID);
 				obj.setfPath(rs.getString("fPath"));
 				obj.setFolienTyp(rs.getString("FolienTyp").charAt(0));
 
@@ -727,7 +727,7 @@ public class DBManager {
 		return list;
 	}
 
-	public ArrayList<Foliensatz> getFoliensätze(Kurs kurs) {
+	public ArrayList<Foliensatz> getFoliensätze(int kursID) {
 
 		ArrayList<Foliensatz> list = new ArrayList<Foliensatz>();
 
@@ -738,7 +738,7 @@ public class DBManager {
 		try {
 
 			stat = conn.prepareStatement(sql);
-			stat.setInt(1, kurs.getID());
+			stat.setInt(1, kursID);
 
 			rs = stat.executeQuery();
 
@@ -747,8 +747,8 @@ public class DBManager {
 				Foliensatz obj = new Foliensatz();
 
 				obj.setID(rs.getInt("FoliensatzID"));
-				obj.setKursID(kurs.getID());
-				obj.setKurs(kurs);
+				obj.setKursID(kursID);
+				obj.setKurs(getKurs(kursID));
 				obj.setName(rs.getString("Name"));
 
 				list.add(obj);

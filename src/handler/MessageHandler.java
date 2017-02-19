@@ -16,6 +16,7 @@ import com.google.gson.JsonObject;
 
 import models.Auswahlbereich;
 import models.Folie;
+import models.Foliensatz;
 import models.Kurs;
 import models.Lehrer;
 import models.Uservoting;
@@ -53,28 +54,46 @@ public class MessageHandler {
 		
 		case "lehrerKursInfoRequest":
 		{
-			//TODO
-			/*
-			 * <-  lehrerKursInfoRequest = {
-						userId 
-						kursId
-					};
-				->	lehrerKursInfo
-						folienSatzList:ArrayList<Foliensatz>
-			 */
+			//int lehrerID = jsonData.get("userId").getAsInt();
+			int kursID = jsonData.get("kursId").getAsInt();
+			
+			String respType = "lehrerKursInfo";
+			ArrayList<Foliensatz> folienSatzList = null;
+			
+			dbm.getFoliensätze(kursID);
+			
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(respType, folienSatzList);
+			
+			try {
+				session.getBasicRemote().sendText(gson.toJson(responseObj));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			break;
 		}
+		
 		case "folienSatzRequest":
 		{
-			//TODO
-			/*
-			 * <- folienSatzRequest = {
-							userId
-							folienSatzId
-					};
-				-> folienSatz
-						folienList:ArrayList<Folie>
-			 */
+			//int lehrerID = jsonData.get("userId").getAsInt();
+			int folienSatzID = jsonData.get("kursId").getAsInt();
+			
+			String respType = "folienSatz";
+			ArrayList<Folie> folienList = null;
+			
+			dbm.getFolien(folienSatzID);
+			
+			FoliensatzFolienMessage responseObj = new FoliensatzFolienMessage(respType, folienList);
+			
+			try {
+				session.getBasicRemote().sendText(gson.toJson(responseObj));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			break;
 		}
+		
 		case "kursInfoRequest":
 		{
 			int studentID = jsonData.get("userId").getAsInt();
@@ -101,7 +120,7 @@ public class MessageHandler {
 			ArrayList<Lehrer> lehrerListe = dbm.getKurslehrer(kursID);
 			lehrerName = lehrerListe.get(0).getVorname()+" "+lehrerListe.get(0).getNachname();
 			
-			KursInfoRequestMessage responseObj = new KursInfoRequestMessage(respType, kursName, lehrerName, f, bereichList);
+			KursInfoMessageStudent responseObj = new KursInfoMessageStudent(respType, kursName, lehrerName, f, bereichList);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -171,10 +190,15 @@ public class MessageHandler {
 		case "heatplotAntwort":
 		{
 			int userId = jsonData.get("userId").getAsInt();
-			int kursId = jsonData.get("kursId").getAsInt();
+			//int kursId = jsonData.get("kursId").getAsInt();
+			int folienId = jsonData.get("folienId").getAsInt();
 			int posX = jsonData.get("posX").getAsInt();
 			int posY = jsonData.get("posY").getAsInt();		
+			String ao = jsonData.get("auswahloption").getAsString();
+			String sesID = jsonData.get("sessionId").getAsString();
 			
+			Uservoting uv = new Uservoting(sesID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);
+			dbm.save(uv);
 			
 			break;
 		}
@@ -220,14 +244,35 @@ abstract class Message {
 	}
 }
 
-class KursInfoRequestMessage extends Message {
+class KursInfoMessageLehrer extends Message {
+	
+	ArrayList<Foliensatz> folienSatzList;
+	
+	public KursInfoMessageLehrer(String rT, ArrayList<Foliensatz> fsl){
+		super(rT);
+		this.folienSatzList = fsl;
+	}
+}
+
+class FoliensatzFolienMessage extends Message {
+	
+	ArrayList<Folie> folienList;
+	
+	public FoliensatzFolienMessage(String rT, ArrayList<Folie> folien){
+		super(rT);
+		this.folienList = folien;
+	}
+	
+}
+
+class KursInfoMessageStudent extends Message {
 	
 	String kursName;
 	String lehrerName;
 	Folie folie;
 	ArrayList<Auswahlbereich> bereichList;
 	
-	public KursInfoRequestMessage(String rT, String kN, String lN, Folie f, ArrayList<Auswahlbereich> bl){
+	public KursInfoMessageStudent(String rT, String kN, String lN, Folie f, ArrayList<Auswahlbereich> bl){
 		super(rT);
 		this.kursName = kN;
 		this.lehrerName = lN;
