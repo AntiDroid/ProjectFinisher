@@ -198,6 +198,7 @@
 		        	<input type="file" accept=".pdf" name="pdfDatei" value=".pdf">
 		        	<label>Foliensatzname:</label>
 		        	<input type="text" name="name">
+		        	<input type="text" name="kursId" id="getPdfKursId" hidden>
 		        	<input class="btn btn-primary btn-sm innerUploadBtn" type="submit" name="senden" value="Hochladen">
 		        </form>
 		      </div>
@@ -220,7 +221,7 @@
 				</div>
 
 				<div class="carouselDiv">
-				  <section id="folienNavThumbs" class="center slider">
+				  <section id="folienNavThumbsSlick" class="center slider">
 				    <div>
 				      <img class="folieThumbnail" src="imgs/Beispiele/1.png" name="1">
 				      <div class="text-center">1</div>
@@ -355,8 +356,9 @@
 	var nachname = "<%=user.getNachname()%>";
 	
 	var kursId = <%=kursId%>;
-	var sessionId = '<%=session.getId()%>';
+	var sessionId = "<%=session.getId()%>";
 	
+	$("#getPdfKursId").val(kursId);
 	
 	if(vorname != null && nachname != null){
 		$("#userName").html(vorname+" "+nachname);

@@ -117,3 +117,9 @@ INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 1');
 INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 2');
 INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 3');
 INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 4');
+
+
+INSERT INTO Folie VALUES(null, 1, 'derPath', 'C');
+INSERT INTO Folie VALUES(null, 1, 'derPath', 'A');
+INSERT INTO Folie VALUES(null, 2, 'derPath', 'C');
+INSERT INTO Folie VALUES(null, 2, 'derPath', 'A');
