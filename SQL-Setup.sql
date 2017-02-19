@@ -111,3 +111,9 @@ INSERT INTO Kursteilnahme VALUES(null, 2, 1);
 INSERT INTO Berechtigung VALUES(null, 1, 1, 'V');
 INSERT INTO Berechtigung VALUES(null, 2, 1, 'V');
 INSERT INTO Berechtigung VALUES(null, 3, 1, 'V');
+
+
+INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 1');
+INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 2');
+INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 3');
+INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 4');

@@ -1,17 +1,18 @@
 var folienSatzList = null;
-var nowfolienSatzId = 0;
-var nowFolienId = 0;
 var folienList = null;
 var aktuelleFolie = null;
 
-var aktiveFolienId = null;
-var folienIndexIdList = {};
+var nowfolienSatzId = 0;
+var nowFolienId = 0;
+var aktiveFolienId = 0;
+
+
 
 // Websocket
 var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
 
 socket.onopen = function() {
-	console.log("Websocketverbindung hergestellt :)");
+	console.log("Websocket Open :)");
 
 	var lehrerKursInfoRequest = {
 		type : "lehrerKursInfoRequest",
@@ -23,7 +24,7 @@ socket.onopen = function() {
 };
 
 socket.onerror = function(evt) {
-	console.log("Websocketverbindung konnte nicht hergestellt werden :(");
+	console.log("Websocket Error :(");
 	
 	var socketEnde = {
 			type : "socketEnde",
@@ -35,6 +36,8 @@ socket.onerror = function(evt) {
 };
 
 socket.onclose = function() {
+	console.log("Websocket Closed :(")
+	
 	var socketEnde = {
 			type : "socketEnde",
 			userId : userId,
@@ -47,7 +50,8 @@ socket.onclose = function() {
 // Onmessages
 socket.onmessage = function(evt) {
 	var msg = $.parseJSON(evt.data);
-
+	console.log(evt.data);
+	
 	if (msg.type == "lehrerKursInfo") {
 		if(msg.folienSatzList != null){
 			folienSatzList = msg.folienSatzList;
@@ -55,9 +59,9 @@ socket.onmessage = function(evt) {
 		}
 	}
 	else if (msg.type == "folienSatz"){
+		disableButtons();
 		if(msg.folienList != null){
 			folienList = msg.folienList;
-			disableButtons();
 			updateFolien();
 		}
 	}
@@ -109,6 +113,7 @@ socket.onmessage = function(evt) {
 		}
 	}
 	else if (msg.type == "welcheFolieAktiv"){
+		//TODO zur bestätigung, dass die folie aktiviert worden ist
 		aktiveFolie = msg.folienId;
 	}
 	
@@ -130,7 +135,6 @@ function updateFolien() {
 	var htmlString = "";
 	for (var i = 0; i < folienList.length; i++) {
 		var fId = folienList[i].folienID;
-		folienIndexIdList.push(fId);
 		htmlString = ""
 		+'<div>'
 	      +'<img class="folieThumbnail" src="ImgServlet?id='+fId+'" name="'+fId+'" alt="'+(i+1)+'">'
