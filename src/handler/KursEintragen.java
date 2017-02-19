@@ -56,10 +56,8 @@ public class KursEintragen extends HttpServlet {
 		}
 		else if (addKurs != null && !dbm.isKursBeteiligt(kursName, ((Student) s.getAttribute("benutzer")).getBenutzername())) {
 			
-			dbm.addKursteilnahme(addKurs, (Student) s.getAttribute("benutzer"));
+			dbm.addKursteilnahme(addKurs.getID(), ((Student) s.getAttribute("benutzer")).getID());
 
-			//anpassen der Kursliste
-			//Temporärlösung
 			@SuppressWarnings("unchecked")
 			ArrayList<Kurs> kurse = (ArrayList<Kurs>) s.getAttribute("kursListe");
 			kurse.add(addKurs);

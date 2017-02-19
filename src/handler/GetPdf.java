@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.nio.ByteBuffer;
 import java.nio.channels.FileChannel;
-import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -39,6 +38,8 @@ public class GetPdf extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
 		try {
+			
+			//String fSName = request.getParameter("name");
 			
 			Part filePart = request.getPart("pdfDatei");
 			String fileName = Paths.get(filePart.getSubmittedFileName()) .getFileName().toString(); // MSIE fix.

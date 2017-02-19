@@ -81,10 +81,6 @@ public class MessageHandler {
 			String respType = "folienSatz";
 			ArrayList<Folie> folienList = dbm.getFolien(folienSatzID);
 			
-			folienList.add(new Folie(5, new Foliensatz(), "LOL", 'C'));
-			
-			System.out.println(folienList.size());
-			
 			FoliensatzFolienMessage responseObj = new FoliensatzFolienMessage(respType, folienList);
 			
 			try {
@@ -99,40 +95,44 @@ public class MessageHandler {
 		case "folienInfoRequest":
 		{
 			
-			int userID = jsonData.get("userId").getAsInt();
+			// int userID = jsonData.get("userId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
+			String sessionID = jsonData.get("sessionId").getAsString();
 			
 			String respType = "folienInfo";
 			Folie folie = dbm.getFolie(folienID);
-			ArrayList<Folie> bereichList = null;
-			ArrayList<Integer> bAuswerteList = null;
-			ArrayList<Uservoting> bUVAuswerteList = null;
+			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
+			ArrayList<Integer> bAuswerteList = new ArrayList<Integer>();
+			ArrayList<Uservoting> hAuswerteList = dbm.getUservotings(0, folienID, sessionID);
+			ArrayList<Uservoting> list = dbm.getUservotings(0, folienID, sessionID);
 			
+			for(int i = 0; i < bereichList.size(); i++){
 			
-			FolienInfoMessage responseObj = new FolienInfoMessage(respType, folie, bereichList, bAuswerteList, bUVAuswerteList);
+				int counter = 0;
+				
+				for(Uservoting uv: list){
+					if(uv.getAuswahloption().equals(i+1))
+						counter++;
+				}
+				
+				bAuswerteList.add(counter);
+			}
+			
+			FolienInfoMessage responseObj = new FolienInfoMessage(respType, folie, bereichList, bAuswerteList, hAuswerteList);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-			//TODO
-			/*
-				->	folienInfo
-						folie:Folie
-						bereichList:ArrayList<Auswahlbereich>
-						bAuswerteList:ArrayList<Integer> //bei bereichn. da muschma a liste mit anzahl von den ausgewählten breichen schicken. indizes gleich wie bei den auswahlbereichn
-						hAuswerteList:ArrayList<Uservoting> //da kanschma gleis ganze Uservoting gebn, weil i die koordinaten brauch
-															// aaaber bei aner riesen lister von Uservotings kanns performanceprobleme geben glabi, vlt schickschma lei die koords in a andas objekt
-			 */
+		
 		}
 		
 		case "folienDeleteRequest":
 		{
 			
-			int userID = jsonData.get("userId").getAsInt();
-			int kursID = jsonData.get("kursId").getAsInt();
+			// int userID = jsonData.get("userId").getAsInt();
+			// int kursID = jsonData.get("kursId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
 			
 			String respType = "folienSatz";
@@ -149,10 +149,7 @@ public class MessageHandler {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-			/* TODO
-					-> folienSatz //ums zu aktualisiern
-			 */
+
 		}
 
 		case "kursInfoRequest":
@@ -167,7 +164,7 @@ public class MessageHandler {
 			ArrayList<Auswahlbereich> bereichList = null;
 			
 			if(f != null){
-				bereichList = dbm.getAuswahlbereiche(f);
+				bereichList = dbm.getAuswahlbereiche(f.getID());
 			}
 				
 			ArrayList<Kurs> kList = dbm.getKurseStudent(studentID);
@@ -214,7 +211,7 @@ public class MessageHandler {
 			
 			String respType = "folienUpdate";
 			Folie f = dbm.getFolie(folienID);
-			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(f);
+			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
 			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(respType, f, bereichList);
 			
 			Message.aktiveFolie.put(kursID, f);
@@ -318,16 +315,16 @@ class KursInfoMessageLehrer extends Message {
 class FolienInfoMessage extends Message {
 	
 	Folie folie;
-	ArrayList<Folie> bereichList;
+	ArrayList<Auswahlbereich> bereichList;
 	ArrayList<Integer> bAuswerteList;
-	ArrayList<Uservoting> bUVAuswerteList;
+	ArrayList<Uservoting> hAuswerteList;
 	
-	public FolienInfoMessage(String rT, Folie f, ArrayList<Folie> bL, ArrayList<Integer> bAL, ArrayList<Uservoting> bUVAL){
+	public FolienInfoMessage(String rT, Folie f, ArrayList<Auswahlbereich> bereiche, ArrayList<Integer> bAL, ArrayList<Uservoting> hAL){
 		super(rT);
 		this.folie = f;
-		this.bereichList = bL;
+		this.bereichList = bereiche;
 		this.bAuswerteList = bAL;
-		this.bUVAuswerteList = bUVAL;
+		this.hAuswerteList = hAL;
 	}
 }
 

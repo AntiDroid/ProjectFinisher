@@ -576,7 +576,7 @@ public class DBManager {
 		}
 	}
 
-	public ArrayList<Auswahlbereich> getAuswahlbereiche(Folie folie) {
+	public ArrayList<Auswahlbereich> getAuswahlbereiche(int folienID) {
 
 		ArrayList<Auswahlbereich> list = new ArrayList<Auswahlbereich>();
 
@@ -587,7 +587,7 @@ public class DBManager {
 		try {
 
 			stat = conn.prepareStatement(sql);
-			stat.setInt(1, folie.getID());
+			stat.setInt(1, folienID);
 
 			rs = stat.executeQuery();
 
@@ -596,8 +596,8 @@ public class DBManager {
 				Auswahlbereich obj = new Auswahlbereich();
 
 				obj.setID(rs.getInt("BereichID"));
-				obj.setFolie(folie);
-				obj.setFolienID(folie.getID());
+				obj.setFolie(getFolie(folienID));
+				obj.setFolienID(folienID);
 				obj.setObenLinksX(rs.getInt("EckeOLX"));
 				obj.setObenLinksY(rs.getInt("EckeOLY"));
 				obj.setUntenRechtsX(rs.getInt("EckeURX"));
@@ -658,7 +658,7 @@ public class DBManager {
 		return list;
 	}
 	
-	public char getBerechtigung(Lehrer lehrer, Kurs kurs) {
+	public char getBerechtigung(int lehrerID, int kursID) {
 
 		char res = 'X';
 
@@ -669,8 +669,8 @@ public class DBManager {
 		try {
 
 			stat = conn.prepareStatement(sql);
-			stat.setInt(1, lehrer.getID());
-			stat.setInt(2, kurs.getID());
+			stat.setInt(1, lehrerID);
+			stat.setInt(2, kursID);
 
 			rs = stat.executeQuery();
 
@@ -1100,20 +1100,28 @@ public class DBManager {
 	}
 	
 	// # was wenn alle Uservotings einer folie und session gebraucht werden?
-	public ArrayList<Uservoting> getUservotings(Student student, Folie folie) {
+	public ArrayList<Uservoting> getUservotings(int studentID, int folienID, String sessionID) {
 
 		ArrayList<Uservoting> list = new ArrayList<Uservoting>();
 
 		PreparedStatement stat = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM Uservoting WHERE StudentenID = ? AND FolienID = ?";
+		String sql = "SELECT * FROM Uservoting WHERE FolienID = ?";
 
 		try {
-
+			
+			if(studentID == 0)
+				sql += " AND StudentenID = ?";
+			if(sessionID.equals(""))
+				sql += " AND SessionID = ?";
+			
 			stat = conn.prepareStatement(sql);
-			stat.setInt(1, student.getID());
-			stat.setInt(2, folie.getID());
-
+			stat.setInt(1, studentID);
+			if(studentID == 0)
+				stat.setInt(2, folienID);
+			if(sessionID.equals(""))
+				stat.setString(3, sessionID);
+			
 			rs = stat.executeQuery();
 
 			while (rs.next()) {
@@ -1122,10 +1130,10 @@ public class DBManager {
 
 				obj.setID(rs.getInt("VotingID"));
 				obj.setSessionID(rs.getString("SessionID"));
-				obj.setStudentenID(student.getID());
-				obj.setStudent(student);
-				obj.setFolienID(folie.getID());
-				obj.setFolie(folie);
+				obj.setStudentenID(studentID);
+				obj.setStudent(getStudent(studentID));
+				obj.setFolienID(folienID);
+				obj.setFolie(getFolie(folienID));
 				obj.setKoordX(rs.getInt("KoordX"));
 				obj.setKoordY(rs.getInt("KoordY"));
 				obj.setAuswahloption(rs.getString("Auswahloption"));
@@ -1260,7 +1268,7 @@ public class DBManager {
 		return false;
 	}
 	
-	public void addKursteilnahme(Kurs kurs, Student student){
+	public void addKursteilnahme(int kursID, int studentID){
 			
 			PreparedStatement stat = null;
 			ResultSet rs = null;
@@ -1271,8 +1279,8 @@ public class DBManager {
 				
 				stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
-				stat.setInt(2, kurs.getID());
-				stat.setInt(3, student.getID());
+				stat.setInt(2, kursID);
+				stat.setInt(3, studentID);
 				stat.execute();
 		
 			} catch (SQLException e) {
@@ -1284,7 +1292,7 @@ public class DBManager {
 			}
 	}
 	
-	public void addBerechtigung(Kurs kurs, Lehrer lehrer, String ber){
+	public void addBerechtigung(int kursID, int lehrerID, String ber){
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
@@ -1295,8 +1303,8 @@ public class DBManager {
 			
 			stat = conn.prepareStatement(sql);
 			stat.setString(1, null);
-			stat.setInt(2, kurs.getID());
-			stat.setInt(3, lehrer.getID());
+			stat.setInt(2, kursID);
+			stat.setInt(3, lehrerID);
 			stat.setString(4, ber);
 			stat.execute();
 	
