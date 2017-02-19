@@ -141,7 +141,8 @@ function updateFolien() {
 	      +'<div class="text-center">'+(i+1)+'</div>'
 	    +'</div>';
 	}
-	$("#folienNavThumbs").html(htmlString);
+	//$("#folienNavThumbsSlick").html(htmlString);
+	$("#folienNavThumbsSlick").slick('slickAdd', htmlString);
 }
 
 function enableControls() {

@@ -198,6 +198,7 @@
 		        	<input type="file" accept=".pdf" name="pdfDatei" value=".pdf">
 		        	<label>Foliensatzname:</label>
 		        	<input type="text" name="name">
+		        	<input type="text" name="kursId" hidden>
 		        	<input class="btn btn-primary btn-sm innerUploadBtn" type="submit" name="senden" value="Hochladen">
 		        </form>
 		      </div>
@@ -220,7 +221,7 @@
 				</div>
 
 				<div class="carouselDiv">
-				  <section id="folienNavThumbs" class="center slider">
+				  <section id="folienNavThumbsSlick" class="center slider">
 				    <div>
 				      <img class="folieThumbnail" src="imgs/Beispiele/1.png" name="1">
 				      <div class="text-center">1</div>
