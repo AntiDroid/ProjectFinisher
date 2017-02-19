@@ -18,8 +18,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import models.Folie;
+import models.Foliensatz;
+
 import com.sun.pdfview.PDFFile;
 import com.sun.pdfview.PDFPage;
+
+import database.DBManager;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -39,12 +44,15 @@ public class GetPdf extends HttpServlet {
 
 		try {
 			
-			//String fSName = request.getParameter("name");
+			DBManager dbm = new DBManager();
+			
+			String fSName = request.getParameter("name");
+			int kursID = Integer.parseInt(request.getParameter("kursId"));
 			
 			Part filePart = request.getPart("pdfDatei");
 			String fileName = Paths.get(filePart.getSubmittedFileName()) .getFileName().toString(); // MSIE fix.
 			InputStream fileContent = filePart.getInputStream();
-			File uploads = new File("C:\\Users\\Talip\\Desktop");
+			File uploads = new File(getServletContext().getRealPath("locale_database/"+fSName));
 			File file = new File(uploads, fileName);
 			Files.deleteIfExists(file.toPath());
 			Files.copy(fileContent, file.toPath());
@@ -54,9 +62,19 @@ public class GetPdf extends HttpServlet {
 	        ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
 	        PDFFile pdf = new PDFFile(buf);
 
+	        Foliensatz fs = new Foliensatz(kursID, dbm.getKurs(kursID), fSName);
+	        dbm.save(fs);
+	        
 	        for (int i=0; i<pdf.getNumPages(); i++){
-	            createImage(pdf.getPage(i+1), "C:\\Users\\Talip\\Desktop\\PICTURE_" + (i+1) + ".jpg");
+	        	
+	        	Folie f = new Folie(fs.getID(), fs, "wird noch eingefuegt", 'A');
+	        	dbm.save(f);
+	        	f = dbm.getFolie(f.getID());
+	        	f.setfPath("locale_database/"+fSName+"/"+f.getID()+".jpg");
+	        	
+	            createImage(pdf.getPage(i+1), getServletContext().getRealPath(f.getfPath()));
 	        }
+	        
 	        raf.close();
 			
 		} catch (Exception e) {
