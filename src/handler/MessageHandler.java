@@ -59,9 +59,8 @@ public class MessageHandler {
 			int kursID = jsonData.get("kursId").getAsInt();
 			
 			String respType = "lehrerKursInfo";
-			ArrayList<Foliensatz> folienSatzList = null;
-			
-			dbm.getFoliensätze(kursID);
+			ArrayList<Foliensatz> folienSatzList = dbm.getFoliensätze(kursID);
+
 			
 			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(respType, folienSatzList);
 			
@@ -80,9 +79,8 @@ public class MessageHandler {
 			int folienSatzID = jsonData.get("folienSatzId").getAsInt();
 			
 			String respType = "folienSatz";
-			ArrayList<Folie> folienList = null;
+			ArrayList<Folie> folienList = dbm.getFolien(folienSatzID);
 			
-			dbm.getFolien(folienSatzID);
 			
 			FoliensatzFolienMessage responseObj = new FoliensatzFolienMessage(respType, folienList);
 			

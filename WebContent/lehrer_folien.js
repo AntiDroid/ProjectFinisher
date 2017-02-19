@@ -59,7 +59,7 @@ socket.onmessage = function(evt) {
 		}
 	}
 	else if (msg.type == "folienSatz"){
-		disableButtons();
+		disableControls();
 		if(msg.folienList != null){
 			folienList = msg.folienList;
 			updateFolien();
@@ -159,7 +159,7 @@ function disableControls() {
 
 //Onklick
 //Folienatz laden
-$('.folienSatzOption').click(function(e) {
+$('#folienSatzListe').on('click', 'option', function(e) {
 	nowfolienSatzId = $(this).val();
 	
 	var folienSatzRequest = {
@@ -170,7 +170,7 @@ $('.folienSatzOption').click(function(e) {
 	var folienSatzRequestJson = JSON.stringify(folienSatzRequest);
 	socket.send(folienSatzRequestJson);
 });
-$('.folieThumbnail').click(function(e) {
+$('.folieThumbnail').on('click', function(e) {
 	nowFolienId = $(this).attr("name");
 	
 	if(nowFolienId == aktiveFolienId) disableControls();
