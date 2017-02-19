@@ -179,6 +179,7 @@ $('.folieThumbnail').on('click', function(e) {
 	var folienInfoRequest = {
 			type : "folienInfoRequest",
 			userId : userId,
+			sessionId : "",//sessionId,
 			folienId : nowFolienId
 		};
 	var folienInfoRequestJson = JSON.stringify(folienInfoRequest);

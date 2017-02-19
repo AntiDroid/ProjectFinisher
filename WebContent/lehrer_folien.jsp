@@ -355,7 +355,7 @@
 	var nachname = "<%=user.getNachname()%>";
 	
 	var kursId = <%=kursId%>;
-	var sessionId = '<%=session.getId()%>';
+	var sessionId = "<%=session.getId()%>";
 	
 	
 	if(vorname != null && nachname != null){
