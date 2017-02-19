@@ -74,7 +74,7 @@ socket.onmessage = function(evt) {
 				$("#interaktivSwitch").prop('checked', true);
 				$("#bereichRadio").prop('checked', true);
 				$("#allIntDiv").show();
-				$("#intBerDiv$").show();
+				$("#intBerDiv").show();
 				
 				var bereichList = folie.bereichList;
 				var htmlString = "";
@@ -132,17 +132,22 @@ function updateFolienSatzList() {
 function updateFolien() {
 	$("#folienNavAnzahl").html(folienList.length+" Seiten");
 	
-	var htmlString = "";
+	// Entfernen der vorherigen Folien (50 um sicher zu gehen)
+	for (var i = 0; i < 50; i++) {
+		$("#folienNavThumbsSlick").slick('slickRemove', "");
+	}
+	
 	for (var i = 0; i < folienList.length; i++) {
+		var htmlString = "";
 		var fId = folienList[i].folienID;
 		htmlString = ""
 		+'<div>'
 	      +'<img class="folieThumbnail" src="ImgServlet?id='+fId+'" name="'+fId+'" alt="'+(i+1)+'">'
 	      +'<div class="text-center">'+(i+1)+'</div>'
 	    +'</div>';
+		$("#folienNavThumbsSlick").slick('slickAdd', htmlString);
 	}
-	//$("#folienNavThumbsSlick").html(htmlString);
-	$("#folienNavThumbsSlick").slick('slickAdd', htmlString);
+	
 }
 
 function enableControls() {
@@ -171,7 +176,7 @@ $('#folienSatzListe').on('click', 'option', function(e) {
 	var folienSatzRequestJson = JSON.stringify(folienSatzRequest);
 	socket.send(folienSatzRequestJson);
 });
-$('.folieThumbnail').on('click', function(e) {
+$('#folienNavThumbsSlick').on('click', 'img', function(e) {
 	nowFolienId = $(this).attr("name");
 	
 	if(nowFolienId == aktiveFolienId) disableControls();
