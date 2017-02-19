@@ -81,6 +81,9 @@ public class MessageHandler {
 			String respType = "folienSatz";
 			ArrayList<Folie> folienList = dbm.getFolien(folienSatzID);
 			
+			folienList.add(new Folie(5, new Foliensatz(), "LOL", 'C'));
+			
+			System.out.println(folienList.size());
 			
 			FoliensatzFolienMessage responseObj = new FoliensatzFolienMessage(respType, folienList);
 			
