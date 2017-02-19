@@ -52,6 +52,16 @@ lehrerfolienseite:
 		folienList:ArrayList<Folie>
 
 
+<- folienInfoRequest = {
+			userId
+			folienId
+		};
+->	folienInfo
+		folie:Folie
+		bereichList:ArrayList<Auswahlbereich>
+		bAuswerteList:ArrayList<Integer>
+		hAuswerteList:ArrayList<Uservoting>
+
 
 <- folienUpdateRequest
 	folienId
@@ -59,3 +69,10 @@ lehrerfolienseite:
 	sessionId
 -> siehe folienUpdate
 
+
+<- folienDeleteRequest = {
+			userId
+			kursId
+			folienId
+		};
+-> folienSatz //ums zu aktualisiern

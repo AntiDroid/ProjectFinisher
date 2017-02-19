@@ -1,6 +1,11 @@
 var folienSatzList = null;
 var nowfolienSatzId = 0;
+var nowFolienId = 0;
 var folienList = null;
+var aktuelleFolie = null;
+
+var aktiveFolienId = null;
+var folienIndexIdList = {};
 
 // Websocket
 var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
@@ -52,9 +57,59 @@ socket.onmessage = function(evt) {
 	else if (msg.type == "folienSatz"){
 		if(msg.folienList != null){
 			folienList = msg.folienList;
+			disableButtons();
 			updateFolien();
 		}
-		
+	}
+	else if (msg.type == "folienInfo"){
+		if(msg.folie != null){
+			if(msg.folie.folienTyp == 'A'){
+				$("#interaktivSwitch").prop('checked', false);
+			}
+			else if(msg.folie.folienTyp == 'C'){
+				$("#interaktivSwitch").prop('checked', true);
+				$("#bereichRadio").prop('checked', true);
+				$("#allIntDiv").show();
+				$("#intBerDiv$").show();
+				
+				var bereichList = folie.bereichList;
+				var htmlString = "";
+				for (var i = 0; i < bereichList.length; i++) {
+					var oLX = bereichList[i].obenLinksX;
+					var oLY = bereichList[i].obenLinksY;
+					var uRX = bereichList[i].untenRechtsX;
+					var uRY = bereichList[i].untenRechtsY;
+					htmlString += "<option class='' value='"+i+"'>"+(i+1)+": "+oLX+","+oLY+";"+uRX+","+uRY+"</option>";
+				}
+				$("#intBereichList").html(htmlString);
+				
+				var bAuswerteList = folie.bAuswerteList;
+				var htmlString = "";
+				for (var i = 0; i < bAuswerteList.length; i++) {
+					var wert = bAuswerteList[i];
+					htmlString += "<option class='' value='"+wert+"'>"+(i+1)+": "+wert+"</option>";
+				}
+				$("#auswerteList").html(htmlString);
+			}
+			else if(msg.folie.folienTyp == 'H'){
+				$("#interaktivSwitch").prop('checked', true);
+				$("#heatplotRadio").prop('checked', true);
+				$("#allIntDiv").show();
+				$("#intBerDiv$").hide();
+				
+				var hAuswerteList = folie.hAuswerteList;
+				var htmlString = "";
+				for (var i = 0; i < hAuswerteList.length; i++) {
+					var x = hAuswerteList[i].koordX;
+					var y = hAuswerteList[i].koordY;
+					htmlString += "<option class='' value='"+i+"'>"+(i+1)+": "+x+","+y+"</option>";
+				}
+				$("#auswerteList").html(htmlString);
+			}
+		}
+	}
+	else if (msg.type == "welcheFolieAktiv"){
+		aktiveFolie = msg.folienId;
 	}
 	
 
@@ -73,23 +128,35 @@ function updateFolien() {
 	$("#folienNavAnzahl").html(folienList.length+" Seiten");
 	
 	var htmlString = "";
-	var fId = 0;
 	for (var i = 0; i < folienList.length; i++) {
-		fId = folienList[i].folienID;
+		var fId = folienList[i].folienID;
+		folienIndexIdList.push(fId);
 		htmlString = ""
 		+'<div>'
-	      +'<img class="folieThumbnail" src="ImgServlet?id='+fId+'" value="'+fId+'">'
+	      +'<img class="folieThumbnail" src="ImgServlet?id='+fId+'" name="'+fId+'" alt="'+(i+1)+'">'
 	      +'<div class="text-center">'+(i+1)+'</div>'
 	    +'</div>';
 	}
 	$("#folienNavThumbs").html(htmlString);
 }
 
+function enableControls() {
+	$("#useThisFoil").prop("disabled", false);
+	$("#delThisFoil").prop("disabled", false);
+	$("#interaktivControlsDiv").fadeIn(60);
+}
+function disableControls() {
+	$("#useThisFoil").prop("disabled", true);
+	$("#delThisFoil").prop("disabled", true);
+	$("#interaktivControlsDiv").fadeOut(180);
+}
+
+
 
 //Onklick
 //Folienatz laden
 $('.folienSatzOption').click(function(e) {
-	nowfolienSatzId = $(this).value;
+	nowfolienSatzId = $(this).val();
 	
 	var folienSatzRequest = {
 			type : "folienSatzRequest",
@@ -99,6 +166,77 @@ $('.folienSatzOption').click(function(e) {
 	var folienSatzRequestJson = JSON.stringify(folienSatzRequest);
 	socket.send(folienSatzRequestJson);
 });
+$('.folieThumbnail').click(function(e) {
+	nowFolienId = $(this).attr("name");
+	
+	if(nowFolienId == aktiveFolienId) disableControls();
+	else enableControls();
+	
+	var folienInfoRequest = {
+			type : "folienInfoRequest",
+			userId : userId,
+			folienId : nowFolienId
+		};
+	var folienInfoRequestJson = JSON.stringify(folienInfoRequest);
+	socket.send(folienInfoRequestJson);
+	
+	
+	//Ab hier kommts wahrscheinlich in FolienInfo
+	//<------------------------------------>
+	$(".folieThumbnail").removeClass("xAusgFolie");
+	$(this).addClass("xAusgFolie");
+	
+	
+	//CANVAS PROBLEME TODO
+	var canvas = document.getElementById("folieCanvas");
+	canvas.width = $('#canvasDiv').width();
+	canvas.height = $('#canvasDiv').height();
+	var img = new Image();
+	img.onload = function() {
+		var prop = img.height/img.width;
+		$('#canvasDiv').height($('#canvasDiv').width()*prop);
+		$('#folieCanvas').height($('#canvasDiv').width()*prop);
+		var cw = $('#folieCanvas').width();
+		var ch = $('#folieCanvas').width()*prop;
+		
+		var ctx = canvas.getContext("2d");
+	    ctx.drawImage(img, 0, 0, cw, ch);
+	};
+	img.src = 'ImgServlet?id='+nowFolienId;
+	
+});
+
+$('#useThisFoil').click(function(e) {
+	disableControls();
+	aktiveFolienId = nowFolienId;
+	$(".folieThumbnail").removeClass("xAktiveFolie");
+	$(".folieThumbnail").removeClass("xAusgFolie");
+	$(".folieThumbnail[name='"+nowFolienId+"']").addClass("xAktiveFolie");
+	
+	var folienUpdateRequest = {
+			type : "folienUpdateRequest",
+			userId : userId,
+			kursId : kursId,
+			folienId : nowFolienId,
+			sessionId : sessionId
+		};
+	var folienUpdateRequestJson = JSON.stringify(folienUpdateRequest);
+	socket.send(folienUpdateRequestJson);
+	
+});
+$('#delThisFoil').click(function(e) {
+	disableControls();
+	var folienDeleteRequest = {
+			type : "folienDeleteRequest",
+			userId : userId,
+			kursId : kursId,
+			folienId : nowFolienId
+		};
+	var folienDeleteRequestJson = JSON.stringify(folienDeleteRequest);
+	socket.send(folienDeleteRequestJson);
+});
+
+
 
 
 //OnReady
@@ -109,12 +247,14 @@ $(document).ready(function(){
 	  slidesToScroll: 3
 	});
 
-	if($("#interaktivSwitch").attr("checked")){
+	if($("#interaktivSwitch").prop("checked")){
 		$("#allIntDiv").show();
 	}
 	else{
 		$("#allIntDiv").hide();
 	}
+	
+	disableControls();
 
 });
 
@@ -126,5 +266,15 @@ $("#interaktivSwitch").change(function() {
     else{
 		$("#allIntDiv").fadeOut(450);
 	}
+});
+
+$("input[name=intModus]").change(function() {
+    if($(this).val() == "Bereiche") {
+        $("#intBerDiv").slideDown(200);
+    }
+    else if($(this).val() == "Heatplot") {
+        $("#intBerDiv").slideUp(200);
+    }
+    
 });
 

@@ -107,12 +107,12 @@ function folienReset(){
 }
 
 function enableButtons() {
-	$("#submitBtn").removeAttr("disabled");
-	$("#clearBtn").removeAttr("disabled");
+	$("#submitBtn").prop("disabled", false);
+	$("#clearBtn").prop("disabled", false);
 }
 function disableButtons() {
-	$("#submitBtn").attr("disabled");
-	$("#clearBtn").attr("disabled");
+	$("#submitBtn").prop("disabled", true);
+	$("#clearBtn").prop("disabled", true);
 }
 
 

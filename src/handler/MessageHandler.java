@@ -54,7 +54,7 @@ public class MessageHandler {
 		
 		case "lehrerKursInfoRequest":
 		{
-			//int lehrerID = jsonData.get("userId").getAsInt();
+			//int userID = jsonData.get("userId").getAsInt();
 			int kursID = jsonData.get("kursId").getAsInt();
 			
 			String respType = "lehrerKursInfo";
@@ -75,8 +75,8 @@ public class MessageHandler {
 		
 		case "folienSatzRequest":
 		{
-			//int lehrerID = jsonData.get("userId").getAsInt();
-			int folienSatzID = jsonData.get("kursId").getAsInt();
+			//int userID = jsonData.get("userId").getAsInt();
+			int folienSatzID = jsonData.get("folienSatzId").getAsInt();
 			
 			String respType = "folienSatz";
 			ArrayList<Folie> folienList = null;
@@ -93,7 +93,66 @@ public class MessageHandler {
 			
 			break;
 		}
+
+		case "folienInfoRequest":
+		{
+			
+			int userID = jsonData.get("userId").getAsInt();
+			int folienID = jsonData.get("folienId").getAsInt();
+			
+			String respType = "folienInfo";
+			Folie folie = dbm.getFolie(folienID);
+			ArrayList<Folie> bereichList = null;
+			ArrayList<Integer> bAuswerteList = null;
+			ArrayList<Uservoting> bUVAuswerteList = null;
+			
+			
+			FolienInfoMessage responseObj = new FolienInfoMessage(respType, folie, bereichList, bAuswerteList, bUVAuswerteList);
+			
+			try {
+				session.getBasicRemote().sendText(gson.toJson(responseObj));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			//TODO
+			/*
+				->	folienInfo
+						folie:Folie
+						bereichList:ArrayList<Auswahlbereich>
+						bAuswerteList:ArrayList<Integer> //bei bereichn. da muschma a liste mit anzahl von den ausgewählten breichen schicken. indizes gleich wie bei den auswahlbereichn
+						hAuswerteList:ArrayList<Uservoting> //da kanschma gleis ganze Uservoting gebn, weil i die koordinaten brauch
+															// aaaber bei aner riesen lister von Uservotings kanns performanceprobleme geben glabi, vlt schickschma lei die koords in a andas objekt
+			 */
+		}
 		
+		case "folienDeleteRequest":
+		{
+			
+			int userID = jsonData.get("userId").getAsInt();
+			int kursID = jsonData.get("kursId").getAsInt();
+			int folienID = jsonData.get("folienId").getAsInt();
+			
+			String respType = "folienSatz";
+			int folienSatzID = dbm.getFolie(folienID).getFoliensatzID();
+			
+			dbm.delete(dbm.getFolie(folienID));
+			
+			Foliensatz folienSatz = dbm.getFoliensatz(folienSatzID);
+			
+			UpdatedFoliensatzMessage responseObj = new UpdatedFoliensatzMessage(respType, folienSatz);
+			
+			try {
+				session.getBasicRemote().sendText(gson.toJson(responseObj));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			/* TODO
+					-> folienSatz //ums zu aktualisiern
+			 */
+		}
+
 		case "kursInfoRequest":
 		{
 			int studentID = jsonData.get("userId").getAsInt();
@@ -251,6 +310,32 @@ class KursInfoMessageLehrer extends Message {
 	public KursInfoMessageLehrer(String rT, ArrayList<Foliensatz> fsl){
 		super(rT);
 		this.folienSatzList = fsl;
+	}
+}
+
+class FolienInfoMessage extends Message {
+	
+	Folie folie;
+	ArrayList<Folie> bereichList;
+	ArrayList<Integer> bAuswerteList;
+	ArrayList<Uservoting> bUVAuswerteList;
+	
+	public FolienInfoMessage(String rT, Folie f, ArrayList<Folie> bL, ArrayList<Integer> bAL, ArrayList<Uservoting> bUVAL){
+		super(rT);
+		this.folie = f;
+		this.bereichList = bL;
+		this.bAuswerteList = bAL;
+		this.bUVAuswerteList = bUVAL;
+	}
+}
+
+class UpdatedFoliensatzMessage extends Message {
+	
+	Foliensatz folienSatz;
+	
+	public UpdatedFoliensatzMessage(String rT, Foliensatz fS){
+		super(rT);
+		this.folienSatz = fS;
 	}
 }
 
