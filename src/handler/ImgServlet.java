@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import database.DBManager;
+
 @WebServlet("/ImgServlet")
 public class ImgServlet extends HttpServlet {
 
@@ -23,8 +25,13 @@ public class ImgServlet extends HttpServlet {
 
 		try {
 
+			DBManager dbm = new DBManager();
+			
+			String folienID = request.getParameter("id");
+			String fSName = dbm.getFolie(Integer.parseInt(folienID)).getfSatz().getName();
+			
 			response.setContentType("image/jpg");
-			BufferedImage bi = ImageIO.read(new File(getServletContext().getRealPath("imgs/Beispiele/7.png")));
+			BufferedImage bi = ImageIO.read(new File(getServletContext().getRealPath("locale_database/"+fSName+"/"+folienID+".jpg")));
 
 			Graphics g = bi.getGraphics();
 
