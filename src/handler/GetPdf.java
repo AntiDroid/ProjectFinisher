@@ -50,13 +50,16 @@ public class GetPdf extends HttpServlet {
 			int kursID = Integer.parseInt(request.getParameter("kursId"));
 			
 			Part filePart = request.getPart("pdfDatei");
-			String fileName = Paths.get(filePart.getSubmittedFileName()) .getFileName().toString(); // MSIE fix.
 			InputStream fileContent = filePart.getInputStream();
-			File uploads = new File(getServletContext().getRealPath("locale_database/"+fSName));
-			File file = new File(uploads, fileName);
+			
+			String fileName = Paths.get(filePart.getSubmittedFileName()) .getFileName().toString(); // MSIE fix.
+			
+			File file = new File("C:/Users/ndsts_000/workspaceEE/ProjectFinisher/WebContent/locale_database/"+fileName);
 			Files.deleteIfExists(file.toPath());
 			Files.copy(fileContent, file.toPath());
-
+			File fSFolder = new File("C:/Users/ndsts_000/workspaceEE/ProjectFinisher/WebContent/locale_database/"+fSName);
+			fSFolder.mkdirs();
+			
 	        RandomAccessFile raf = new RandomAccessFile(file, "r");
 	        FileChannel channel = raf.getChannel();
 	        ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
@@ -70,9 +73,11 @@ public class GetPdf extends HttpServlet {
 	        	Folie f = new Folie(fs.getID(), fs, "wird noch eingefuegt", 'A');
 	        	dbm.save(f);
 	        	f = dbm.getFolie(f.getID());
-	        	f.setfPath("locale_database/"+fSName+"/"+f.getID()+".jpg");
-	        	
-	            createImage(pdf.getPage(i+1), getServletContext().getRealPath(f.getfPath()));
+	        	System.out.println(f.getID());
+	        	f.setfPath("C:/Users/ndsts_000/workspaceEE/ProjectFinisher/WebContent/locale_database/"+fSName+"/"+f.getID()+".jpg");
+	        	dbm.save(f);
+	   
+	            createImage(pdf.getPage(i+1), f.getfPath());
 	        }
 	        
 	        raf.close();
