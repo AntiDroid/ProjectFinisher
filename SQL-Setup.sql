@@ -44,7 +44,7 @@ CREATE TABLE Foliensatz (
 CREATE TABLE Folie (
         FolienID            int PRIMARY KEY AUTO_INCREMENT,
         FoliensatzID		int NOT NULL,
-        fPath			    varchar(30) NOT NULL,
+        fPath			    varchar(120) NOT NULL,
         FolienTyp			char NOT NULL,
         FOREIGN KEY (FoliensatzID) REFERENCES Foliensatz(FoliensatzID) ON DELETE CASCADE
 );
@@ -112,7 +112,7 @@ INSERT INTO Berechtigung VALUES(null, 1, 1, 'V');
 INSERT INTO Berechtigung VALUES(null, 2, 1, 'V');
 INSERT INTO Berechtigung VALUES(null, 3, 1, 'V');
 
-
+/*
 INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 1');
 INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 2');
 INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 3');
