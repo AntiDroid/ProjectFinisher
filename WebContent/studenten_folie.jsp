@@ -9,6 +9,7 @@
 	
 	if(session.getAttribute("benutzer") == null){
 		response.sendRedirect("login.jsp");
+		return;
 	}
 	else{
 		user = (Client) session.getAttribute("benutzer");
@@ -20,7 +21,6 @@
 		}
 		else response.sendRedirect("studenten_kurse.jsp");
 	}
-	
 	%>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -76,7 +76,7 @@
 	</div>
 
 	<div class="imgDiv">
-			<img id="folienImg" src="ImgServlet"/>
+			<img id="folienImg" src="ImgServlet?id=1"/>
 	</div>
 	<img id="pin" src="imgs/pin.png" style="display: none; position: absolute;" />
 

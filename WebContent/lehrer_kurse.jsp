@@ -7,6 +7,7 @@
 	Client user = null;
 	if(session.getAttribute("benutzer") == null){
 		response.sendRedirect("login.jsp");
+		return;
 	}
 	else{
 		user = (Client) session.getAttribute("benutzer");
