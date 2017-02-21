@@ -3,6 +3,7 @@ package handler;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.servlet.annotation.WebServlet;
@@ -26,23 +27,27 @@ public class ImgServlet extends HttpServlet {
 
 		try {
 
+			String fPathLocal = "C:/Users/ndsts_000/Desktop/";
+			
 			DBManager dbm = new DBManager();
 			
 			String folienID = request.getParameter("id");
-			String fSName = dbm.getFolie(Integer.parseInt(folienID)).getfSatz().getName();
 			
 			Folie f = dbm.getFolie(Integer.parseInt(folienID));
 			
 			response.setContentType("image/jpg");
-			BufferedImage bi = ImageIO.read(new File(f.getfPath()));
+			BufferedImage bi = ImageIO.read(new File(fPathLocal+f.getfPath()));
 
 			Graphics g = bi.getGraphics();
 
 			g.dispose();
 			ImageIO.write(bi, "jpg", response.getOutputStream());
 
-		} catch (Exception e) {
+		} catch (NullPointerException e) {
+			System.out.println("ImgServlet ohne Parameter aufgerufen!");
+		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 	}
 }

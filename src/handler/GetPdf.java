@@ -44,6 +44,8 @@ public class GetPdf extends HttpServlet {
 
 		try {
 			
+			String fPathLocal = "C:/Users/ndsts_000/Desktop/";
+			
 			DBManager dbm = new DBManager();
 			
 			String fSName = request.getParameter("name");
@@ -53,11 +55,12 @@ public class GetPdf extends HttpServlet {
 			InputStream fileContent = filePart.getInputStream();
 			
 			String fileName = Paths.get(filePart.getSubmittedFileName()) .getFileName().toString(); // MSIE fix.
-			
-			File file = new File("C:/Users/ndsts_000/workspaceEE/ProjectFinisher/WebContent/locale_database/"+fileName);
-			Files.deleteIfExists(file.toPath());
+		
+			File file = new File((fPathLocal+"/locale_database/"+fileName).replace("file:", ""));
+			file.mkdirs();
 			Files.copy(fileContent, file.toPath());
-			File fSFolder = new File("C:/Users/ndsts_000/workspaceEE/ProjectFinisher/WebContent/locale_database/"+fSName);
+			
+			File fSFolder = new File(fPathLocal+"/locale_database/"+fSName);
 			fSFolder.mkdirs();
 			
 	        RandomAccessFile raf = new RandomAccessFile(file, "r");
@@ -73,12 +76,13 @@ public class GetPdf extends HttpServlet {
 	        	Folie f = new Folie(fs.getID(), fs, "wird noch eingefuegt", 'A');
 	        	dbm.save(f);
 	        	f = dbm.getFolie(f.getID());
-	        	System.out.println(f.getID());
-	        	f.setfPath("C:/Users/ndsts_000/workspaceEE/ProjectFinisher/WebContent/locale_database/"+fSName+"/"+f.getID()+".jpg");
+	        	f.setfPath("/locale_database/"+fSName+"/"+f.getID()+".jpg");
 	        	dbm.save(f);
 	   
-	            createImage(pdf.getPage(i+1), f.getfPath());
+	            createImage(pdf.getPage(i+1), fPathLocal+f.getfPath());
 	        }
+	        
+	        file.delete();
 	        
 	        raf.close();
 			
@@ -109,7 +113,7 @@ public class GetPdf extends HttpServlet {
         );
         Graphics2D bufImageGraphics = bufferedImage.createGraphics();
         bufImageGraphics.drawImage(image, 0, 0, null);
-        ImageIO.write(bufferedImage, "JPG", new File( destination ));
+        ImageIO.write(bufferedImage, "JPG", new File(destination));
     }
 	
 }
