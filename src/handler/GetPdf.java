@@ -83,7 +83,7 @@ public class GetPdf extends HttpServlet {
 	        }
 	        
 	        file.delete();
-	        
+	        fileContent.close();
 	        raf.close();
 			
 		} catch (Exception e) {
