@@ -116,13 +116,6 @@ public class MessageHandler {
 				bAuswerteList.add(counter);
 			}
 			
-			bereichList = new ArrayList<Auswahlbereich>();
-			bereichList.add(new Auswahlbereich());
-			bAuswerteList = new ArrayList<Integer>();
-			bAuswerteList.add(5);
-			hAuswerteList = new ArrayList<Uservoting>();
-			hAuswerteList.add(new Uservoting());
-			
 			FolienInfoMessage responseObj = new FolienInfoMessage(respType, folie, bereichList, bAuswerteList, hAuswerteList);
 			
 			try {
@@ -161,12 +154,12 @@ public class MessageHandler {
 		case "kursInfoRequest":
 		{
 			int studentID = jsonData.get("userId").getAsInt();
-			int kursID = 1;
+			int kursID = jsonData.get("kursId").getAsInt();
 			
 			String respType = "kursInfo";
 			String kursName = "";
 			String lehrerName = "";
-			Folie f = new Folie(1, dbm.getFoliensatz(1), "asd", 'C');
+			Folie f = Message.aktiveFolie.get(kursID);
 			ArrayList<Auswahlbereich> bereichList = null;
 			
 			if(f != null){
