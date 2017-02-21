@@ -8,6 +8,8 @@ var aktiveFolienId = 0;
 
 
 
+
+
 // Websocket
 var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
 
@@ -206,9 +208,9 @@ $('#folienNavThumbsSlick').on('click', 'img', function(e) {
 	img.onload = function() {
 		var prop = img.height/img.width;
 		$('#canvasDiv').height($('#canvasDiv').width()*prop);
-		$('#folieCanvas').height($('#canvasDiv').width()*prop);
+		canvas.height = $('#canvasDiv').width()*prop;
 		var cw = $('#folieCanvas').width();
-		var ch = $('#folieCanvas').width()*prop;
+		var ch = cw*prop;
 		
 		var ctx = canvas.getContext("2d");
 	    ctx.drawImage(img, 0, 0, cw, ch);
