@@ -103,19 +103,25 @@ public class MessageHandler {
 			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
 			ArrayList<Integer> bAuswerteList = new ArrayList<Integer>();
 			ArrayList<Uservoting> hAuswerteList = dbm.getUservotings(0, folienID, sessionID);
-			ArrayList<Uservoting> list = dbm.getUservotings(0, folienID, sessionID);
 			
 			for(int i = 0; i < bereichList.size(); i++){
 			
 				int counter = 0;
 				
-				for(Uservoting uv: list){
+				for(Uservoting uv: hAuswerteList){
 					if(uv.getAuswahloption().equals(i+1))
 						counter++;
 				}
 				
 				bAuswerteList.add(counter);
 			}
+			
+			bereichList = new ArrayList<Auswahlbereich>();
+			bereichList.add(new Auswahlbereich());
+			bAuswerteList = new ArrayList<Integer>();
+			bAuswerteList.add(5);
+			hAuswerteList = new ArrayList<Uservoting>();
+			hAuswerteList.add(new Uservoting());
 			
 			FolienInfoMessage responseObj = new FolienInfoMessage(respType, folie, bereichList, bAuswerteList, hAuswerteList);
 			
@@ -124,7 +130,7 @@ public class MessageHandler {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
+			break;
 		}
 		
 		case "folienDeleteRequest":
@@ -149,17 +155,18 @@ public class MessageHandler {
 				e.printStackTrace();
 			}
 
+			break;
 		}
 
 		case "kursInfoRequest":
 		{
 			int studentID = jsonData.get("userId").getAsInt();
-			int kursID = jsonData.get("kursId").getAsInt();
+			int kursID = 1;
 			
 			String respType = "kursInfo";
 			String kursName = "";
 			String lehrerName = "";
-			Folie f = Message.aktiveFolie.get(kursID);
+			Folie f = new Folie(1, dbm.getFoliensatz(1), "asd", 'C');
 			ArrayList<Auswahlbereich> bereichList = null;
 			
 			if(f != null){
@@ -196,6 +203,7 @@ public class MessageHandler {
 				if(!sessionList.contains(session))
 					Message.kursSessions.get(kursID).add(session);
 			}
+			
 			
 			break;
 		}
@@ -278,9 +286,9 @@ public class MessageHandler {
 	@OnError
 	public void onError(Throwable t){
 		System.out.println("MessageHandler-Error");
-		System.out.println("ToString: "+t.toString());
-		System.out.println("LocalizedMessage: "+t.getLocalizedMessage());
+		System.out.println();
 		t.printStackTrace();
+		System.out.println("\n\n\n");
 	}
    
 	@OnClose

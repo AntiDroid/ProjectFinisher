@@ -76,10 +76,6 @@ public class GetPdf extends HttpServlet {
 	            createImage(pdf.getPage(i+1), fPathLocal+f.getfPath());
 	        }
 	        
-	        channel.close();
-	        fileContent.close();
-	        raf.close();
-	        
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
