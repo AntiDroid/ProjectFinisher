@@ -27,7 +27,7 @@ public class ImgServlet extends HttpServlet {
 
 		try {
 
-			String fPathLocal = "C:/Users/ndsts_000/Desktop/";
+			String fPathLocal = "C:/Users/ndsts_000/Desktop";
 			
 			DBManager dbm = new DBManager();
 			

@@ -44,7 +44,7 @@ public class GetPdf extends HttpServlet {
 
 		try {
 			
-			String fPathLocal = "C:/Users/ndsts_000/Desktop/";
+			String fPathLocal = "C:/Users/ndsts_000/Desktop";
 			
 			DBManager dbm = new DBManager();
 			
@@ -57,7 +57,7 @@ public class GetPdf extends HttpServlet {
 			String fileName = Paths.get(filePart.getSubmittedFileName()) .getFileName().toString(); // MSIE fix.
 		
 			File file = new File((fPathLocal+"/locale_database/"+fileName).replace("file:", ""));
-			file.mkdirs();
+			//file.mkdirs();
 			Files.copy(fileContent, file.toPath());
 			
 			File fSFolder = new File(fPathLocal+"/locale_database/"+fSName);

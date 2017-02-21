@@ -41,7 +41,6 @@ public class MessageHandler {
 	
 	@OnMessage
 	public void onMessage(Session session, String message) {
-		System.out.println(message);
 	   
 		DBManager dbm = new DBManager();
 		
