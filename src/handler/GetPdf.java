@@ -45,7 +45,7 @@ public class GetPdf extends HttpServlet {
 		try {
 			
 			DBManager dbm = new DBManager();
-			String fPathLocal = "C:/Users/ndsts_000/Desktop";
+			String fPathLocal = System.getProperty("java.io.tmpdir");
 			
 			String fSName = request.getParameter("name");
 			int kursID = Integer.parseInt(request.getParameter("kursId"));
@@ -58,6 +58,7 @@ public class GetPdf extends HttpServlet {
 			InputStream fileContent = filePart.getInputStream();
 			
 			File fSFolder = new File(fPathLocal+"/locale_database/"+fs.getID());
+			deleteDir(fSFolder);
 			fSFolder.mkdirs();
 
 			RandomAccessFile raf = InputStreamConverter.toRandomAccessFile(fileContent);
@@ -109,6 +110,18 @@ public class GetPdf extends HttpServlet {
         ImageIO.write(bufferedImage, "png", new File(destination));
     }
 	
+	public static boolean deleteDir(File dir) {
+	    if (dir.isDirectory()) {
+	        String[] children = dir.list();
+	        for (int i=0; i<children.length; i++) {
+	            boolean success = deleteDir(new File(dir, children[i]));
+	            if (!success) {
+	                return false;
+	            }
+	        }
+	    }
+	    return dir.delete();
+	}
 }
 
 class InputStreamConverter {

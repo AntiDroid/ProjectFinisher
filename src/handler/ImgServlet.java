@@ -28,7 +28,7 @@ public class ImgServlet extends HttpServlet {
 		try {
 			
 			DBManager dbm = new DBManager();
-			String fPathLocal = "C:/Users/ndsts_000/Desktop";
+			String fPathLocal = System.getProperty("java.io.tmpdir");
 			
 			String folienID = request.getParameter("id");
 			Folie f = dbm.getFolie(Integer.parseInt(folienID));
