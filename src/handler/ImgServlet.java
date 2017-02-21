@@ -26,23 +26,21 @@ public class ImgServlet extends HttpServlet {
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
 		try {
-
-			String fPathLocal = "C:/Users/ndsts_000/Desktop";
 			
 			DBManager dbm = new DBManager();
+			String fPathLocal = "C:/Users/ndsts_000/Desktop";
 			
 			String folienID = request.getParameter("id");
-			
 			Folie f = dbm.getFolie(Integer.parseInt(folienID));
 			
 			response.setContentType("image/jpg");
 			BufferedImage bi = ImageIO.read(new File(fPathLocal+f.getfPath()));
 
 			Graphics g = bi.getGraphics();
-
 			g.dispose();
+			
 			ImageIO.write(bi, "jpg", response.getOutputStream());
-
+			
 		} catch (NullPointerException e) {
 			System.out.println("ImgServlet ohne Parameter aufgerufen!");
 		} catch (IOException e) {

@@ -44,48 +44,41 @@ public class GetPdf extends HttpServlet {
 
 		try {
 			
-			String fPathLocal = "C:/Users/ndsts_000/Desktop";
-			
 			DBManager dbm = new DBManager();
+			String fPathLocal = "C:/Users/ndsts_000/Desktop";
 			
 			String fSName = request.getParameter("name");
 			int kursID = Integer.parseInt(request.getParameter("kursId"));
 			
+	        Foliensatz fs = new Foliensatz(kursID, dbm.getKurs(kursID), fSName);
+	        dbm.save(fs);
+			
 			Part filePart = request.getPart("pdfDatei");
+			//String fileName = Paths.get(filePart.getSubmittedFileName()) .getFileName().toString(); // MSIE fix.
 			InputStream fileContent = filePart.getInputStream();
 			
-			String fileName = Paths.get(filePart.getSubmittedFileName()) .getFileName().toString(); // MSIE fix.
-		
-			File file = new File((fPathLocal+"/locale_database/"+fileName).replace("file:", ""));
-			//file.mkdirs();
-			Files.copy(fileContent, file.toPath());
-			
-			File fSFolder = new File(fPathLocal+"/locale_database/"+fSName);
+			File fSFolder = new File(fPathLocal+"/locale_database/"+fs.getID());
 			fSFolder.mkdirs();
-			
-	        RandomAccessFile raf = new RandomAccessFile(file, "r");
+
+			RandomAccessFile raf = InputStreamConverter.toRandomAccessFile(fileContent);
 	        FileChannel channel = raf.getChannel();
 	        ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
 	        PDFFile pdf = new PDFFile(buf);
-
-	        Foliensatz fs = new Foliensatz(kursID, dbm.getKurs(kursID), fSName);
-	        dbm.save(fs);
 	        
 	        for (int i=0; i<pdf.getNumPages(); i++){
 	        	
 	        	Folie f = new Folie(fs.getID(), fs, "wird noch eingefuegt", 'A');
 	        	dbm.save(f);
-	        	f = dbm.getFolie(f.getID());
-	        	f.setfPath("/locale_database/"+fSName+"/"+f.getID()+".jpg");
+	        	f.setfPath("/locale_database/"+fs.getID()+"/"+f.getID()+".jpg");
 	        	dbm.save(f);
 	   
 	            createImage(pdf.getPage(i+1), fPathLocal+f.getfPath());
 	        }
 	        
-	        file.delete();
+	        channel.close();
 	        fileContent.close();
 	        raf.close();
-			
+	        
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -117,3 +110,23 @@ public class GetPdf extends HttpServlet {
     }
 	
 }
+
+class InputStreamConverter {
+     
+    public static RandomAccessFile toRandomAccessFile(InputStream is) throws IOException {
+    	
+        RandomAccessFile raf = new RandomAccessFile(File.createTempFile("isc", "tmp"), "rwd");
+  
+        byte[] buffer = new byte[2048];
+        int    tmp    = 0;
+  
+        while ((tmp = is.read(buffer)) != -1) 
+        {
+          raf.write(buffer, 0, tmp);
+        }
+         
+        raf.seek(0);
+         
+        return raf;
+    }
+}      
