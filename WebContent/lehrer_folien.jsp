@@ -15,11 +15,15 @@
 		user = (Client) session.getAttribute("benutzer");
 		if(user instanceof Student){
 			response.sendRedirect("studenten_kurse.jsp");
+			return;
 		}
 		if(session.getAttribute("kursId") != null){
 			kursId = (int) session.getAttribute("kursId");
 		}
-		else response.sendRedirect("lehrer_kurse.jsp");
+		else{
+			response.sendRedirect("lehrer_kurse.jsp");
+			return;
+		}
 	}
 	%>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
