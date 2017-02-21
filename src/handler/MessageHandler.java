@@ -277,10 +277,10 @@ public class MessageHandler {
 	
 	@OnError
 	public void onError(Throwable t){
-//		System.out.println("MessageHandler-Error");
-//		System.out.println("ToString: "+t.toString());
-//		System.out.println("LocalizedMessage: "+t.getLocalizedMessage());
-//		t.printStackTrace();
+		System.out.println("MessageHandler-Error");
+		System.out.println("ToString: "+t.toString());
+		System.out.println("LocalizedMessage: "+t.getLocalizedMessage());
+		t.printStackTrace();
 	}
    
 	@OnClose
