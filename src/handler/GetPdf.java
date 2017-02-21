@@ -69,7 +69,7 @@ public class GetPdf extends HttpServlet {
 	        	
 	        	Folie f = new Folie(fs.getID(), fs, "wird noch eingefuegt", 'A');
 	        	dbm.save(f);
-	        	f.setfPath("/locale_database/"+fs.getID()+"/"+f.getID()+".jpg");
+	        	f.setfPath("/locale_database/"+fs.getID()+"/"+f.getID()+".png");
 	        	dbm.save(f);
 	   
 	            createImage(pdf.getPage(i+1), fPathLocal+f.getfPath());
@@ -106,7 +106,7 @@ public class GetPdf extends HttpServlet {
         );
         Graphics2D bufImageGraphics = bufferedImage.createGraphics();
         bufImageGraphics.drawImage(image, 0, 0, null);
-        ImageIO.write(bufferedImage, "JPG", new File(destination));
+        ImageIO.write(bufferedImage, "png", new File(destination));
     }
 	
 }

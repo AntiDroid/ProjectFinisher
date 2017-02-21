@@ -121,7 +121,7 @@ public class MessageHandler {
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
-			} catch (IOException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		
@@ -277,6 +277,8 @@ public class MessageHandler {
 	
 	@OnError
 	public void onError(Throwable t){
+		System.out.println("MessageHandler-Error");
+		System.out.println(t.toString());
 		/*
 		System.out.println("MessageHandler-ERROR");
 		System.out.println(t.getMessage());
