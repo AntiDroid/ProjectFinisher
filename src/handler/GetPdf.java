@@ -4,11 +4,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.RandomAccessFile;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
 import javax.servlet.annotation.MultipartConfig;
@@ -18,17 +13,12 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.rendering.PDFRenderer;
+
 import models.Folie;
 import models.Foliensatz;
-
-import com.sun.pdfview.PDFFile;
-import com.sun.pdfview.PDFPage;
-
 import database.DBManager;
-
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
 
 @WebServlet("/GetPdfServlet")
 @MultipartConfig
@@ -61,20 +51,28 @@ public class GetPdf extends HttpServlet {
 			deleteDir(fSFolder);
 			fSFolder.mkdirs();
 
-			RandomAccessFile raf = InputStreamConverter.toRandomAccessFile(fileContent);
-	        FileChannel channel = raf.getChannel();
-	        ByteBuffer buf = channel.map(FileChannel.MapMode.READ_ONLY, 0, channel.size());
-	        PDFFile pdf = new PDFFile(buf);
-	        
-	        for (int i=0; i<pdf.getNumPages(); i++){
-	        	
+			// Loading an existing PDF document
+			PDDocument document = PDDocument.load(fileContent);
+
+			// Instantiating the PDFRenderer class
+			PDFRenderer renderer = new PDFRenderer(document);
+
+			// Rendering an image from the PDF document
+
+			for (int i = 0; i < document.getNumberOfPages(); i++) {
+				
 	        	Folie f = new Folie(fs.getID(), fs, "wird noch eingefuegt", 'A');
 	        	dbm.save(f);
 	        	f.setfPath("/locale_database/"+fs.getID()+"/"+f.getID()+".png");
 	        	dbm.save(f);
-	   
-	            createImage(pdf.getPage(i+1), fPathLocal+f.getfPath());
-	        }
+				
+				BufferedImage image = renderer.renderImage(i);
+
+				// Writing the image to a file
+				ImageIO.write(image, "PNG", new File(fPathLocal+f.getfPath()));
+			}
+			// Closing the document
+			document.close();
 	        
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -89,23 +87,6 @@ public class GetPdf extends HttpServlet {
 
 	}
 	
-	public void createImage(PDFPage page, String destination) throws IOException{
-        Rectangle rect = new Rectangle(0, 0, (int) page.getBBox().getWidth(),
-                (int) page.getBBox().getHeight());
-        BufferedImage bufferedImage = new BufferedImage(rect.width, rect.height,
-                         BufferedImage.TYPE_INT_RGB);
-
-        Image image = page.getImage(rect.width, rect.height,    // width & height
-                   rect,                       // clip rect
-                   null,                       // null for the ImageObserver
-                   true,                       // fill background with white
-                   true                        // block until drawing is done
-        );
-        Graphics2D bufImageGraphics = bufferedImage.createGraphics();
-        bufImageGraphics.drawImage(image, 0, 0, null);
-        ImageIO.write(bufferedImage, "png", new File(destination));
-    }
-	
 	public static boolean deleteDir(File dir) {
 	    if (dir.isDirectory()) {
 	        String[] children = dir.list();
@@ -118,24 +99,4 @@ public class GetPdf extends HttpServlet {
 	    }
 	    return dir.delete();
 	}
-}
-
-class InputStreamConverter {
-     
-    public static RandomAccessFile toRandomAccessFile(InputStream is) throws IOException {
-    	
-        RandomAccessFile raf = new RandomAccessFile(File.createTempFile("isc", "tmp"), "rwd");
-  
-        byte[] buffer = new byte[2048];
-        int    tmp    = 0;
-  
-        while ((tmp = is.read(buffer)) != -1) 
-        {
-          raf.write(buffer, 0, tmp);
-        }
-         
-        raf.seek(0);
-         
-        return raf;
-    }
 }      
