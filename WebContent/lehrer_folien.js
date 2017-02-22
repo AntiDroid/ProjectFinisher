@@ -30,25 +30,13 @@ socket.onerror = function(evt) {
 	console.log("Websocket Error :(");
 	console.log(evt.data);
 	
-	var socketEnde = {
-			type : "socketEnde",
-			userId : userId,
-			kursId : kursId
-		};
-	var socketEndeJson = JSON.stringify(socketEnde);
-	socket.send(socketEndeJson);
+	endSocket();
 };
 
 socket.onclose = function() {
 	console.log("Websocket Closed :(")
 	
-	var socketEnde = {
-			type : "socketEnde",
-			userId : userId,
-			kursId : kursId
-		};
-	var socketEndeJson = JSON.stringify(socketEnde);
-	socket.send(socketEndeJson);
+	endSocket();
 };
 
 // Onmessages
@@ -152,7 +140,15 @@ function updateFolien() {
 	    +'</div>';
 		$("#folienNavThumbsSlick").slick('slickAdd', htmlString);
 	}
-	
+}
+function endSocket() {
+	var socketEnde = {
+			type : "socketEnde",
+			userId : userId,
+			kursId : kursId
+		};
+	var socketEndeJson = JSON.stringify(socketEnde);
+	socket.send(socketEndeJson);
 }
 
 function enableControls() {
@@ -251,8 +247,16 @@ $('#delThisFoil').click(function(e) {
 	var folienDeleteRequestJson = JSON.stringify(folienDeleteRequest);
 	socket.send(folienDeleteRequestJson);
 });
-
-
+/*
+$('input[name=intModus]').click(function(e) {
+	if($(this).val() == "Bereiche") {
+		
+    }
+    else if($(this).val() == "Heatplot") {
+        $("#intBerDiv").slideUp(200);
+    }
+});
+*/
 
 
 //OnReady
