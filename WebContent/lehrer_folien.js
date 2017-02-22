@@ -162,6 +162,16 @@ function disableControls() {
 	$("#interaktivControlsDiv").fadeOut(180);
 }
 
+function changeFolienType(type) {
+	var folienTypChange = {
+			type : "folienTypChange",
+			userId : userId,
+			folienId : nowFolienId,
+			folienTyp : type
+		};
+	var folienTypChangeJson = JSON.stringify(folienTypChange);
+	socket.send(folienTypChangeJson);
+}
 
 
 //Onklick
@@ -247,16 +257,12 @@ $('#delThisFoil').click(function(e) {
 	var folienDeleteRequestJson = JSON.stringify(folienDeleteRequest);
 	socket.send(folienDeleteRequestJson);
 });
-/*
-$('input[name=intModus]').click(function(e) {
-	if($(this).val() == "Bereiche") {
-		
-    }
-    else if($(this).val() == "Heatplot") {
-        $("#intBerDiv").slideUp(200);
-    }
+
+$("#interaktivSwitch").click(function(e) {
+	
 });
-*/
+
+
 
 
 //OnReady
@@ -281,21 +287,33 @@ $(document).ready(function(){
 
 //OnChange
 $("#interaktivSwitch").change(function() {
-    if(this.checked) {
+	if(this.checked) {
+		if($('input[name=intModus]').val() == "Bereiche") {
+			changeFolienType('C');
+	    }
+	    else if($('input[name=intModus]').val() == "Heatplot") {
+	    	changeFolienType('H');
+	    }
+		
         $("#allIntDiv").fadeIn(350);
-    }
-    else{
+	}
+	else{
+		changeFolienType('A');
+		
 		$("#allIntDiv").fadeOut(450);
 	}
 });
 
 $("input[name=intModus]").change(function() {
     if($(this).val() == "Bereiche") {
+		changeFolienType('C');
+		
         $("#intBerDiv").slideDown(200);
     }
     else if($(this).val() == "Heatplot") {
+    	changeFolienType('H');
+    	
         $("#intBerDiv").slideUp(200);
     }
-    
 });
 

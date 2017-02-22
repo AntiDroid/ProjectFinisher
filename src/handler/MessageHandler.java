@@ -41,7 +41,7 @@ public class MessageHandler {
 	
 	@OnMessage
 	public void onMessage(Session session, String message) {
-	   
+	   System.out.println(message);
 		DBManager dbm = new DBManager();
 		
 		Gson gson = new Gson();
@@ -51,7 +51,17 @@ public class MessageHandler {
 		String type = jsonData.get("type").getAsString();
 		
 		switch(type){
-		
+		case "folienTypChange":
+		{	
+			/*TODO
+			 * <- folienTypChange = {
+							userId
+							folienId
+							folienTyp
+					};
+			 */
+			break;
+		}
 		case "lehrerKursInfoRequest":
 		{
 			//int userID = jsonData.get("userId").getAsInt();
