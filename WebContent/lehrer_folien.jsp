@@ -184,8 +184,7 @@
 
 		<div style="font-size: 20px">Foliensätze:</div>
 		<select id="folienSatzListe" class="form-control" size="24">
-			<option class="folienSatzOption" value="1" selected>Foliensatz1</option>
-			<option class="folienSatzOption" value="2">Foliensatz2</option>
+			<!-- Hier werden die Foliensätze dynamisch geladen -->
 		</select>
 
 		<button class="btn btn-sm btn-warning outerUploadBtn" data-toggle="modal" data-target="#uploadModal">PDF Hochladen</button>
@@ -203,7 +202,7 @@
 		        	<label></label>
 		        	<input type="file" accept=".pdf" name="pdfDatei" value=".pdf">
 		        	<label>Foliensatzname:</label>
-		        	<input type="text" name="name">
+		        	<input type="text" name="name" required>
 		        	<input type="text" name="kursId" id="getPdfKursId" hidden>
 		        	<input class="btn btn-primary btn-sm innerUploadBtn" type="submit" name="senden" value="Hochladen">
 		        </form>
@@ -218,7 +217,7 @@
 		
 
 		</div>
-		<div class="col-md-10">
+		<div id="allFoliensatzAnsicht" class="col-md-10">
 			<div class="row"></div>
 				<div class="folienNavDiv text-center">
 					<button class="folienNavBtn btn btn-xs">zurück</button>
@@ -228,34 +227,7 @@
 
 				<div class="carouselDiv">
 				  <section id="folienNavThumbsSlick" class="center slider">
-				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/1.png" name="1">
-				      <div class="text-center">1</div>
-				    </div>
-				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/2.png" name="2">
-				      <div class="text-center">2</div>
-				    </div>
-				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/3.png" name="3">
-				      <div class="text-center">3</div>
-				    </div>
-				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/4.png" name="4">
-				      <div class="text-center">4</div>
-				    </div>
-				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/5.png" name="5">
-				      <div class="text-center">5</div>
-				    </div>
-				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/6.png" name="6">
-				      <div class="text-center">6</div>
-				    </div>
-				    <div>
-				      <img class="folieThumbnail" src="imgs/Beispiele/7.png" name="7">
-				      <div class="text-center">7</div>
-				    </div>
+				  	<!-- Hier werden die Folienthumbnails dynamisch geladen -->
 				  </section>
 				</div>
 

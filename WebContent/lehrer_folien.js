@@ -6,7 +6,8 @@ var nowfolienSatzId = 0;
 var nowFolienId = 0;
 var aktiveFolienId = 0;
 
-
+if(nowFolienId == 0) $("#allFoliensatzAnsicht").hide();
+else $("#allFoliensatzAnsicht").show();
 
 
 
@@ -27,6 +28,7 @@ socket.onopen = function() {
 
 socket.onerror = function(evt) {
 	console.log("Websocket Error :(");
+	console.log(evt.data);
 	
 	var socketEnde = {
 			type : "socketEnde",
@@ -62,6 +64,7 @@ socket.onmessage = function(evt) {
 	}
 	else if (msg.type == "folienSatz"){
 		disableControls();
+		$("#allFoliensatzAnsicht").show();
 		if(msg.folienList != null){
 			folienList = msg.folienList;
 			updateFolien();
@@ -268,6 +271,7 @@ $(document).ready(function(){
 	}
 	
 	disableControls();
+	
 
 });
 
