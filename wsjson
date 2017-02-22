@@ -76,3 +76,10 @@ lehrerfolienseite:
 			folienId
 		};
 -> folienSatz //ums zu aktualisiern
+
+
+<- folienTypChange = {
+			userId
+			folienId
+			folienTyp
+	};
