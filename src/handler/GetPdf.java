@@ -66,7 +66,8 @@ public class GetPdf extends HttpServlet {
 	        	f.setfPath("/locale_database/"+fs.getID()+"/"+f.getID()+".png");
 	        	dbm.save(f);
 				
-				BufferedImage image = renderer.renderImage(i);
+				BufferedImage image = renderer.renderImage(i, 2f);
+//				image = renderer.renderImageWithDPI(i, dpi);
 
 				// Writing the image to a file
 				ImageIO.write(image, "PNG", new File(fPathLocal+f.getfPath()));

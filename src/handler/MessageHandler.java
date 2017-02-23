@@ -53,7 +53,7 @@ public class MessageHandler {
 		switch(type){
 		case "folienTypChange":
 		{	
-			int userID = jsonData.get("userId").getAsInt();
+			// int userID = jsonData.get("userId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
 			char folienTyp = jsonData.get("folienTyp").getAsCharacter();
 			
@@ -79,6 +79,8 @@ public class MessageHandler {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			
+			Message.kursSessions.putIfAbsent(kursID, new ArrayList<Session>());
 			
 			break;
 		}
@@ -207,7 +209,6 @@ public class MessageHandler {
 				if(!sessionList.contains(session))
 					Message.kursSessions.get(kursID).add(session);
 			}
-			
 			
 			break;
 		}
