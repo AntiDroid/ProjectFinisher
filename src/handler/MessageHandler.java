@@ -84,6 +84,8 @@ public class MessageHandler {
 			f.setFolienTyp(folienTyp);
 			dbm.save(f);
 			
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//I brauch da a FolienInfo zum updaten
 			break;
 		}
 		case "lehrerKursInfoRequest":
@@ -139,6 +141,8 @@ public class MessageHandler {
 			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
 			ArrayList<Integer> bAuswerteList = new ArrayList<Integer>();
 			ArrayList<Uservoting> hAuswerteList = dbm.getUservotings(0, folienID, sessionID);
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+// du musch no bAuswerteList machn glabi, i griag 0
 			
 			for(int i = 0; i < bereichList.size(); i++){
 			

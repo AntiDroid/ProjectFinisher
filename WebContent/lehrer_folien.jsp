@@ -270,10 +270,10 @@
 							<div class="intModusDiv">
 								 <span class="verticalMiddle">Interaktionsmodus: </span>
 								 <span class="btn-group" data-toggle="buttons">
-					                <label class="btn btn-sm btn-default active" for="bereichRadio">
+					                <label id="bereichRadioBtn" class="btn btn-sm btn-default active" for="bereichRadio">
 					                    <input id="bereichRadio" type="radio" name="intModus" value="Bereiche" /> Bereiche
 					                </label> 
-					                <label class="btn btn-sm btn-default" for="heatplotRadio">
+					                <label id="heatplotRadioBtn" class="btn btn-sm btn-default" for="heatplotRadio">
 					                    <input id="heatplotRadio" type="radio" name="intModus" value="Heatplot" /> Heatplot
 					                </label>
 					            </span>

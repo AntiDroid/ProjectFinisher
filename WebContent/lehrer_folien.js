@@ -77,10 +77,12 @@ socket.onmessage = function(evt) {
 			else if(msg.folie.folienTyp == 'C'){
 				$("#interaktivSwitch").prop('checked', true);
 				$("#bereichRadio").prop('checked', true);
+				$("#bereichRadioBtn").addClass("active");
+				$("#heatplotRadioBtn").removeClass("active");
 				$("#allIntDiv").fadeIn(350);
-				$("#intBerDiv").fadeIn(350);
+				$("#intBerDiv").slideDown(200);
 				
-				var bereichList = msg.folie.bereichList;
+				var bereichList = msg.bereichList;
 				var htmlString = "";
 				if(bereichList != null){
 					for (var i = 0; i < bereichList.length; i++) {
@@ -88,12 +90,12 @@ socket.onmessage = function(evt) {
 						var oLY = bereichList[i].obenLinksY;
 						var uRX = bereichList[i].untenRechtsX;
 						var uRY = bereichList[i].untenRechtsY;
-						htmlString += "<option class='' value='"+i+"'>"+(i+1)+": "+oLX+","+oLY+";"+uRX+","+uRY+"</option>";
+						htmlString += "<option class='' value='"+i+"'>"+(i+1)+": "+oLX+","+oLY+" ; "+uRX+","+uRY+"</option>";
 					}
 				}
 				$("#intBereichList").html(htmlString);
 				
-				var bAuswerteList = msg.folie.bAuswerteList;
+				var bAuswerteList = msg.bAuswerteList;
 				var htmlString = "";
 				if(bAuswerteList != null){
 					for (var i = 0; i < bAuswerteList.length; i++) {
@@ -106,10 +108,12 @@ socket.onmessage = function(evt) {
 			else if(msg.folie.folienTyp == 'H'){
 				$("#interaktivSwitch").prop('checked', true);
 				$("#heatplotRadio").prop('checked', true);
+				$("#heatplotRadioBtn").addClass("active");
+				$("#bereichRadioBtn").removeClass("active");
 				$("#allIntDiv").fadeIn(350);
-				$("#intBerDiv").fadeOut(350);
+				$("#intBerDiv").slideUp(200);
 				
-				var hAuswerteList = msg.folie.hAuswerteList;
+				var hAuswerteList = msg.hAuswerteList;
 				var htmlString = "";
 				if(hAuswerteList != null){
 					for (var i = 0; i < hAuswerteList.length; i++) {
@@ -119,6 +123,7 @@ socket.onmessage = function(evt) {
 					}
 				}
 				$("#auswerteList").html(htmlString);
+				$("#intBereichList").html("");
 			}
 		}
 	}
@@ -306,10 +311,10 @@ $(document).ready(function(){
 //OnChange
 $("#interaktivSwitch").change(function() {
 	if(this.checked) {
-		if($('input[name=intModus]').val() == "Bereiche") {
+		if($('input[name=intModus]:checked').val() == "Bereiche") {
 			changeFolienType('C');
 	    }
-	    else if($('input[name=intModus]').val() == "Heatplot") {
+	    else if($('input[name=intModus]:checked').val() == "Heatplot") {
 	    	changeFolienType('H');
 	    }
 		

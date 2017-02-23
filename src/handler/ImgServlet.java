@@ -39,7 +39,7 @@ public class ImgServlet extends HttpServlet {
 			try{
 				bi = ImageIO.read(new File(fPathLocal+f.getfPath()));
 			}catch(IOException e){
-				bi = ImageIO.read(new File(getServletContext().getRealPath("/imgs/na.jpg")));
+				bi = ImageIO.read(new File(getServletContext().getRealPath("imgs/na.jpg")));
 			}
 			Graphics g = bi.getGraphics();
 			g.dispose();
