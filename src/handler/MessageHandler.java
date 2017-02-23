@@ -51,6 +51,29 @@ public class MessageHandler {
 		String type = jsonData.get("type").getAsString();
 		
 		switch(type){
+		
+		case "folienSatzDeleteRequest":
+		{
+			//int userID = jsonData.get("userId").getAsInt();
+			int kursID = jsonData.get("kursId").getAsInt();
+			int foliensatzID = jsonData.get("folienSatzId").getAsInt();
+			
+			dbm.delete(dbm.getFoliensatz(foliensatzID));
+			
+			String respType = "lehrerKursInfo";
+			ArrayList<Foliensatz> folienSatzList = dbm.getFoliensätze(kursID);
+			
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(respType, folienSatzList, Message.kursSessions.size());
+			
+			try {
+				session.getBasicRemote().sendText(gson.toJson(responseObj));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			break;
+		}
+		
 		case "folienTypChange":
 		{	
 			// int userID = jsonData.get("userId").getAsInt();
