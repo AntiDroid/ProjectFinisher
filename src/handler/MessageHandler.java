@@ -53,13 +53,14 @@ public class MessageHandler {
 		switch(type){
 		case "folienTypChange":
 		{	
-			/*TODO
-			 * <- folienTypChange = {
-							userId
-							folienId
-							folienTyp
-					};
-			 */
+			int userID = jsonData.get("userId").getAsInt();
+			int folienID = jsonData.get("folienId").getAsInt();
+			char folienTyp = jsonData.get("folienTyp").getAsCharacter();
+			
+			Folie f = dbm.getFolie(folienID);
+			f.setFolienTyp(folienTyp);
+			dbm.save(f);
+			
 			break;
 		}
 		case "lehrerKursInfoRequest":
@@ -71,7 +72,7 @@ public class MessageHandler {
 			ArrayList<Foliensatz> folienSatzList = dbm.getFoliensätze(kursID);
 
 			
-			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(respType, folienSatzList);
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(respType, folienSatzList, Message.kursSessions.size());
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -302,8 +303,8 @@ public class MessageHandler {
 
 abstract class Message {
 	
-	static public HashMap<Integer, ArrayList<Session>> kursSessions;
-	static public HashMap<Integer, Folie> aktiveFolie;
+	static public HashMap<Integer, ArrayList<Session>> kursSessions = new HashMap<Integer, ArrayList<Session>>();
+	static public HashMap<Integer, Folie> aktiveFolie = new HashMap<Integer, Folie>();
 	
 	String type;
 	
@@ -315,10 +316,12 @@ abstract class Message {
 class KursInfoMessageLehrer extends Message {
 	
 	ArrayList<Foliensatz> folienSatzList;
+	int anzOnline;
 	
-	public KursInfoMessageLehrer(String rT, ArrayList<Foliensatz> fsl){
+	public KursInfoMessageLehrer(String rT, ArrayList<Foliensatz> fsl, int aO){
 		super(rT);
 		this.folienSatzList = fsl;
+		this.anzOnline = aO;
 	}
 }
 
