@@ -5,10 +5,16 @@ var aktuelleFolie = null;
 var nowfolienSatzId = 0;
 var nowFolienId = 0;
 var aktiveFolienId = 0;
+var studentsOnline = 0;
 
 if(nowFolienId == 0) $("#allFoliensatzAnsicht").hide();
 else $("#allFoliensatzAnsicht").show();
 
+var canvas = document.getElementById("folieCanvas");
+var ctx = canvas.getContext("2d");
+ctx.globalAlpha = 0.4;
+ctx.fillStyle="#ee00ff";
+//ctx.fillRect(20, 20, 160, 100);
 
 
 // Websocket
@@ -49,6 +55,10 @@ socket.onmessage = function(evt) {
 			folienSatzList = msg.folienSatzList;
 			updateFolienSatzList();
 		}
+		if(msg.anzOnline != null){
+			studentsOnline = msg.anzOnline;
+			updateStudentsOnline();
+		}
 	}
 	else if (msg.type == "folienSatz"){
 		disableControls();
@@ -62,44 +72,51 @@ socket.onmessage = function(evt) {
 		if(msg.folie != null){
 			if(msg.folie.folienTyp == 'A'){
 				$("#interaktivSwitch").prop('checked', false);
+				$("#allIntDiv").fadeOut(350);
 			}
 			else if(msg.folie.folienTyp == 'C'){
 				$("#interaktivSwitch").prop('checked', true);
 				$("#bereichRadio").prop('checked', true);
-				$("#allIntDiv").show();
-				$("#intBerDiv").show();
+				$("#allIntDiv").fadeIn(350);
+				$("#intBerDiv").fadeIn(350);
 				
-				var bereichList = folie.bereichList;
+				var bereichList = msg.folie.bereichList;
 				var htmlString = "";
-				for (var i = 0; i < bereichList.length; i++) {
-					var oLX = bereichList[i].obenLinksX;
-					var oLY = bereichList[i].obenLinksY;
-					var uRX = bereichList[i].untenRechtsX;
-					var uRY = bereichList[i].untenRechtsY;
-					htmlString += "<option class='' value='"+i+"'>"+(i+1)+": "+oLX+","+oLY+";"+uRX+","+uRY+"</option>";
+				if(bereichList != null){
+					for (var i = 0; i < bereichList.length; i++) {
+						var oLX = bereichList[i].obenLinksX;
+						var oLY = bereichList[i].obenLinksY;
+						var uRX = bereichList[i].untenRechtsX;
+						var uRY = bereichList[i].untenRechtsY;
+						htmlString += "<option class='' value='"+i+"'>"+(i+1)+": "+oLX+","+oLY+";"+uRX+","+uRY+"</option>";
+					}
 				}
 				$("#intBereichList").html(htmlString);
 				
-				var bAuswerteList = folie.bAuswerteList;
+				var bAuswerteList = msg.folie.bAuswerteList;
 				var htmlString = "";
-				for (var i = 0; i < bAuswerteList.length; i++) {
-					var wert = bAuswerteList[i];
-					htmlString += "<option class='' value='"+wert+"'>"+(i+1)+": "+wert+"</option>";
+				if(bAuswerteList != null){
+					for (var i = 0; i < bAuswerteList.length; i++) {
+						var wert = bAuswerteList[i];
+						htmlString += "<option class='' value='"+wert+"'>"+(i+1)+": "+wert+"</option>";
+					}
 				}
 				$("#auswerteList").html(htmlString);
 			}
 			else if(msg.folie.folienTyp == 'H'){
 				$("#interaktivSwitch").prop('checked', true);
 				$("#heatplotRadio").prop('checked', true);
-				$("#allIntDiv").show();
-				$("#intBerDiv$").hide();
+				$("#allIntDiv").fadeIn(350);
+				$("#intBerDiv").fadeOut(350);
 				
-				var hAuswerteList = folie.hAuswerteList;
+				var hAuswerteList = msg.folie.hAuswerteList;
 				var htmlString = "";
-				for (var i = 0; i < hAuswerteList.length; i++) {
-					var x = hAuswerteList[i].koordX;
-					var y = hAuswerteList[i].koordY;
-					htmlString += "<option class='' value='"+i+"'>"+(i+1)+": "+x+","+y+"</option>";
+				if(hAuswerteList != null){
+					for (var i = 0; i < hAuswerteList.length; i++) {
+						var x = hAuswerteList[i].koordX;
+						var y = hAuswerteList[i].koordY;
+						htmlString += "<option class='' value='"+i+"'>"+(i+1)+": "+x+","+y+"</option>";
+					}
 				}
 				$("#auswerteList").html(htmlString);
 			}
@@ -156,6 +173,7 @@ function enableControls() {
 	$("#delThisFoil").prop("disabled", false);
 	$("#interaktivControlsDiv").fadeIn(60);
 }
+
 function disableControls() {
 	$("#useThisFoil").prop("disabled", true);
 	$("#delThisFoil").prop("disabled", true);
@@ -172,6 +190,11 @@ function changeFolienType(type) {
 	var folienTypChangeJson = JSON.stringify(folienTypChange);
 	socket.send(folienTypChangeJson);
 }
+
+function updateStudentsOnline(anzahl) {
+	$("#studentsOnline").html(studentsOnline+" Studenten Online");
+}
+
 
 
 //Onklick
@@ -210,7 +233,6 @@ $('#folienNavThumbsSlick').on('click', 'img', function(e) {
 	
 	
 	//CANVAS PROBLEME TODO
-	var canvas = document.getElementById("folieCanvas");
 	canvas.width = $('#canvasDiv').width();
 	canvas.height = $('#canvasDiv').height();
 	var img = new Image();
@@ -221,7 +243,6 @@ $('#folienNavThumbsSlick').on('click', 'img', function(e) {
 		var cw = $('#folieCanvas').width();
 		var ch = cw*prop;
 		
-		var ctx = canvas.getContext("2d");
 	    ctx.drawImage(img, 0, 0, cw, ch);
 	};
 	img.src = 'ImgServlet?id='+nowFolienId;
@@ -258,9 +279,6 @@ $('#delThisFoil').click(function(e) {
 	socket.send(folienDeleteRequestJson);
 });
 
-$("#interaktivSwitch").click(function(e) {
-	
-});
 
 
 

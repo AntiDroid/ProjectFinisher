@@ -169,7 +169,7 @@
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
 		<span id="userName" class="navbar-brand"></span>
-		<span class="navbar-brand" style="font-size: 10px;">0 Studenten Online</span>
+		<span id="studentsOnline" class="navbar-brand" style="font-size: 10px;">0 Studenten Online</span>
 		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
 		</form>
@@ -270,12 +270,12 @@
 							<div class="intModusDiv">
 								 <span class="verticalMiddle">Interaktionsmodus: </span>
 								 <span class="btn-group" data-toggle="buttons">
-					                <span class="btn btn-sm btn-default active">
-					                    <input id="bereichRadio" type="radio" name="intModus" value="Bereiche" checked/> Bereiche
-					                </span> 
-					                <span class="btn btn-sm btn-default">
+					                <label class="btn btn-sm btn-default active" for="bereichRadio">
+					                    <input id="bereichRadio" type="radio" name="intModus" value="Bereiche" /> Bereiche
+					                </label> 
+					                <label class="btn btn-sm btn-default" for="heatplotRadio">
 					                    <input id="heatplotRadio" type="radio" name="intModus" value="Heatplot" /> Heatplot
-					                </span>
+					                </label>
 					            </span>
 							</div>
 	
