@@ -34,8 +34,13 @@ public class ImgServlet extends HttpServlet {
 			Folie f = dbm.getFolie(Integer.parseInt(folienID));
 			
 			response.setContentType("image/png");
-			BufferedImage bi = ImageIO.read(new File(fPathLocal+f.getfPath()));
-
+			
+			BufferedImage bi = null;
+			try{
+				bi = ImageIO.read(new File(fPathLocal+f.getfPath()));
+			}catch(IOException e){
+				bi = ImageIO.read(new File(getServletContext().getRealPath("/imgs/na.jpg")));
+			}
 			Graphics g = bi.getGraphics();
 			g.dispose();
 			
@@ -44,6 +49,7 @@ public class ImgServlet extends HttpServlet {
 		} catch (NullPointerException e) {
 			System.out.println("ImgServlet ohne Parameter aufgerufen!");
 		} catch (IOException e) {
+			
 			e.printStackTrace();
 		}
 
