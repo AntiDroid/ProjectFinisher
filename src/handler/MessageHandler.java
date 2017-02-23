@@ -304,8 +304,18 @@ public class MessageHandler {
 			break;
 		}
 		default:
+		{
+			DefaultMessage responseObj = new DefaultMessage("defaultMessage");
+			
+			try {
+				session.getBasicRemote().sendText(gson.toJson(responseObj));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
 			
 			break;
+		}
 		}
 		
 		dbm.dispose();
@@ -411,5 +421,12 @@ class FolienUpdateRequestMessage extends Message {
 		super(rT);
 		this.folie = f;
 		this.bereichList = bl;
+	}
+}
+
+class DefaultMessage extends Message {
+	
+	public DefaultMessage(String rT){
+		super(rT);
 	}
 }
