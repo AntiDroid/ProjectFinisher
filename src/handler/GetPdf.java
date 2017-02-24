@@ -32,9 +32,10 @@ public class GetPdf extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
+		DBManager dbm = new DBManager();
+		
 		try {
 			
-			DBManager dbm = new DBManager();
 			String fPathLocal = System.getProperty("java.io.tmpdir");
 			
 			String fSName = request.getParameter("name");
@@ -79,6 +80,7 @@ public class GetPdf extends HttpServlet {
 			e.printStackTrace();
 		}
 		finally{
+			dbm.dispose();
 			try {
 				response.sendRedirect("lehrer_folien.jsp");
 			} catch (IOException e) {
