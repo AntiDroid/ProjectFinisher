@@ -194,7 +194,8 @@ function changeFolienType(type) {
 			type : "folienTypChange",
 			userId : userId,
 			folienId : nowFolienId,
-			folienTyp : type
+			folienTyp : type,
+			sessionId : sessionId
 		};
 	var folienTypChangeJson = JSON.stringify(folienTypChange);
 	socket.send(folienTypChangeJson);
