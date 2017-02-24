@@ -35,9 +35,6 @@ public class MessageHandler {
 	public void onOpen(){
 		
 	}
-   
-	// Nachricht schicken
-	// session.getBasicRemote().sendText("Du bist: " +c.getName()+ "\n");
 	
 	@OnMessage
 	public void onMessage(Session session, String message) {
@@ -60,10 +57,9 @@ public class MessageHandler {
 			
 			dbm.delete(dbm.getFoliensatz(foliensatzID));
 			
-			String respType = "lehrerKursInfo";
 			ArrayList<Foliensatz> folienSatzList = dbm.getFoliensätze(kursID);
 			
-			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(respType, folienSatzList, Message.kursSessions.size());
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursSessions.size());
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -79,25 +75,48 @@ public class MessageHandler {
 			// int userID = jsonData.get("userId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
 			char folienTyp = jsonData.get("folienTyp").getAsCharacter();
+			String sessionID = jsonData.get("sessionId").getAsString();
 			
 			Folie f = dbm.getFolie(folienID);
 			f.setFolienTyp(folienTyp);
 			dbm.save(f);
 			
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//I brauch da a FolienInfo zum updaten
+			Folie folie = dbm.getFolie(folienID);
+			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
+			ArrayList<Integer> bAuswerteList = new ArrayList<Integer>();
+			ArrayList<Uservoting> hAuswerteList = dbm.getUservotings(0, folienID, sessionID);
+			
+			for(int i = 0; i < bereichList.size(); i++){
+			
+				int counter = 0;
+				
+				for(Uservoting uv: hAuswerteList){
+					if(uv.getAuswahloption().equals(i+1))
+						counter++;
+				}
+				
+				bAuswerteList.add(counter);
+			}
+			
+			FolienInfoMessage responseObj = new FolienInfoMessage(folie, bereichList, bAuswerteList, hAuswerteList);
+			
+			try {
+				session.getBasicRemote().sendText(gson.toJson(responseObj));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			break;
 		}
 		case "lehrerKursInfoRequest":
 		{
 			//int userID = jsonData.get("userId").getAsInt();
 			int kursID = jsonData.get("kursId").getAsInt();
-			
-			String respType = "lehrerKursInfo";
+		
 			ArrayList<Foliensatz> folienSatzList = dbm.getFoliensätze(kursID);
 
 			
-			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(respType, folienSatzList, Message.kursSessions.size());
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursSessions.size());
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -115,10 +134,9 @@ public class MessageHandler {
 			//int userID = jsonData.get("userId").getAsInt();
 			int folienSatzID = jsonData.get("folienSatzId").getAsInt();
 			
-			String respType = "folienSatz";
 			ArrayList<Folie> folienList = dbm.getFolien(folienSatzID);
 			
-			FoliensatzFolienMessage responseObj = new FoliensatzFolienMessage(respType, folienList);
+			FoliensatzFolienMessage responseObj = new FoliensatzFolienMessage(folienList);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -136,13 +154,10 @@ public class MessageHandler {
 			int folienID = jsonData.get("folienId").getAsInt();
 			String sessionID = jsonData.get("sessionId").getAsString();
 			
-			String respType = "folienInfo";
 			Folie folie = dbm.getFolie(folienID);
 			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
 			ArrayList<Integer> bAuswerteList = new ArrayList<Integer>();
 			ArrayList<Uservoting> hAuswerteList = dbm.getUservotings(0, folienID, sessionID);
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// du musch no bAuswerteList machn glabi, i griag 0
 			
 			for(int i = 0; i < bereichList.size(); i++){
 			
@@ -156,7 +171,7 @@ public class MessageHandler {
 				bAuswerteList.add(counter);
 			}
 			
-			FolienInfoMessage responseObj = new FolienInfoMessage(respType, folie, bereichList, bAuswerteList, hAuswerteList);
+			FolienInfoMessage responseObj = new FolienInfoMessage(folie, bereichList, bAuswerteList, hAuswerteList);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -173,14 +188,13 @@ public class MessageHandler {
 			// int kursID = jsonData.get("kursId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
 			
-			String respType = "folienSatz";
 			int folienSatzID = dbm.getFolie(folienID).getFoliensatzID();
 			
 			dbm.delete(dbm.getFolie(folienID));
 			
 			Foliensatz folienSatz = dbm.getFoliensatz(folienSatzID);
 			
-			UpdatedFoliensatzMessage responseObj = new UpdatedFoliensatzMessage(respType, folienSatz);
+			UpdatedFoliensatzMessage responseObj = new UpdatedFoliensatzMessage(folienSatz);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -196,7 +210,6 @@ public class MessageHandler {
 			int studentID = jsonData.get("userId").getAsInt();
 			int kursID = jsonData.get("kursId").getAsInt();
 			
-			String respType = "kursInfo";
 			String kursName = "";
 			String lehrerName = "";
 			Folie f = Message.aktiveFolie.get(kursID);
@@ -217,7 +230,7 @@ public class MessageHandler {
 			ArrayList<Lehrer> lehrerListe = dbm.getKurslehrer(kursID);
 			lehrerName = lehrerListe.get(0).getVorname()+" "+lehrerListe.get(0).getNachname();
 			
-			KursInfoMessageStudent responseObj = new KursInfoMessageStudent(respType, kursName, lehrerName, f, bereichList);
+			KursInfoMessageStudent responseObj = new KursInfoMessageStudent(kursName, lehrerName, f, bereichList);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -248,10 +261,9 @@ public class MessageHandler {
 			// was wenn Websocket auf Client-Seite Verbindung verliert? Liste wird nicht korrigiert
 			// Socket - Equals?
 			
-			String respType = "folienUpdate";
 			Folie f = dbm.getFolie(folienID);
 			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
-			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(respType, f, bereichList);
+			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(f, bereichList);
 			
 			Message.aktiveFolie.put(kursID, f);
 			
@@ -309,7 +321,7 @@ public class MessageHandler {
 		}
 		default:
 		{
-			DefaultMessage responseObj = new DefaultMessage("defaultMessage");
+			DefaultMessage responseObj = new DefaultMessage();
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -356,8 +368,8 @@ class KursInfoMessageLehrer extends Message {
 	ArrayList<Foliensatz> folienSatzList;
 	int anzOnline;
 	
-	public KursInfoMessageLehrer(String rT, ArrayList<Foliensatz> fsl, int aO){
-		super(rT);
+	public KursInfoMessageLehrer(ArrayList<Foliensatz> fsl, int aO){
+		super("lehrerKursInfo");
 		this.folienSatzList = fsl;
 		this.anzOnline = aO;
 	}
@@ -370,8 +382,8 @@ class FolienInfoMessage extends Message {
 	ArrayList<Integer> bAuswerteList;
 	ArrayList<Uservoting> hAuswerteList;
 	
-	public FolienInfoMessage(String rT, Folie f, ArrayList<Auswahlbereich> bereiche, ArrayList<Integer> bAL, ArrayList<Uservoting> hAL){
-		super(rT);
+	public FolienInfoMessage(Folie f, ArrayList<Auswahlbereich> bereiche, ArrayList<Integer> bAL, ArrayList<Uservoting> hAL){
+		super("folienInfo");
 		this.folie = f;
 		this.bereichList = bereiche;
 		this.bAuswerteList = bAL;
@@ -383,8 +395,8 @@ class UpdatedFoliensatzMessage extends Message {
 	
 	Foliensatz folienSatz;
 	
-	public UpdatedFoliensatzMessage(String rT, Foliensatz fS){
-		super(rT);
+	public UpdatedFoliensatzMessage(Foliensatz fS){
+		super("folienSatz");
 		this.folienSatz = fS;
 	}
 }
@@ -393,8 +405,8 @@ class FoliensatzFolienMessage extends Message {
 	
 	ArrayList<Folie> folienList;
 	
-	public FoliensatzFolienMessage(String rT, ArrayList<Folie> folien){
-		super(rT);
+	public FoliensatzFolienMessage(ArrayList<Folie> folien){
+		super("folienSatz");
 		this.folienList = folien;
 	}
 	
@@ -407,8 +419,8 @@ class KursInfoMessageStudent extends Message {
 	Folie folie;
 	ArrayList<Auswahlbereich> bereichList;
 	
-	public KursInfoMessageStudent(String rT, String kN, String lN, Folie f, ArrayList<Auswahlbereich> bl){
-		super(rT);
+	public KursInfoMessageStudent(String kN, String lN, Folie f, ArrayList<Auswahlbereich> bl){
+		super("kursInfo");
 		this.kursName = kN;
 		this.lehrerName = lN;
 		this.folie = f;
@@ -421,8 +433,8 @@ class FolienUpdateRequestMessage extends Message {
 	Folie folie;
 	ArrayList<Auswahlbereich> bereichList;
 	
-	public FolienUpdateRequestMessage(String rT, Folie f, ArrayList<Auswahlbereich> bl){
-		super(rT);
+	public FolienUpdateRequestMessage(Folie f, ArrayList<Auswahlbereich> bl){
+		super("folienUpdate");
 		this.folie = f;
 		this.bereichList = bl;
 	}
@@ -430,7 +442,7 @@ class FolienUpdateRequestMessage extends Message {
 
 class DefaultMessage extends Message {
 	
-	public DefaultMessage(String rT){
-		super(rT);
+	public DefaultMessage(){
+		super("defaultMessage");
 	}
 }
