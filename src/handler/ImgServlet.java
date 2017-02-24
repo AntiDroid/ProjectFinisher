@@ -25,9 +25,10 @@ public class ImgServlet extends HttpServlet {
 
 	public void doGet(HttpServletRequest request, HttpServletResponse response) {
 
+		DBManager dbm = new DBManager();
+		
 		try {
 			
-			DBManager dbm = new DBManager();
 			String fPathLocal = System.getProperty("java.io.tmpdir");
 			
 			String folienID = request.getParameter("id");
@@ -47,11 +48,15 @@ public class ImgServlet extends HttpServlet {
 			ImageIO.write(bi, "png", response.getOutputStream());
 			
 			response.getOutputStream().close();
-			dbm.dispose();
-		} catch (Exception e) {
-			
-			System.out.println("ImgServlet ohne Parameter aufgerufen!");
+		} catch (Exception e) {	
 			e.printStackTrace();
+		} finally{
+			try {
+				response.getOutputStream().close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			dbm.dispose();
 		}
 		
 	}
