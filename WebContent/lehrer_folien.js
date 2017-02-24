@@ -162,6 +162,10 @@ function updateFolien() {
 	    +'</div>';
 		$("#folienNavThumbsSlick").slick('slickAdd', htmlString);
 	}
+	
+	$(".folieThumbnail").removeClass("xAusgFolie");
+	$(".folieThumbnail[name='"+aktiveFolienId+"']").addClass("xAktiveFolie");
+	
 }
 function endSocket() {
 	var socketEnde = {

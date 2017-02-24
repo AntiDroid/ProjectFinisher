@@ -46,12 +46,13 @@ public class ImgServlet extends HttpServlet {
 			
 			ImageIO.write(bi, "png", response.getOutputStream());
 			
-		} catch (NullPointerException e) {
-			System.out.println("ImgServlet ohne Parameter aufgerufen!");
-		} catch (IOException e) {
+			response.getOutputStream().close();
+			dbm.dispose();
+		} catch (Exception e) {
 			
+			System.out.println("ImgServlet ohne Parameter aufgerufen!");
 			e.printStackTrace();
 		}
-
+		
 	}
 }
