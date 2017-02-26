@@ -83,3 +83,21 @@ lehrerfolienseite:
 			folienId
 			folienTyp
 	};
+
+
+<-type : "newBereich",
+				userId
+				kursId
+				folienId
+				sessionId
+				oLX 
+				oLY 
+				uRX 
+				uRY
+
+<-type : "delBereich",
+				userId
+				kursId
+				folienId
+				sessionId
+				bereichId

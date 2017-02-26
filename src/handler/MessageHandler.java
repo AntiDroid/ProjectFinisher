@@ -49,6 +49,41 @@ public class MessageHandler {
 		
 		switch(type){
 		
+		case "newBereich":{
+			/*
+				type : "newBereich",
+				userId
+				kursId
+				folienId
+				sessionId
+				oLX 
+				oLY 
+				uRX 
+				uRY
+			};
+			
+			Schickma danach folienInfo!
+			 */
+			
+			break;
+		}
+		case "delBereich":{
+			/*
+			 * bereich löschen
+			 * 
+				type : "delBereich",
+				userId
+				kursId
+				folienId
+				sessionId
+				bereichId
+			};
+			
+			Schickma danach folienInfo!
+			 */
+			
+			break;
+		}
 		case "folienSatzDeleteRequest":
 		{
 			//int userID = jsonData.get("userId").getAsInt();

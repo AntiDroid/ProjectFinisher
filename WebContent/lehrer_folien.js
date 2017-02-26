@@ -1,19 +1,21 @@
 var folienSatzList = null;
 var folienList = null;
 var aktuelleFolie = null;
+var bereichList = null;
 
 var nowfolienSatzId = 0;
 var nowFolienId = 0;
 var aktiveFolienId = 0;
 var studentsOnline = 0;
+var ausgIntBereich = 0;
 
 if(nowFolienId == 0) $("#allFoliensatzAnsicht").hide();
 else $("#allFoliensatzAnsicht").show();
 
 var canvas = document.getElementById("folieCanvas");
 var ctx = canvas.getContext("2d");
-ctx.globalAlpha = 0.4;
-ctx.fillStyle="#ee00ff";
+//ctx.globalAlpha = 0.4;
+//ctx.fillStyle="#ee00ff";
 //ctx.fillRect(20, 20, 160, 100);
 
 
@@ -70,6 +72,38 @@ socket.onmessage = function(evt) {
 	}
 	else if (msg.type == "folienInfo"){
 		if(msg.folie != null){
+			
+			//CANVAS Bild und Bereiche
+			canvas.width = $('#canvasDiv').width();
+			canvas.height = $('#canvasDiv').height();
+			var img = new Image();
+			img.src = 'ImgServlet?id='+nowFolienId;
+			
+			img.onload = function() {
+				var prop = img.height/img.width;
+				$('#canvasDiv').height($('#canvasDiv').width()*prop);
+				canvas.height = $('#canvasDiv').width()*prop;
+				var cw = $('#folieCanvas').width();
+				var ch = cw*prop;
+				
+			    ctx.drawImage(img, 0, 0, cw, ch);
+			    
+			    //Bereiche Reinmalen
+				bereichList = msg.bereichList;
+			    if(bereichList != null && msg.folie.folienTyp == 'C'){
+				    ctx.globalAlpha = 0.4;
+				    ctx.fillStyle="#d000ff";
+					for (var i = 0; i < bereichList.length; i++) {
+						var oLX = bereichList[i].obenLinksX;
+						var oLY = bereichList[i].obenLinksY;
+						var uRX = bereichList[i].untenRechtsX;
+						var uRY = bereichList[i].untenRechtsY;
+					    ctx.fillRect(relToAbsX(oLX), relToAbsY(oLY), relToAbsX(uRX)-relToAbsX(oLX), relToAbsY(uRY)-relToAbsY(oLY));
+					}
+				}
+			};
+			//CANVAS ENDE
+			
 			if(msg.folie.folienTyp == 'A'){
 				$("#interaktivSwitch").prop('checked', false);
 				$("#allIntDiv").fadeOut(350);
@@ -82,15 +116,16 @@ socket.onmessage = function(evt) {
 				$("#allIntDiv").fadeIn(350);
 				$("#intBerDiv").slideDown(200);
 				
-				var bereichList = msg.bereichList;
+				bereichList = msg.bereichList;
 				var htmlString = "";
 				if(bereichList != null){
 					for (var i = 0; i < bereichList.length; i++) {
+						var bId = bereichList[i].auswahlBereichsID;
 						var oLX = bereichList[i].obenLinksX;
 						var oLY = bereichList[i].obenLinksY;
 						var uRX = bereichList[i].untenRechtsX;
 						var uRY = bereichList[i].untenRechtsY;
-						htmlString += "<option class='' value='"+i+"'>"+(i+1)+": "+oLX+","+oLY+" ; "+uRX+","+uRY+"</option>";
+						htmlString += "<option class='' value='"+bId+"'>"+(i+1)+": "+oLX+","+oLY+" ; "+uRX+","+uRY+"</option>";
 					}
 				}
 				$("#intBereichList").html(htmlString);
@@ -145,6 +180,8 @@ function updateFolienSatzList() {
 	$("#folienSatzListe").html(htmlString);
 }
 function updateFolien() {
+	ctx.clearRect(0, 0, canvas.width, canvas.height);
+	
 	$("#folienNavAnzahl").html(folienList.length+" Seiten");
 	
 	// Entfernen der vorherigen Folien (50 um sicher zu gehen)
@@ -205,11 +242,28 @@ function updateStudentsOnline(anzahl) {
 	$("#studentsOnline").html(studentsOnline+" Studenten Online");
 }
 
+function relToAbsX(rel) {
+	var abs = (rel/100)*canvas.width;
+	return abs;
+}
+function relToAbsY(rel) {
+	var abs = (rel/100)*canvas.height;
+	return abs;
+}
+function absToRelX(abs) {
+	var rel = Math.round((abs / canvas.width) * 100);
+	return rel;
+}
+function absToRelY(abs) {
+	var rel = Math.round((abs / canvas.height) * 100);
+	return rel;
+}
 
 
 //Onklick
 //Folienatz laden
 $('#folienSatzListe').on('click', 'option', function(e) {
+	quitNewBereich();
 	nowfolienSatzId = $(this).val();
 	
 	var folienSatzRequest = {
@@ -221,6 +275,7 @@ $('#folienSatzListe').on('click', 'option', function(e) {
 	socket.send(folienSatzRequestJson);
 });
 $('#folienNavThumbsSlick').on('click', 'img', function(e) {
+	quitNewBereich();
 	nowFolienId = $(this).attr("name");
 	
 	if(nowFolienId == aktiveFolienId) disableControls();
@@ -235,31 +290,12 @@ $('#folienNavThumbsSlick').on('click', 'img', function(e) {
 	var folienInfoRequestJson = JSON.stringify(folienInfoRequest);
 	socket.send(folienInfoRequestJson);
 	
-	
-	//Ab hier kommts wahrscheinlich in FolienInfo
-	//<------------------------------------>
 	$(".folieThumbnail").removeClass("xAusgFolie");
 	$(this).addClass("xAusgFolie");
-	
-	
-	//CANVAS PROBLEME TODO
-	canvas.width = $('#canvasDiv').width();
-	canvas.height = $('#canvasDiv').height();
-	var img = new Image();
-	img.onload = function() {
-		var prop = img.height/img.width;
-		$('#canvasDiv').height($('#canvasDiv').width()*prop);
-		canvas.height = $('#canvasDiv').width()*prop;
-		var cw = $('#folieCanvas').width();
-		var ch = cw*prop;
-		
-	    ctx.drawImage(img, 0, 0, cw, ch);
-	};
-	img.src = 'ImgServlet?id='+nowFolienId;
-	
 });
 
 $('#useThisFoil').click(function(e) {
+	quitNewBereich();
 	disableControls();
 	aktiveFolienId = nowFolienId;
 	$(".folieThumbnail").removeClass("xAktiveFolie");
@@ -278,6 +314,7 @@ $('#useThisFoil').click(function(e) {
 	
 });
 $('#delThisFoil').click(function(e) {
+	quitNewBereich();
 	disableControls();
 	var folienDeleteRequest = {
 			type : "folienDeleteRequest",
@@ -289,6 +326,25 @@ $('#delThisFoil').click(function(e) {
 	socket.send(folienDeleteRequestJson);
 });
 
+$('#intBereichList').on('click', 'option', function(e) {
+	$('#delIntBereich').prop("disabled", false);
+	
+	ausgIntBereich = $(this).val();
+});
+$('#delIntBereich').click(function(e) {
+	$('#delIntBereich').prop("disabled", true);
+	
+	var delBereich = {
+			type : "delBereich",
+			userId : userId,
+			kursId : kursId,
+			folienId : nowFolienId,
+			sessionId : sessionId,
+			bereichId : ausgIntBereich
+		};
+	var delBereichJson = JSON.stringify(delBereich);
+	socket.send(delBereichJson);
+});
 
 
 

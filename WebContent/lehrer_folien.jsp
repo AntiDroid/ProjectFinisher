@@ -238,7 +238,6 @@
 			<div class="row">
 
 				<div class="col-md-8">
-					<!-- Hier sollte noch Canvas her -->
 					<div id="canvasDiv">
 						<canvas id="folieCanvas" class="folieVorschau"></canvas>
 					</div>
@@ -271,7 +270,7 @@
 								 <span class="verticalMiddle">Interaktionsmodus: </span>
 								 <span class="btn-group" data-toggle="buttons">
 					                <label id="bereichRadioBtn" class="btn btn-sm btn-default active" for="bereichRadio">
-					                    <input id="bereichRadio" type="radio" name="intModus" value="Bereiche" /> Bereiche
+					                    <input id="bereichRadio" type="radio" name="intModus" value="Bereiche" checked/> Bereiche
 					                </label> 
 					                <label id="heatplotRadioBtn" class="btn btn-sm btn-default" for="heatplotRadio">
 					                    <input id="heatplotRadio" type="radio" name="intModus" value="Heatplot" /> Heatplot
@@ -284,13 +283,12 @@
 									<div class="col-md-6">
 										<div class="text-center">Interaktive Bereiche:</div>
 										<select id="intBereichList" class="fWidth" size="5">
-											<option class="" value="1">1: 5,55;26,90</option>
-											<option class="" value="2">Bereich 2</option>
+											<!-- Dynamisches Reinladen von Bereichen -->
 										</select>
 									</div>
 									<div class="col-md-6" style="top: 5px;">
-										<button class="btn btn-sm btn-danger intBereichButton">Neuer interaktiver<br/>Bereich</button>
-										<button class="btn btn-xs btn-default intBereichButton" disabled>interaktiven Bereich<br/>löschen</button>
+										<button id="newIntBereich" class="btn btn-sm btn-danger intBereichButton">Neuer interaktiver<br/>Bereich</button>
+										<button id="delIntBereich" class="btn btn-xs btn-default intBereichButton" disabled>interaktiven Bereich<br/>löschen</button>
 									</div>
 								</div>
 							</div>
@@ -300,8 +298,7 @@
 									<div class="col-md-6">
 										<div class="text-center">Auswertungen:</div>
 										<select id="auswerteList" class="fWidth" size="5">
-											<option class="" value="1">1: 23</option>
-											<option class="" value="2">Auswertung 2</option>
+											<!-- Dynamisches Reinladen von Auswertungen -->
 										</select>
 									</div>
 									<div class="col-md-6" style="top: 30px;">
@@ -346,5 +343,6 @@
 	}
 </script>
 <script src="lehrer_folien.js"></script>
+<script src="drawBereich.js"></script>
 </body>
 </html>
