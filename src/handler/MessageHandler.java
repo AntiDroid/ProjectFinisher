@@ -84,6 +84,7 @@ public class MessageHandler {
 			
 			break;
 		}
+		
 		case "folienSatzDeleteRequest":
 		{
 			//int userID = jsonData.get("userId").getAsInt();
@@ -348,7 +349,6 @@ public class MessageHandler {
 		ArrayList<Uservoting> hAuswerteList = dbm.getUservotings(0, folienID, sessionID);
 		
 		System.out.println("Inhalt: ");
-		System.out.println(hAuswerteList.size());
 		System.out.println(bAuswerteList.size());
 		
 		for(int i = 0; i < bereichList.size(); i++){
@@ -362,6 +362,8 @@ public class MessageHandler {
 			
 			bAuswerteList.add(counter);
 		}
+		
+		System.out.println(hAuswerteList.size());
 		
 		FolienInfoMessage responseObj = new FolienInfoMessage(folie, bereichList, bAuswerteList, hAuswerteList);
 		
