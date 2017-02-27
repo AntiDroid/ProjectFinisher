@@ -53,7 +53,7 @@ public class MessageHandler {
 		case "newBereich":{
 			
 			//int userID = jsonData.get("userId").getAsInt();
-			int kursID = jsonData.get("kursId").getAsInt();
+			//int kursID = jsonData.get("kursId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
 			String sessionID = jsonData.get("sessionId").getAsString();
 			int oLX = jsonData.get("oLX").getAsInt();
@@ -341,31 +341,38 @@ public class MessageHandler {
 		System.out.println("MessageHandler-Close");
 	}
 	
+	public boolean isInBereich(Uservoting uv, Auswahlbereich aw) {
+
+		if (uv.getKoordX() >= aw.getObenLinksX() && uv.getKoordX() <= aw.getUntenRechtsX()) {
+			if (uv.getKoordY() >= aw.getObenLinksY() && uv.getKoordY() <= aw.getUntenRechtsY()) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+	
 	public void sendFolienInfo(Session session, Gson gson, DBManager dbm, int folienID, String sessionID){
 		
 		Folie folie = dbm.getFolie(folienID);
 		ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
-		ArrayList<Integer> bAuswerteList = new ArrayList<Integer>();
-		ArrayList<Uservoting> hAuswerteList = dbm.getUservotings(0, folienID, sessionID);
+		ArrayList<Uservoting> votings = dbm.getUservotings(0, folienID, sessionID);
+		ArrayList<Integer> bAuswertung = new ArrayList<Integer>();
 		
-		System.out.println("Inhalt: ");
-		System.out.println(bAuswerteList.size());
-		
-		for(int i = 0; i < bereichList.size(); i++){
+		for(Auswahlbereich aw: bereichList){
 		
 			int counter = 0;
 			
-			for(Uservoting uv: hAuswerteList){
-				if(uv.getAuswahloption().equals(i+1))
+			for(Uservoting uv: votings){
+				if(isInBereich(uv, aw)){
 					counter++;
+				}
 			}
 			
-			bAuswerteList.add(counter);
+			bAuswertung.add(counter);
 		}
 		
-		System.out.println(hAuswerteList.size());
-		
-		FolienInfoMessage responseObj = new FolienInfoMessage(folie, bereichList, bAuswerteList, hAuswerteList);
+		FolienInfoMessage responseObj = new FolienInfoMessage(folie, bereichList, bAuswertung, votings);
 		
 		try {
 			session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -405,14 +412,14 @@ class FolienInfoMessage extends Message {
 	Folie folie;
 	ArrayList<Auswahlbereich> bereichList;
 	ArrayList<Integer> bAuswerteList;
-	ArrayList<Uservoting> hAuswerteList;
+	ArrayList<Uservoting> votings;
 	
 	public FolienInfoMessage(Folie f, ArrayList<Auswahlbereich> bereiche, ArrayList<Integer> bAL, ArrayList<Uservoting> hAL){
 		super("folienInfo");
 		this.folie = f;
 		this.bereichList = bereiche;
 		this.bAuswerteList = bAL;
-		this.hAuswerteList = hAL;
+		this.votings = hAL;
 	}
 }
 
