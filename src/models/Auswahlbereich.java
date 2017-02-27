@@ -9,7 +9,7 @@ public class Auswahlbereich {
 
 	private int obenLinksX, obenLinksY, untenRechtsX, untenRechtsY;
 
-	public Auswahlbereich(int fID, Folie f, int oLX, int oLY, int uLX, int uLY) {
+	public Auswahlbereich(int fID, Folie f, int oLX, int oLY, int uRX, int uRY) {
 		this.auswahlBereichsID = -1;
 
 		this.folie = f;
@@ -17,8 +17,8 @@ public class Auswahlbereich {
 
 		this.obenLinksX = oLX;
 		this.obenLinksY = oLY;
-		this.untenRechtsX = uLX;
-		this.untenRechtsY = uLY;
+		this.untenRechtsX = uRX;
+		this.untenRechtsY = uRY;
 	}
 
 	public Auswahlbereich() {

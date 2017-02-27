@@ -878,6 +878,40 @@ public class DBManager {
 		return list;
 	}
 
+	public Auswahlbereich getAuswahlbereich(int awID) {
+
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Auswahlbereich WHERE BereichID = ?";
+		Auswahlbereich obj = new Auswahlbereich();
+
+		try {
+
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, awID);
+			rs = stat.executeQuery();
+
+			if (rs.next()) {
+				obj.setID(awID);
+				obj.setFolie(getFolie(rs.getInt("FolienID")));
+				obj.setFolienID(rs.getInt("FolienID"));
+				obj.setObenLinksX(rs.getInt("EckeOLX"));
+				obj.setObenLinksY(rs.getInt("EckeOLY"));
+				obj.setUntenRechtsX(rs.getInt("EckeURX"));
+				obj.setUntenRechtsY(rs.getInt("EckeURY"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - Folie");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+
+		return obj;
+	}
+	
 	public Folie getFolie(int folienID) {
 
 		PreparedStatement stat = null;

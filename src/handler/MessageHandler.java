@@ -38,6 +38,7 @@ public class MessageHandler {
 	
 	@OnMessage
 	public void onMessage(Session session, String message) {
+		
 	   System.out.println(message);
 		DBManager dbm = new DBManager();
 		
@@ -50,37 +51,36 @@ public class MessageHandler {
 		switch(type){
 		
 		case "newBereich":{
-			/*
-				type : "newBereich",
-				userId
-				kursId
-				folienId
-				sessionId
-				oLX 
-				oLY 
-				uRX 
-				uRY
-			};
 			
-			Schickma danach folienInfo!
-			 */
+			//int userID = jsonData.get("userId").getAsInt();
+			int kursID = jsonData.get("kursId").getAsInt();
+			int folienID = jsonData.get("folienId").getAsInt();
+			String sessionID = jsonData.get("sessionId").getAsString();
+			int oLX = jsonData.get("oLX").getAsInt();
+			int oLY = jsonData.get("oLY").getAsInt();
+			int uRX = jsonData.get("uRX").getAsInt();
+			int uRY = jsonData.get("uRY").getAsInt();
+			
+			Folie f = dbm.getFolie(folienID);
+			
+			Auswahlbereich ab = new Auswahlbereich(folienID, f, oLX, oLY, uRX, uRY);
+			dbm.save(ab);
+			
+			sendFolienInfo(session, gson, dbm, folienID, sessionID);
 			
 			break;
 		}
 		case "delBereich":{
-			/*
-			 * bereich löschen
-			 * 
-				type : "delBereich",
-				userId
-				kursId
-				folienId
-				sessionId
-				bereichId
-			};
 			
-			Schickma danach folienInfo!
-			 */
+			//int userID = jsonData.get("userId").getAsInt();
+			//int kursID = jsonData.get("kursId").getAsInt();
+			int folienID = jsonData.get("folienId").getAsInt();
+			String sessionID = jsonData.get("sessionId").getAsString();
+			int bereichID = jsonData.get("bereichId").getAsInt();
+			
+			dbm.delete(dbm.getAuswahlbereich(bereichID));
+			
+			sendFolienInfo(session, gson, dbm, folienID, sessionID);
 			
 			break;
 		}
@@ -116,30 +116,7 @@ public class MessageHandler {
 			f.setFolienTyp(folienTyp);
 			dbm.save(f);
 			
-			Folie folie = dbm.getFolie(folienID);
-			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
-			ArrayList<Integer> bAuswerteList = new ArrayList<Integer>();
-			ArrayList<Uservoting> hAuswerteList = dbm.getUservotings(0, folienID, sessionID);
-			
-			for(int i = 0; i < bereichList.size(); i++){
-			
-				int counter = 0;
-				
-				for(Uservoting uv: hAuswerteList){
-					if(uv.getAuswahloption().equals(i+1))
-						counter++;
-				}
-				
-				bAuswerteList.add(counter);
-			}
-			
-			FolienInfoMessage responseObj = new FolienInfoMessage(folie, bereichList, bAuswerteList, hAuswerteList);
-			
-			try {
-				session.getBasicRemote().sendText(gson.toJson(responseObj));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			sendFolienInfo(session, gson, dbm, folienID, sessionID);
 			
 			break;
 		}
@@ -189,30 +166,8 @@ public class MessageHandler {
 			int folienID = jsonData.get("folienId").getAsInt();
 			String sessionID = jsonData.get("sessionId").getAsString();
 			
-			Folie folie = dbm.getFolie(folienID);
-			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
-			ArrayList<Integer> bAuswerteList = new ArrayList<Integer>();
-			ArrayList<Uservoting> hAuswerteList = dbm.getUservotings(0, folienID, sessionID);
+			sendFolienInfo(session, gson, dbm, folienID, sessionID);
 			
-			for(int i = 0; i < bereichList.size(); i++){
-			
-				int counter = 0;
-				
-				for(Uservoting uv: hAuswerteList){
-					if(uv.getAuswahloption().equals(i+1))
-						counter++;
-				}
-				
-				bAuswerteList.add(counter);
-			}
-			
-			FolienInfoMessage responseObj = new FolienInfoMessage(folie, bereichList, bAuswerteList, hAuswerteList);
-			
-			try {
-				session.getBasicRemote().sendText(gson.toJson(responseObj));
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 			break;
 		}
 		
@@ -383,6 +338,39 @@ public class MessageHandler {
 	@OnClose
 	public void onClose(){
 		System.out.println("MessageHandler-Close");
+	}
+	
+	public void sendFolienInfo(Session session, Gson gson, DBManager dbm, int folienID, String sessionID){
+		
+		Folie folie = dbm.getFolie(folienID);
+		ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
+		ArrayList<Integer> bAuswerteList = new ArrayList<Integer>();
+		ArrayList<Uservoting> hAuswerteList = dbm.getUservotings(0, folienID, sessionID);
+		
+		System.out.println("Inhalt: ");
+		System.out.println(hAuswerteList.size());
+		System.out.println(bAuswerteList.size());
+		
+		for(int i = 0; i < bereichList.size(); i++){
+		
+			int counter = 0;
+			
+			for(Uservoting uv: hAuswerteList){
+				if(uv.getAuswahloption().equals(i+1))
+					counter++;
+			}
+			
+			bAuswerteList.add(counter);
+		}
+		
+		FolienInfoMessage responseObj = new FolienInfoMessage(folie, bereichList, bAuswerteList, hAuswerteList);
+		
+		try {
+			session.getBasicRemote().sendText(gson.toJson(responseObj));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 }
 
