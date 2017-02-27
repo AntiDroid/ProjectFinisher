@@ -20,14 +20,16 @@ function quitNewBereich() {
 	breed = false;
 	inNewBerMode = false;
 	$('#newIntBereich').prop("disabled", false);
+	
+	$('#delIntBereich').prop("disabled", true);
 }
 
 $('#newIntBereich').click(function(e) {
 	if(!inNewBerMode){
 		inNewBerMode = true;
 		$(this).prop("disabled", true);
-		ctx.globalAlpha = 0.3;
-		ctx.fillStyle="#ffdd00";
+		ctx.globalAlpha = 0.2;
+		ctx.fillStyle="#F4FF4F";
 		ctx.fillRect(0, 0, canvas.width, canvas.height);
 	}
 	else{

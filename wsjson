@@ -60,7 +60,7 @@ lehrerfolienseite:
 		folie:Folie
 		bereichList:ArrayList<Auswahlbereich>
 		bAuswerteList:ArrayList<Integer>
-		hAuswerteList:ArrayList<Uservoting>
+		votings:ArrayList<Uservoting>
 
 
 <- folienUpdateRequest

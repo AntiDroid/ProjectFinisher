@@ -148,12 +148,12 @@ socket.onmessage = function(evt) {
 				$("#allIntDiv").fadeIn(350);
 				$("#intBerDiv").slideUp(200);
 				
-				var hAuswerteList = msg.hAuswerteList;
+				var votings = msg.votings;
 				var htmlString = "";
-				if(hAuswerteList != null){
-					for (var i = 0; i < hAuswerteList.length; i++) {
-						var x = hAuswerteList[i].koordX;
-						var y = hAuswerteList[i].koordY;
+				if(votings != null){
+					for (var i = 0; i < votings.length; i++) {
+						var x = votings[i].koordX;
+						var y = votings[i].koordY;
 						htmlString += "<option class='' value='"+i+"'>"+(i+1)+": "+x+","+y+"</option>";
 					}
 				}
