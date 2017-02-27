@@ -1144,16 +1144,16 @@ public class DBManager {
 
 		try {
 			
-			if(studentID == 0)
+			if(studentID > 0)
 				sql += " AND StudentenID = ?";
-			if(sessionID.equals(""))
+			if(!sessionID.equals(""))
 				sql += " AND SessionID = ?";
 			
 			stat = conn.prepareStatement(sql);
 			stat.setInt(1, folienID);
-			if(studentID == 0)
+			if(studentID != 0)
 				stat.setInt(2, studentID);
-			if(sessionID.equals(""))
+			if(!sessionID.equals(""))
 				stat.setString(3, sessionID);
 			
 			rs = stat.executeQuery();
