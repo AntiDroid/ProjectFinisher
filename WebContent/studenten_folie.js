@@ -3,9 +3,8 @@ var folienId = 0;
 var pinSet = false;
 var beantwortet = false;
 
-var interaktiv = false;
-var heatplot = false;
-var bereiche = false;
+var folie = null;
+var folienTyp = 'A';
 var bereichList = []; // obenLinksX, obenLinksY, untenRechtsX, untenRechtsY
 
 
@@ -58,11 +57,23 @@ socket.onmessage = function(evt) {
 		$("#kursName").html(msg.kursName);
 		$("#lehrerName").html(msg.lehrerName);
 		if(msg.folie != null){
-			folienUpdate(msg);
+			folie = msg.folie;
+			bereichList = msg.bereichList;
+			folienUpdate();
+			
+			activateAnsicht();
 		}
+		else deactivateAnsicht();
 	} 
 	else if (msg.type == "folienUpdate") {
-		folienUpdate(msg);
+		if(msg.folie != null){
+			folie = msg.folie;
+			bereichList = msg.bereichList;
+			folienUpdate();
+			
+			activateAnsicht();
+		}
+		else deactivateAnsicht();
 	}
 
 };
@@ -76,30 +87,18 @@ $(document).ready(function() {
 
 //Functions
 
-function folienUpdate(msg) {
+function folienUpdate() {
 	folieAktiv = true;
 	beantwortet = false;
-	interaktiv = false;
-	heatplot = false;
-	bereiche = false;
-	folienId = msg.folie.folienID;
+	folienTyp = 'A';
+	folienId = folie.folienID;
 	
-	$("#folienImg").attr("src", "ImgServlet?id=" + msg.folie.folienID);
+	$("#folienImg").attr("src", "ImgServlet?id=" + folie.folienID);
 	$("#lehrerName").html(msg.lehrerName);
-	$("#folienName").html(msg.folie.fSatz.name);
-
-	if (msg.folie.folienTyp = 'H') {
-		interaktiv = true;
-		heatplot = true;
-	}
-	else if(msg.folie.folienTyp = 'C' || 'M'){
-		interaktiv = true;
-		bereiche = true;
-		bereichList = msg.bereichList;
-	}
-	else{
-		interaktiv = false;
-	}
+	$("#folienName").html(folie.fSatz.name);
+	
+	folienTyp = folie.folienTyp; 
+	
 	
 	folienReset();
 }
@@ -120,6 +119,14 @@ function disableButtons() {
 	$("#clearBtn").prop("disabled", true);
 }
 
+function activateAnsicht() {
+	$("#noFoil").hide();
+	$("#allesContainer").show();
+}
+function deactivateAnsicht() {
+	$("#allesContainer").hide();
+	$("#noFoil").show();
+}
 
 //Klicks
 
@@ -180,7 +187,7 @@ $('#submitBtn').click(function(e) {
 	
 	beantwortet = true;
 	
-	if(bereiche){
+	if(folienTyp == 'C'){
 		var bereichAntwort = {
 				type : "bereichAntwort",
 				userId : userId,
@@ -193,7 +200,7 @@ $('#submitBtn').click(function(e) {
 		var bereichAntwortJson = JSON.stringify(bereichAntwort);
 		socket.send(bereichAntwortJson);
 	}
-	else if(heatplot){
+	else if(folienTyp == 'H'){
 		var heatplotAntwort = {
 				type : "heatplotAntwort",
 				userId : userId,

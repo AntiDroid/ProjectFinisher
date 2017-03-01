@@ -38,7 +38,7 @@
 	<script type="text/javascript">
 	</script>
 	<style type="text/css">
-		.allesContainer{
+		#allesContainer{
 			max-width: 72em;
 		}
 		.imgDiv img {
@@ -58,20 +58,28 @@
 			font-weight: bold;
 		}
 		
+		#noFoil{
+			text-align: center;
+    		font-size: 4vw;
+    		color: #c4c4c4;
+			transform: translateY(100%);
+		}
+		
 	</style>
 </head>
 <body>
 
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<a id="userName" class="navbar-brand"></a>
+		<a id="userName" href="index.jsp" class="navbar-brand"></a>
 		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
 		</form>
 	</div>
 </div>
 
-<div class="container allesContainer">
+<div id="noFoil">Zurzeit ist keine Folie Aktiv...</div>
+<div id="allesContainer" class="container" hidden>
 
 	<div class="row">
 		<div id="lehrerName" class="text-left col-sm-4">Lehrer</div>
