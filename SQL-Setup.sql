@@ -87,7 +87,7 @@ CREATE TABLE Kursteilnahme (
 
 CREATE TABLE Uservoting (
         VotingID            int PRIMARY KEY AUTO_INCREMENT,
-        SessionID           varchar(30) NOT NULL,
+        SessionID           varchar(32) NOT NULL,
         StudentenID         int NOT NULL,
         FolienID			int NOT NULL,
         KoordX				int NOT NULL,
@@ -112,7 +112,7 @@ INSERT INTO Berechtigung VALUES(null, 1, 1, 'V');
 INSERT INTO Berechtigung VALUES(null, 2, 1, 'V');
 INSERT INTO Berechtigung VALUES(null, 3, 1, 'V');
 
-/*
+
 INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 1');
 INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 2');
 INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 3');
@@ -126,13 +126,12 @@ INSERT INTO Folie VALUES(null, 1, 'derPath', 'C');
 INSERT INTO Folie VALUES(null, 1, 'derPath', 'A');
 INSERT INTO Folie VALUES(null, 2, 'derPath', 'C');
 INSERT INTO Folie VALUES(null, 2, 'derPath', 'A');
-*/
 
 INSERT INTO Auswahlbereich VALUES(null, 1, 10, 15, 30, 35);
 INSERT INTO Auswahlbereich VALUES(null, 1, 50, 55, 70, 75);
 
-INSERT INTO Uservoting VALUES(null, '', 1, 20, 27, 1);
-INSERT INTO Uservoting VALUES(null, '', 1, 25, 31, 1);
+INSERT INTO Uservoting VALUES(null, '', 1, 1, 20, 27, 1);
+INSERT INTO Uservoting VALUES(null, '', 1, 1, 25, 31, 1);
 
-INSERT INTO Uservoting VALUES(null, '', 1, 62, 71, 2);
-INSERT INTO Uservoting VALUES(null, '', 1, 58, 72, 2);
+INSERT INTO Uservoting VALUES(null, '', 1, 1, 62, 71, 2);
+INSERT INTO Uservoting VALUES(null, '', 1, 1, 58, 72, 2);

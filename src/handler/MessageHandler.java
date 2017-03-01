@@ -300,7 +300,7 @@ public class MessageHandler {
 			int folienId = jsonData.get("folienId").getAsInt();
 			int posX = jsonData.get("posX").getAsInt();
 			int posY = jsonData.get("posY").getAsInt();
-			String ao = jsonData.get("auswahloption").getAsString();
+			String ao = jsonData.get("bereichNr").getAsString();
 			String sesID = jsonData.get("sessionId").getAsString();
 		
 			Uservoting uv = new Uservoting(sesID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);
@@ -316,7 +316,7 @@ public class MessageHandler {
 			int folienId = jsonData.get("folienId").getAsInt();
 			int posX = jsonData.get("posX").getAsInt();
 			int posY = jsonData.get("posY").getAsInt();		
-			String ao = jsonData.get("auswahloption").getAsString();
+			String ao = jsonData.get("bereichNr").getAsString();
 			String sesID = jsonData.get("sessionId").getAsString();
 			
 			Uservoting uv = new Uservoting(sesID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);

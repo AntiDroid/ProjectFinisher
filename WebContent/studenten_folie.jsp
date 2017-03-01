@@ -47,6 +47,13 @@
 		   border-style: solid;
 		   border-color: #ccc;
 		   border-width: thin;
+		   
+			user-drag: none; 
+			user-select: none;
+			-moz-user-select: none;
+			-webkit-user-drag: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
 		}
 
 		.submitButton{
@@ -88,7 +95,7 @@
 	</div>
 
 	<div class="imgDiv">
-			<img id="folienImg" src="ImgServlet?id=1"/>
+			<img id="folienImg" src="ImgServlet"/>
 	</div>
 	<img id="pin" src="imgs/pin.png" style="display: none; position: absolute;" />
 
@@ -112,6 +119,7 @@
 	var nachname = "<%=user.getNachname()%>";
 	
 	var kursId = <%=kursId%>;
+	var sessionId = "<%=session.getId()%>";
 	
 	if(vorname != null && nachname != null){
 		$("#userName").html(vorname+" "+nachname);
