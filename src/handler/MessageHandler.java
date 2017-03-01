@@ -50,6 +50,28 @@ public class MessageHandler {
 		
 		switch(type){
 		
+		case "deleteFoliensatz":{
+			/*
+			 *  deleteFoliensatz = {
+			type : "deleteFoliensatz",
+			userId : userId,
+			folienSatzId : nowfolienSatzId
+		};
+			 */
+			 break;
+		}
+		case "folieInaktivieren":{
+			/*
+			 * folieInaktivieren = {
+			type : "folieInaktivieren",
+			userId : userId,
+			kursId : kursId,
+			folienId : nowFolienId,
+			sessionId : sessionId
+		};
+			 */
+			break;
+		}
 		case "newBereich":{
 			
 			//int userID = jsonData.get("userId").getAsInt();

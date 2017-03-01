@@ -25,7 +25,8 @@ socket.onopen = function() {
 };
 
 socket.onerror = function(evt) {
-	console.log("Websocketverbindung konnte nicht hergestellt werden :(");
+	console.log("Websocket Error :(");
+	console.log(evt.data);
 	
 	var socketEnde = {
 			type : "socketEnde",
@@ -37,6 +38,8 @@ socket.onerror = function(evt) {
 };
 
 socket.onclose = function() {
+	console.log("Websocket Closed :(")
+	
 	var socketEnde = {
 			type : "socketEnde",
 			userId : userId,
@@ -49,6 +52,7 @@ socket.onclose = function() {
 // Onmessages
 socket.onmessage = function(evt) {
 	var msg = $.parseJSON(evt.data);
+	console.log(evt.data);
 
 	if (msg.type == "kursInfo") {
 		$("#kursName").html(msg.kursName);
@@ -56,7 +60,8 @@ socket.onmessage = function(evt) {
 		if(msg.folie != null){
 			folienUpdate(msg);
 		}
-	} else if (msg.type == "folienUpdate") {
+	} 
+	else if (msg.type == "folienUpdate") {
 		folienUpdate(msg);
 	}
 

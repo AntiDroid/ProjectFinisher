@@ -64,7 +64,7 @@
 
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<div id="userName" class="navbar-brand"></div>
+		<a id="userName" class="navbar-brand"></a>
 		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
 		</form>
