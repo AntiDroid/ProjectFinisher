@@ -243,6 +243,7 @@ public class MessageHandler {
 			
 			break;
 		}
+		
 		case "folienUpdateRequest":
 		{	
 			int folienID = jsonData.get("folienId").getAsInt();
@@ -250,7 +251,6 @@ public class MessageHandler {
 			
 			// zu viele Daten durch Verschachtelung?
 			// was wenn Websocket auf Client-Seite Verbindung verliert? Liste wird nicht korrigiert
-			// Socket - Equals?
 			
 			Folie f = dbm.getFolie(folienID);
 			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
@@ -259,6 +259,8 @@ public class MessageHandler {
 			Message.aktiveFolie.put(kursID, f);
 			
 			try {
+			
+				//TODO nach allen Broadcast die SessionListe leeren und OK antwort verlangen mit der man Liste wieder füllt
 				
 				for(Session s: Message.kursSessions.get(kursID)){
 					s.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -284,7 +286,7 @@ public class MessageHandler {
 			Uservoting uv = new Uservoting(sesID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);
 			dbm.save(uv);
 			
-			break;
+			break;   
 		}
 		
 		case "heatplotAntwort":

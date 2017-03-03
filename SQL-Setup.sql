@@ -17,18 +17,6 @@ CREATE TABLE Kurs (
         -- Namenkürzel
 );
 
--- Berechtigungen
--- Vollzugriff - V
--- Lesezugriff - L
-CREATE TABLE Berechtigung (
-		BerechtigungsID		int PRIMARY KEY AUTO_INCREMENT,
-        KursID            	int NOT NULL,
-        LehrerID            int NOT NULL,
-        Berechtigungstyp    char NOT NULL,
-        FOREIGN KEY (KursID) REFERENCES Kurs(KursID),
-        FOREIGN KEY (LehrerID) REFERENCES Lehrer(LehrerID) ON DELETE CASCADE
-);
-
 CREATE TABLE Foliensatz (
         FoliensatzID        int PRIMARY KEY AUTO_INCREMENT,
         KursID              int NOT NULL,
@@ -47,16 +35,6 @@ CREATE TABLE Folie (
         fPath			    varchar(120) NOT NULL,
         FolienTyp			char NOT NULL,
         FOREIGN KEY (FoliensatzID) REFERENCES Foliensatz(FoliensatzID) ON DELETE CASCADE
-);
-
-CREATE TABLE LetzteAktiveFolie (
-        LehrerID            int NOT NULL,
-        FoliensatzID      	int NOT NULL,
-        LetzteFolieID 		int NOT NULL,
-        PRIMARY KEY (LehrerID, FoliensatzID, LetzteFolieID),
-        FOREIGN KEY (LehrerID) REFERENCES Lehrer(LehrerID),
-        FOREIGN KEY (FoliensatzID) REFERENCES Foliensatz(FoliensatzID),
-        FOREIGN KEY (LetzteFolieID) REFERENCES Folie(FolienID) ON DELETE CASCADE
 );
 
 CREATE TABLE Auswahlbereich (
@@ -108,10 +86,6 @@ INSERT INTO Kurs VALUES(null, 'Deutsch', 'PW');
 INSERT INTO Kursteilnahme VALUES(null, 1, 1);
 INSERT INTO Kursteilnahme VALUES(null, 2, 1);
 
-INSERT INTO Berechtigung VALUES(null, 1, 1, 'V');
-INSERT INTO Berechtigung VALUES(null, 2, 1, 'V');
-INSERT INTO Berechtigung VALUES(null, 3, 1, 'V');
-
 /*
 INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 1');
 INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 2');
@@ -126,7 +100,6 @@ INSERT INTO Folie VALUES(null, 1, 'derPath', 'C');
 INSERT INTO Folie VALUES(null, 1, 'derPath', 'A');
 INSERT INTO Folie VALUES(null, 2, 'derPath', 'C');
 INSERT INTO Folie VALUES(null, 2, 'derPath', 'A');
-*/
 
 INSERT INTO Auswahlbereich VALUES(null, 1, 10, 15, 30, 35);
 INSERT INTO Auswahlbereich VALUES(null, 1, 50, 55, 70, 75);
@@ -136,3 +109,4 @@ INSERT INTO Uservoting VALUES(null, '', 1, 25, 31, 1);
 
 INSERT INTO Uservoting VALUES(null, '', 1, 62, 71, 2);
 INSERT INTO Uservoting VALUES(null, '', 1, 58, 72, 2);
+*/
