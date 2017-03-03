@@ -61,11 +61,11 @@ public class MessageHandler {
 		case "folieInaktivieren":{
 
 			//int userID = jsonData.get("userId").getAsInt();
-			//int kursID = jsonData.get("kursId").getAsInt();
-			int folienID = jsonData.get("folienId").getAsInt();
-			int sessionID = jsonData.get("sessionId").getAsInt();
+			int kursID = jsonData.get("kursId").getAsInt();
+			//int folienID = jsonData.get("folienId").getAsInt();
+			//int sessionID = jsonData.get("sessionId").getAsInt();
 
-			//TODO Mach was
+			Message.aktiveFolie.put(kursID, null);
 			
 			break;
 		}
@@ -407,8 +407,6 @@ abstract class Message {
 	
 	static public HashMap<Integer, ArrayList<Session>> kursSessions = new HashMap<Integer, ArrayList<Session>>();
 	static public HashMap<Integer, Folie> aktiveFolie = new HashMap<Integer, Folie>();
-	//TODO aktive Folie eines Kurses
-	
 	
 	String type;
 	
