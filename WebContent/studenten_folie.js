@@ -93,7 +93,11 @@ function folienUpdate(msg) {
 	folienTyp = 'A';
 	folienId = folie.folienID;
 	
-	$("#folienImg").attr("src", "ImgServlet?id=" + folie.folienID);
+	//!!Überprüfen, ob schon beantwortet wurde
+	
+	$("#folienImg").prop("src", "ImgServlet?id=" + folie.folienID);
+	//var proportion = $("#folienImg").width()/$("#folienImg").height();
+	//$("#folienImg").width(proportion*100+"%");
 	$("#lehrerName").html(msg.lehrerName);
 	$("#folienName").html(folie.fSatz.name);
 	
@@ -135,9 +139,9 @@ var clickX = 0;
 var clickY = 0;
 var bereichNr = 0;
 
-$('#folienImg').click(function(e) {
+$('#folienImg').mousedown(function(e) {
 	
-	if(folieAktiv && folienTyp != 'A'){
+	if(folieAktiv && folienTyp != 'A' && !beantwortet){
 		var offset_x = $(this).offset().left - $(window).scrollLeft();
 		var offset_y = $(this).offset().top - $(window).scrollTop();
 	
@@ -232,3 +236,4 @@ $('#clearBtn').click(function(e) {
 	clickY = 0;
 });
 
+$('img').on('dragstart', function(event) { event.preventDefault(); });

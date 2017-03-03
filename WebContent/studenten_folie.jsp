@@ -41,19 +41,20 @@
 		#allesContainer{
 			max-width: 72em;
 		}
+		
+		.imgDiv{
+		   text-align: center;
+		}
 		.imgDiv img {
-		   width: 100%;
+		   height: 100vh;
+		   object-fit: contain;
+		   max-width: 100%;
+		   
 		   margin: 4px 0;
 		   border-style: solid;
 		   border-color: #ccc;
 		   border-width: thin;
-		   
-			user-drag: none; 
-			user-select: none;
-			-moz-user-select: none;
-			-webkit-user-drag: none;
-			-webkit-user-select: none;
-			-ms-user-select: none;
+
 		}
 
 		.submitButton{

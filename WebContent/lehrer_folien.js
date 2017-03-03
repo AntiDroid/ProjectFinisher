@@ -196,7 +196,7 @@ function updateFolien() {
 		var fId = folienList[i].folienID;
 		htmlString = ""
 		+'<div>'
-	      +'<img class="folieThumbnail" src="ImgServlet?id='+fId+'" name="'+fId+'" alt="'+(i+1)+'">'
+	      +'<img class="folieThumbnail" src="ImgServlet?id='+fId+'&thumb=1" name="'+fId+'" alt="'+(i+1)+'">'
 	      +'<div class="text-center">'+(i+1)+'</div>'
 	    +'</div>';
 		$("#folienNavThumbsSlick").slick('slickAdd', htmlString);
@@ -475,3 +475,4 @@ $("input[name=intModus]").change(function() {
     }
 });
 
+$('img').on('dragstart', function(event) { event.preventDefault(); });
