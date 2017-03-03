@@ -38,7 +38,7 @@
 	<script type="text/javascript">
 	</script>
 	<style type="text/css">
-		.allesContainer{
+		#allesContainer{
 			max-width: 72em;
 		}
 		.imgDiv img {
@@ -47,6 +47,13 @@
 		   border-style: solid;
 		   border-color: #ccc;
 		   border-width: thin;
+		   
+			user-drag: none; 
+			user-select: none;
+			-moz-user-select: none;
+			-webkit-user-drag: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
 		}
 
 		.submitButton{
@@ -58,20 +65,28 @@
 			font-weight: bold;
 		}
 		
+		#noFoil{
+			text-align: center;
+    		font-size: 4vw;
+    		color: #c4c4c4;
+			transform: translateY(100%);
+		}
+		
 	</style>
 </head>
 <body>
 
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<div id="userName" class="navbar-brand"></div>
+		<a id="userName" href="index.jsp" class="navbar-brand"></a>
 		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
 		</form>
 	</div>
 </div>
 
-<div class="container allesContainer">
+<div id="noFoil">Zurzeit ist keine Folie Aktiv...</div>
+<div id="allesContainer" class="container" hidden>
 
 	<div class="row">
 		<div id="lehrerName" class="text-left col-sm-4">Lehrer</div>
@@ -80,7 +95,7 @@
 	</div>
 
 	<div class="imgDiv">
-			<img id="folienImg" src="ImgServlet?id=1"/>
+			<img id="folienImg" src="ImgServlet"/>
 	</div>
 	<img id="pin" src="imgs/pin.png" style="display: none; position: absolute;" />
 
@@ -104,6 +119,7 @@
 	var nachname = "<%=user.getNachname()%>";
 	
 	var kursId = <%=kursId%>;
+	var sessionId = "<%=session.getId()%>";
 	
 	if(vorname != null && nachname != null){
 		$("#userName").html(vorname+" "+nachname);

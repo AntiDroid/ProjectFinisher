@@ -16,6 +16,11 @@ var oLY = 0;
 var uRX = 0;
 var uRY = 0;
 
+var secCanvas = document.createElement("canvas");
+secCtx = secCanvas.getContext("2d");
+
+
+
 function quitNewBereich() {
 	breed = false;
 	inNewBerMode = false;
@@ -46,6 +51,10 @@ $("#folieCanvas").mousedown(function(e) {
 	
 		berStartX = (e.clientX - offset_x);
 		berStartY = (e.clientY - offset_y);
+		
+		secCanvas.width = canvas.width;
+		secCanvas.height = canvas.height;
+		secCtx.drawImage(canvas, 0, 0);
 	}
 });
 $("#folieCanvas").mousemove(function(e) {
@@ -58,6 +67,7 @@ $("#folieCanvas").mousemove(function(e) {
 			var tempY = (e.clientY - offset_y);
 	
 			//RECHTECK ZEICHNEN
+			ctx.drawImage(secCanvas, 0, 0);
 		    ctx.globalAlpha = 0.4;
 		    ctx.fillStyle="#d000ff";
 			ctx.fillRect(berStartX, berStartY, tempX-berStartX, tempY-berStartY);
@@ -110,29 +120,139 @@ $("#folieCanvas").mouseup(function(e) {
 	
 		console.log("Rel: "+oLX+","+oLY+";"+uRX+","+uRY);
 		
-		//Kollision mit anderem Bereichen
+		
+		
+		var passt = true;
+		
+		if(oLX == uRX || oLY == uRY){
+			passt = false;
+		}
+		
+		//Kollision mit anderen Bereichen
 		for (var i = 0; i < bereichList.length; i++) {
 			var zoLX = bereichList[i].obenLinksX;
 			var zoLY = bereichList[i].obenLinksY;
 			var zuRX = bereichList[i].untenRechtsX;
 			var zuRY = bereichList[i].untenRechtsY;
 			
-			//...
+			//RechtsUntere Ecke
+			if(oLX > zoLX && oLX < zuRX){
+				if(oLY > zoLY && oLY < zuRY){
+					passt = false;
+				}
+			}
+			//LinksObere Ecke
+			if(uRX > zoLX && uRX < zuRX){
+				if(uRY > zoLY && uRY < zuRY){
+					passt = false;
+				}
+			}
+			//LinksUntere Ecke
+			if(uRX > zoLX && uRX < zuRX){
+				if(oLY > zoLY && oLY < zuRY){
+					passt = false;
+				}
+			}
+			//RechtsObere Ecke
+			if(oLX > zoLX && oLX < zuRX){
+				if(uRY > zoLY && uRY < zuRY){
+					passt = false;
+				}
+			}
+			
+			//ganzes größeres
+			if(oLX < zoLX && uRX > zuRX){
+				if(oLY < zoLY && uRY > zuRY){
+					passt = false;
+				}
+			}
+			//ganzes kleineres
+			if(oLX > zoLX && uRX < zuRX){
+				if(oLY > zoLY && uRY < zuRY){
+					passt = false;
+				}
+			}
+			
+			//Rechts größer
+			if(oLX > zoLX && oLX < zuRX){
+				if(oLY < zoLY && uRY > zuRY){
+					passt = false;
+				}
+			}
+			//Rechts kleiner
+			if(oLX > zoLX && oLX < zuRX){
+				if(oLY > zoLY && uRY < zuRY){
+					passt = false;
+				}
+			}
+			
+			//Links größer
+			if(uRX > zoLX && uRX < zuRX){
+				if(oLY < zoLY && uRY > zuRY){
+					passt = false;
+				}
+			}
+			//Links kleiner
+			if(uRX > zoLX && uRX < zuRX){
+				if(oLY > zoLY && uRY < zuRY){
+					passt = false;
+				}
+			}
+			
+			//Oben größer
+			if(oLX < zoLX && uRX > zuRX){
+				if(oLY < zoLY && uRY > zoLY){
+					passt = false;
+				}
+			}
+			//Oben kleiner
+			if(oLX > zoLX && uRX < zuRX){
+				if(oLY < zoLY && uRY > zoLY){
+					passt = false;
+				}
+			}
+			
+			//Unten größer
+			if(oLX < zoLX && uRX > zuRX){
+				if(oLY < zuRY && uRY > zuRY){
+					passt = false;
+				}
+			}
+			//Unten kleiner
+			if(oLX > zoLX && uRX < zuRX){
+				if(oLY < zuRY && uRY > zuRY){
+					passt = false;
+				}
+			}
+			
 		}
 		
-		var newBereich = {
-				type : "newBereich",
-				userId : userId,
-				kursId : kursId,
-				folienId : nowFolienId,
-				sessionId : sessionId,
-				oLX : oLX,
-				oLY : oLY,
-				uRX : uRX,
-				uRY : uRY
-			};
-		var newBereichJson = JSON.stringify(newBereich);
-		socket.send(newBereichJson);
+		if(passt){
+			var newBereich = {
+					type : "newBereich",
+					userId : userId,
+					kursId : kursId,
+					folienId : nowFolienId,
+					sessionId : sessionId,
+					oLX : oLX,
+					oLY : oLY,
+					uRX : uRX,
+					uRY : uRY
+				};
+			var newBereichJson = JSON.stringify(newBereich);
+			socket.send(newBereichJson);
+		}
+		if(!passt){
+			var folienInfoRequest = {
+					type : "folienInfoRequest",
+					userId : userId,
+					sessionId : "",//sessionId,
+					folienId : nowFolienId
+				};
+			var folienInfoRequestJson = JSON.stringify(folienInfoRequest);
+			socket.send(folienInfoRequestJson);
+		}
+		
 		
 		inNewBerMode = false;
 		$('#newIntBereich').prop("disabled", false);

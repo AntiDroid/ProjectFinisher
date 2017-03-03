@@ -3,9 +3,8 @@ var folienId = 0;
 var pinSet = false;
 var beantwortet = false;
 
-var interaktiv = false;
-var heatplot = false;
-var bereiche = false;
+var folie = null;
+var folienTyp = 'A';
 var bereichList = []; // obenLinksX, obenLinksY, untenRechtsX, untenRechtsY
 
 
@@ -25,7 +24,8 @@ socket.onopen = function() {
 };
 
 socket.onerror = function(evt) {
-	console.log("Websocketverbindung konnte nicht hergestellt werden :(");
+	console.log("Websocket Error :(");
+	console.log(evt.data);
 	
 	var socketEnde = {
 			type : "socketEnde",
@@ -37,6 +37,8 @@ socket.onerror = function(evt) {
 };
 
 socket.onclose = function() {
+	console.log("Websocket Closed :(")
+	
 	var socketEnde = {
 			type : "socketEnde",
 			userId : userId,
@@ -49,15 +51,29 @@ socket.onclose = function() {
 // Onmessages
 socket.onmessage = function(evt) {
 	var msg = $.parseJSON(evt.data);
+	console.log(evt.data);
 
 	if (msg.type == "kursInfo") {
 		$("#kursName").html(msg.kursName);
 		$("#lehrerName").html(msg.lehrerName);
 		if(msg.folie != null){
+			folie = msg.folie;
+			bereichList = msg.bereichList;
 			folienUpdate(msg);
+			
+			activateAnsicht();
 		}
-	} else if (msg.type == "folienUpdate") {
-		folienUpdate(msg);
+		else deactivateAnsicht();
+	} 
+	else if (msg.type == "folienUpdate") {
+		if(msg.folie != null){
+			folie = msg.folie;
+			bereichList = msg.bereichList;
+			folienUpdate(msg);
+			
+			activateAnsicht();
+		}
+		else deactivateAnsicht();
 	}
 
 };
@@ -74,27 +90,15 @@ $(document).ready(function() {
 function folienUpdate(msg) {
 	folieAktiv = true;
 	beantwortet = false;
-	interaktiv = false;
-	heatplot = false;
-	bereiche = false;
-	folienId = msg.folie.folienID;
+	folienTyp = 'A';
+	folienId = folie.folienID;
 	
-	$("#folienImg").attr("src", "ImgServlet?id=" + msg.folie.folienID);
+	$("#folienImg").attr("src", "ImgServlet?id=" + folie.folienID);
 	$("#lehrerName").html(msg.lehrerName);
-	$("#folienName").html(msg.folie.fSatz.name);
-
-	if (msg.folie.folienTyp = 'H') {
-		interaktiv = true;
-		heatplot = true;
-	}
-	else if(msg.folie.folienTyp = 'C' || 'M'){
-		interaktiv = true;
-		bereiche = true;
-		bereichList = msg.bereichList;
-	}
-	else{
-		interaktiv = false;
-	}
+	$("#folienName").html(folie.fSatz.name);
+	
+	folienTyp = folie.folienTyp; 
+	
 	
 	folienReset();
 }
@@ -115,6 +119,14 @@ function disableButtons() {
 	$("#clearBtn").prop("disabled", true);
 }
 
+function activateAnsicht() {
+	$("#noFoil").hide();
+	$("#allesContainer").show();
+}
+function deactivateAnsicht() {
+	$("#allesContainer").hide();
+	$("#noFoil").show();
+}
 
 //Klicks
 
@@ -125,7 +137,7 @@ var bereichNr = 0;
 
 $('#folienImg').click(function(e) {
 	
-	if(folieAktiv){
+	if(folieAktiv && folienTyp != 'A'){
 		var offset_x = $(this).offset().left - $(window).scrollLeft();
 		var offset_y = $(this).offset().top - $(window).scrollTop();
 	
@@ -138,25 +150,33 @@ $('#folienImg').click(function(e) {
 		var relX = Math.round((x / imgW) * 100);
 		var relY = Math.round((y / imgH) * 100);
 	
-		
-		// mit bereichlist überprüfen...
-		var inBereich = false;
-		for (var i = 0; i < bereichList.length; i++) {
-			if(relX >= bereichList[i].obenLinksX && relX <= bereichList[i].untenRechtsX){
-				if(relY >= bereichList[i].obenLinksY && relY <= bereichList[i].untenRechtsY){
-					inBereich = true;
-					bereichNr = i;
-					break;
+		if(folienTyp == 'C'){
+			// mit bereichlist überprüfen...
+			var inBereich = false;
+			for (var i = 0; i < bereichList.length; i++) {
+				if(relX >= bereichList[i].obenLinksX && relX <= bereichList[i].untenRechtsX){
+					if(relY >= bereichList[i].obenLinksY && relY <= bereichList[i].untenRechtsY){
+						inBereich = true;
+						bereichNr = i;
+						break;
+					}
 				}
 			}
+			
+			if(inBereich) { 
+				clickX = relX;
+				clickY = relY;
+				pinSet = true; 
+			}
+			else { pinSet = false; }
 		}
-		
-		if(inBereich) { 
+		else if (folienTyp == 'H') {
 			clickX = relX;
 			clickY = relY;
 			pinSet = true; 
 		}
-		else { pinSet = false; }
+		
+		
 		
 		if(pinSet){
 			$('#pin').css('left', e.pageX).css('top', e.pageY - 25).show();
@@ -175,7 +195,7 @@ $('#submitBtn').click(function(e) {
 	
 	beantwortet = true;
 	
-	if(bereiche){
+	if(folienTyp == 'C'){
 		var bereichAntwort = {
 				type : "bereichAntwort",
 				userId : userId,
@@ -183,19 +203,21 @@ $('#submitBtn').click(function(e) {
 				folienId : folienId,
 				bereichNr : bereichNr,
 				posX : clickX,
-				posY : clickY
+				posY : clickY,
+				sessionId : sessionId
 			};
 		var bereichAntwortJson = JSON.stringify(bereichAntwort);
 		socket.send(bereichAntwortJson);
 	}
-	else if(heatplot){
+	else if(folienTyp == 'H'){
 		var heatplotAntwort = {
 				type : "heatplotAntwort",
 				userId : userId,
 				kursId : kursId,
 				folienId : folienId,
 				posX : clickX,
-				posY : clickY
+				posY : clickY,
+				sessionId : sessionId
 			};
 		var heatplotAntwortJson = JSON.stringify(heatplotAntwort);
 		socket.send(heatplotAntwortJson);

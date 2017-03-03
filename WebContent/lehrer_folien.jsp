@@ -50,7 +50,7 @@
 			margin: 1% 0 13px 0;
 		}
 
-		#uploadModal{
+		#uploadModal, #histoModal, #fSatzLoeschenModal{
 			margin: auto;
 			text-align: center;
 		}
@@ -161,6 +161,23 @@
 		.xAusgFolie{
 			border: 2px solid black;
 		}
+		
+		#histoModal{
+			
+		}
+		
+		#histoModalBody{
+			height: 420px;
+		}
+		
+		#notUseThisFoil{
+			margin: 10px 0;
+			width: 100%;
+		}
+		
+		#fSatzLoeschenModalBtn{
+			width: 100%;
+		}
 
 	</style>
 </head>
@@ -168,7 +185,7 @@
 <!--Navbar-->
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<span id="userName" class="navbar-brand"></span>
+		<a id="userName" href="index.jsp" class="navbar-brand"></a>
 		<span id="studentsOnline" class="navbar-brand" style="font-size: 10px;">0 Studenten Online</span>
 		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
@@ -188,32 +205,9 @@
 		</select>
 
 		<button class="btn btn-sm btn-warning outerUploadBtn" data-toggle="modal" data-target="#uploadModal">PDF Hochladen</button>
+		<button id="fSatzLoeschenModalBtn" class="btn btn-sm" data-toggle="modal" data-target="#fSatzLoeschenModal">Foliensatz löschen</button>
 
-		<!-- Upload Modal -->
-		<div id="uploadModal" class="modal fade">
-		  <div class="modal-dialog">
-		    <!-- Modal content-->
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h4 class="modal-title">PDF Hochladen</h4>
-		      </div>
-		      <div class="modal-body">
-		        <form enctype="multipart/form-data" class="text-center" action="GetPdfServlet" method="post" onsubmit="endSocket()">
-		        	<label></label>
-		        	<input type="file" accept=".pdf" name="pdfDatei" value=".pdf">
-		        	<label>Foliensatzname:</label>
-		        	<input type="text" name="name" required>
-		        	<input type="text" name="kursId" id="getPdfKursId" hidden>
-		        	<input class="btn btn-primary btn-sm innerUploadBtn" type="submit" name="senden" value="Hochladen">
-		        </form>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-		      </div>
-		    </div>
-
-		  </div>
-		</div>
+		
 		
 
 		</div>
@@ -251,10 +245,12 @@
 							<button id="useThisFoil" class="btn btn-success">Auf diese Folie<br/>wechseln</button>
 							</div>
 							<div class="col-md-6 text-right">
-							<button id="delThisFoil" class="btn btn-xs btn-default verticalMiddle">Folie<br/>löschen!</button>
+							<button id="delThisFoil" class="btn"><b>Folie<br/>löschen</b></button>
 							</div>
 						</div>
 					</div>
+					
+					<button id="notUseThisFoil" class="btn btn-lg" hidden>Folie<br/>Inaktivieren</button>
 					
 					<div id="interaktivControlsDiv">
 						<div class="interaktivSwitchDiv">
@@ -302,7 +298,7 @@
 										</select>
 									</div>
 									<div class="col-md-6" style="top: 30px;">
-										<button id="histoBtn" class="btn btn-sm btn-info intBereichButton verticalMiddle" ">Histogramm<br/>erzeugen</button>
+										<button id="histoBtn" class="btn btn-sm btn-info intBereichButton verticalMiddle" data-toggle="modal" data-target="#histoModal">Histogramm<br/>erzeugen</button>
 									</div>
 								</div>
 							</div>
@@ -319,12 +315,82 @@
 
 </div>
 
+<!-- Upload Modal -->
+		<div id="uploadModal" class="modal fade">
+		  <div class="modal-dialog">
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title">PDF Hochladen</h4>
+		      </div>
+		      <div class="modal-body">
+		        <form enctype="multipart/form-data" class="text-center" action="GetPdfServlet" method="post" onsubmit="endSocket()">
+		        	<label></label>
+		        	<input type="file" accept=".pdf" name="pdfDatei" value=".pdf">
+		        	<label>Foliensatzname:</label>
+		        	<input type="text" name="name" required>
+		        	<input type="text" name="kursId" id="getPdfKursId" hidden>
+		        	<input class="btn btn-primary btn-sm innerUploadBtn" type="submit" name="senden" value="Hochladen">
+		        </form>
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+		
+<!-- Histogramm Modal -->
+		<div id="histoModal" class="modal fade">
+		  <div class="modal-dialog">
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title">Histogramm</h4>
+		      </div>
+		      <div id="histoModalBody" class="modal-body">
+		      
+		      	<div id="chartContainer" height="400px"></div>
+		      	
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
+		
+<!-- Foliensatz löschen Modal -->
+		<div id="fSatzLoeschenModal" class="modal fade">
+		  <div class="modal-dialog">
+		    <!-- Modal content-->
+		    <div class="modal-content">
+		      <div class="modal-header">
+		        <h4 class="modal-title">Foliensatz löschen?</h4>
+		      </div>
+		      <div class="modal-body text-center">
+		      	
+		      	<div>Sind Sie sich sicher, dass den aktuellen Foliensatz löschen möchten?</div>
+		      	<br/>
+		      	<button id="delFolienSatzBtn" class="btn btn-danger">Löschen</button>
+		      	
+		      </div>
+		      <div class="modal-footer">
+		        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+		      </div>
+		    </div>
+
+		  </div>
+		</div>
 
 <!-- <script src="jquery/jquery-3.1.1.js"></script> -->
 <!-- jquery2 wegn slick -->
 <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="slick/slick.js" type="text/javascript" charset="utf-8"></script>
+<script src="canvasjs/canvasjs.min.js"></script>
 <script type="text/javascript">
 	var userId = <%=user.getID()%>;
 	var vorname = "<%=user.getVorname()%>";

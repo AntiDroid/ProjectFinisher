@@ -3,7 +3,7 @@ body{
 }
 .logoutButton{
     float: right;
-		transform: translateY(24%);
+	transform: translateY(24%);
 }
 .bottomButton{
 	transform: translateY(-100%);

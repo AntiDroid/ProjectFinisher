@@ -2,6 +2,7 @@ var folienSatzList = null;
 var folienList = null;
 var aktuelleFolie = null;
 var bereichList = null;
+var bAuswerteList = null;
 
 var nowfolienSatzId = 0;
 var nowFolienId = 0;
@@ -72,6 +73,7 @@ socket.onmessage = function(evt) {
 	}
 	else if (msg.type == "folienInfo"){
 		if(msg.folie != null){
+			aktuelleFolie = msg.folie;
 			
 			//CANVAS Bild und Bereiche
 			canvas.width = $('#canvasDiv').width();
@@ -130,7 +132,7 @@ socket.onmessage = function(evt) {
 				}
 				$("#intBereichList").html(htmlString);
 				
-				var bAuswerteList = msg.bAuswerteList;
+				bAuswerteList = msg.bAuswerteList;
 				var htmlString = "";
 				if(bAuswerteList != null){
 					for (var i = 0; i < bAuswerteList.length; i++) {
@@ -218,6 +220,8 @@ function enableControls() {
 	$("#useThisFoil").prop("disabled", false);
 	$("#delThisFoil").prop("disabled", false);
 	$("#interaktivControlsDiv").fadeIn(60);
+	
+	$("#notUseThisFoil").hide();
 }
 
 function disableControls() {
@@ -263,6 +267,8 @@ function absToRelY(abs) {
 //Onklick
 //Folienatz laden
 $('#folienSatzListe').on('click', 'option', function(e) {
+	$("#fSatzLoeschenModalBtn").show();
+	$("#notUseThisFoil").hide();
 	quitNewBereich();
 	nowfolienSatzId = $(this).val();
 	
@@ -278,7 +284,10 @@ $('#folienNavThumbsSlick').on('click', 'img', function(e) {
 	quitNewBereich();
 	nowFolienId = $(this).attr("name");
 	
-	if(nowFolienId == aktiveFolienId) disableControls();
+	if(nowFolienId == aktiveFolienId){
+		disableControls();
+		$("#notUseThisFoil").show();
+	}
 	else enableControls();
 	
 	var folienInfoRequest = {
@@ -297,6 +306,7 @@ $('#folienNavThumbsSlick').on('click', 'img', function(e) {
 $('#useThisFoil').click(function(e) {
 	quitNewBereich();
 	disableControls();
+	$("#notUseThisFoil").show();
 	aktiveFolienId = nowFolienId;
 	$(".folieThumbnail").removeClass("xAktiveFolie");
 	$(".folieThumbnail").removeClass("xAusgFolie");
@@ -346,6 +356,69 @@ $('#delIntBereich').click(function(e) {
 	socket.send(delBereichJson);
 });
 
+$('#histoBtn').click(function(e) {
+	if(aktuelleFolie.folienTyp == "C"){
+		$("#chartContainer").html();
+		
+		var dataPoints = [];
+		if(bAuswerteList != null){
+			for (var i = 0; i < bAuswerteList.length; i++) {
+				var o = { y: bAuswerteList[i], label: ""+(i+1) };
+				dataPoints.push(o);
+			}
+		}
+		
+		var chart = new CanvasJS.Chart("chartContainer", {
+		      animationEnabled: true,
+		      legend: {
+		        verticalAlign: "bottom",
+		        horizontalAlign: "center"
+		      },
+		      theme: "theme1",
+		      data: [{
+				type: "column",
+				dataPoints: dataPoints
+			}]
+		});
+		chart.render();
+	}
+	
+	else if(aktuelleFolie.folienTyp == "H"){
+		$("#chartContainer").html();
+		
+	}
+});
+
+$('#notUseThisFoil').click(function(e) {
+	aktiveFolienId = 0;
+	enableControls();
+	$(".folieThumbnail").removeClass("xAktiveFolie");
+	$(".folieThumbnail[name='"+nowFolienId+"']").addClass("xAusgFolie");
+	
+	var folieInaktivieren = {
+			type : "folieInaktivieren",
+			userId : userId,
+			kursId : kursId,
+			folienId : nowFolienId,
+			sessionId : sessionId
+		};
+	var folieInaktivierenJson = JSON.stringify(folieInaktivieren);
+	socket.send(folieInaktivierenJson);
+});
+
+$('#delFolienSatzBtn').click(function(e) {
+	disableControls();
+	
+	var deleteFoliensatz = {
+			type : "deleteFoliensatz",
+			userId : userId,
+			folienSatzId : nowfolienSatzId
+		};
+	var deleteFoliensatzJson = JSON.stringify(deleteFoliensatz);
+	socket.send(deleteFoliensatzJson);
+	
+	location.reload(); 
+});
 
 
 
@@ -365,7 +438,8 @@ $(document).ready(function(){
 	}
 	
 	disableControls();
-	
+	$("#notUseThisFoil").hide();
+	$("#fSatzLoeschenModalBtn").hide();
 
 });
 

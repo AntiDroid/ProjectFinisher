@@ -36,7 +36,7 @@
 
 <div class="navbar navbar-inverse navbar-static-top">
 	<div class="container">
-		<div id="userName" class="navbar-brand"><%= user.getVorname()+" "+user.getNachname() %></div>
+		<a id="userName" class="navbar-brand" href="index.jsp"><%= user.getVorname()+" "+user.getNachname() %></a>
 		<form action="LogoutServlet" method="post">
 		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
 		</form>

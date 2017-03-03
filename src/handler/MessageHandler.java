@@ -50,6 +50,28 @@ public class MessageHandler {
 		
 		switch(type){
 		
+		case "deleteFoliensatz":{
+			/*
+			 *  deleteFoliensatz = {
+			type : "deleteFoliensatz",
+			userId : userId,
+			folienSatzId : nowfolienSatzId
+		};
+			 */
+			 break;
+		}
+		case "folieInaktivieren":{
+			/*
+			 * folieInaktivieren = {
+			type : "folieInaktivieren",
+			userId : userId,
+			kursId : kursId,
+			folienId : nowFolienId,
+			sessionId : sessionId
+		};
+			 */
+			break;
+		}
 		case "newBereich":{
 			
 			//int userID = jsonData.get("userId").getAsInt();
@@ -280,7 +302,7 @@ public class MessageHandler {
 			int folienId = jsonData.get("folienId").getAsInt();
 			int posX = jsonData.get("posX").getAsInt();
 			int posY = jsonData.get("posY").getAsInt();
-			String ao = jsonData.get("auswahloption").getAsString();
+			String ao = jsonData.get("bereichNr").getAsString();
 			String sesID = jsonData.get("sessionId").getAsString();
 		
 			Uservoting uv = new Uservoting(sesID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);
@@ -296,7 +318,7 @@ public class MessageHandler {
 			int folienId = jsonData.get("folienId").getAsInt();
 			int posX = jsonData.get("posX").getAsInt();
 			int posY = jsonData.get("posY").getAsInt();		
-			String ao = jsonData.get("auswahloption").getAsString();
+			String ao = jsonData.get("bereichNr").getAsString();
 			String sesID = jsonData.get("sessionId").getAsString();
 			
 			Uservoting uv = new Uservoting(sesID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);
