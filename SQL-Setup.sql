@@ -12,20 +12,10 @@ CREATE TABLE Lehrer (
 
 CREATE TABLE Kurs (
         KursID            	int PRIMARY KEY AUTO_INCREMENT,
+        LehrerID			int NOT NULL,
         Name              	varchar(30) UNIQUE NOT NULL,
-        Passwort            varchar(30) NOT NULL
+        Passwort            varchar(30) NOT NULL,
         -- Namenkürzel
-);
-
--- Berechtigungen
--- Vollzugriff - V
--- Lesezugriff - L
-CREATE TABLE Berechtigung (
-		BerechtigungsID		int PRIMARY KEY AUTO_INCREMENT,
-        KursID            	int NOT NULL,
-        LehrerID            int NOT NULL,
-        Berechtigungstyp    char NOT NULL,
-        FOREIGN KEY (KursID) REFERENCES Kurs(KursID),
         FOREIGN KEY (LehrerID) REFERENCES Lehrer(LehrerID) ON DELETE CASCADE
 );
 
@@ -47,16 +37,6 @@ CREATE TABLE Folie (
         fPath			    varchar(120) NOT NULL,
         FolienTyp			char NOT NULL,
         FOREIGN KEY (FoliensatzID) REFERENCES Foliensatz(FoliensatzID) ON DELETE CASCADE
-);
-
-CREATE TABLE LetzteAktiveFolie (
-        LehrerID            int NOT NULL,
-        FoliensatzID      	int NOT NULL,
-        LetzteFolieID 		int NOT NULL,
-        PRIMARY KEY (LehrerID, FoliensatzID, LetzteFolieID),
-        FOREIGN KEY (LehrerID) REFERENCES Lehrer(LehrerID),
-        FOREIGN KEY (FoliensatzID) REFERENCES Foliensatz(FoliensatzID),
-        FOREIGN KEY (LetzteFolieID) REFERENCES Folie(FolienID) ON DELETE CASCADE
 );
 
 CREATE TABLE Auswahlbereich (
@@ -87,7 +67,7 @@ CREATE TABLE Kursteilnahme (
 
 CREATE TABLE Uservoting (
         VotingID            int PRIMARY KEY AUTO_INCREMENT,
-        SessionID           varchar(32) NOT NULL,
+        BefID           int NOT NULL,
         StudentenID         int NOT NULL,
         FolienID			int NOT NULL,
         KoordX				int NOT NULL,
@@ -97,41 +77,21 @@ CREATE TABLE Uservoting (
         FOREIGN KEY (FolienID) REFERENCES Folie(FolienID) ON DELETE CASCADE
 );
 
+CREATE TABLE BefragungsSession (
+        BefID           int PRIMARY KEY AUTO_INCREMENT,
+        FolienID		int NOT NULL,
+        Beginn			timestamp NOT NULL,
+        Ende			timestamp NOT NULL,
+        FOREIGN KEY (FolienID) REFERENCES Folie(FolienID) ON DELETE CASCADE
+);
+
 INSERT INTO Student VALUES(null, 'Student1', 'Talip', 'Vural', 'stud');
 INSERT INTO Lehrer VALUES(null, 'Lehrer1', 'Orcun', 'Döger', 'lehr');
 
-INSERT INTO Kurs VALUES(null, 'Mathe', 'PW');
-INSERT INTO Kurs VALUES(null, 'Englisch', 'PW');
-INSERT INTO Kurs VALUES(null, 'Deutsch', 'PW');
+INSERT INTO Kurs VALUES(null, 1, 'Mathe', 'PW');
+INSERT INTO Kurs VALUES(null, 1, 'Englisch', 'PW');
+INSERT INTO Kurs VALUES(null, 1, 'Deutsch', 'PW');
 
 -- 								ID, Kurs, Student
 INSERT INTO Kursteilnahme VALUES(null, 1, 1);
 INSERT INTO Kursteilnahme VALUES(null, 2, 1);
-
-INSERT INTO Berechtigung VALUES(null, 1, 1, 'V');
-INSERT INTO Berechtigung VALUES(null, 2, 1, 'V');
-INSERT INTO Berechtigung VALUES(null, 3, 1, 'V');
-
-
-INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 1');
-INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 2');
-INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 3');
-INSERT INTO Foliensatz VALUES(null, 1, 'Testsatz 4');
-
-
-INSERT INTO Folie VALUES(null, 1, 'derPath', 'C');
-INSERT INTO Folie VALUES(null, 1, 'derPath', 'A');
-INSERT INTO Folie VALUES(null, 1, 'derPath', 'A');
-INSERT INTO Folie VALUES(null, 1, 'derPath', 'C');
-INSERT INTO Folie VALUES(null, 1, 'derPath', 'A');
-INSERT INTO Folie VALUES(null, 2, 'derPath', 'C');
-INSERT INTO Folie VALUES(null, 2, 'derPath', 'A');
-
-INSERT INTO Auswahlbereich VALUES(null, 1, 10, 15, 30, 35);
-INSERT INTO Auswahlbereich VALUES(null, 1, 50, 55, 70, 75);
-
-INSERT INTO Uservoting VALUES(null, '', 1, 1, 20, 27, 1);
-INSERT INTO Uservoting VALUES(null, '', 1, 1, 25, 31, 1);
-
-INSERT INTO Uservoting VALUES(null, '', 1, 1, 62, 71, 2);
-INSERT INTO Uservoting VALUES(null, '', 1, 1, 58, 72, 2);

@@ -57,10 +57,10 @@ public class KursErstellen extends HttpServlet {
 		}
 		else {
 			
-			Kurs k = new Kurs(kursName, kursPW);
+			Lehrer l = ((Lehrer)s.getAttribute("benutzer"));
+			
+			Kurs k = new Kurs(kursName, kursPW, l, l.getID());
 			dbm.save(k);
-
-			dbm.addBerechtigung(k.getID(), ((Lehrer)s.getAttribute("benutzer")).getID(), "V");
 
 			//anpassen der Kursliste
 			//Temporärlösung
