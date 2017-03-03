@@ -279,18 +279,16 @@ public class MessageHandler {
 			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(f, bereichList);
 			
 			Message.aktiveFolie.put(kursID, f);
-			
-			try {
-			
-				//TODO nach allen Broadcast die SessionListe leeren und OK antwort verlangen mit der man Liste wieder füllt
-				// oder je nach IllegalStateException die Liste korrigieren
 				
-				for(Session s: Message.kursSessions.get(kursID)){
+			for(Session s: Message.kursSessions.get(kursID)){
+				
+				try{
 					s.getBasicRemote().sendText(gson.toJson(responseObj));
+				}catch(IllegalStateException e){
+					Message.kursSessions.get(kursID).remove(s);
+				}catch(Exception e){
+					e.printStackTrace();
 				}
-				
-			} catch (IOException e) {
-				e.printStackTrace();
 			}
 			
 			break;
