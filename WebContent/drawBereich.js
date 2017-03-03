@@ -233,7 +233,7 @@ $("#folieCanvas").mouseup(function(e) {
 					userId : userId,
 					kursId : kursId,
 					folienId : nowFolienId,
-					sessionId : sessionId,
+					sessionId : 0,
 					oLX : oLX,
 					oLY : oLY,
 					uRX : uRX,
@@ -246,7 +246,7 @@ $("#folieCanvas").mouseup(function(e) {
 			var folienInfoRequest = {
 					type : "folienInfoRequest",
 					userId : userId,
-					sessionId : "",//sessionId,
+					sessionId : 0,//sessionId,
 					folienId : nowFolienId
 				};
 			var folienInfoRequestJson = JSON.stringify(folienInfoRequest);

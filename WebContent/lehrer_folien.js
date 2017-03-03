@@ -196,7 +196,7 @@ function updateFolien() {
 		var fId = folienList[i].folienID;
 		htmlString = ""
 		+'<div>'
-	      +'<img class="folieThumbnail" src="ImgServlet?id='+fId+'" name="'+fId+'" alt="'+(i+1)+'">'
+	      +'<img class="folieThumbnail" src="ImgServlet?id='+fId+'&thumb=1" name="'+fId+'" alt="'+(i+1)+'">'
 	      +'<div class="text-center">'+(i+1)+'</div>'
 	    +'</div>';
 		$("#folienNavThumbsSlick").slick('slickAdd', htmlString);
@@ -236,7 +236,7 @@ function changeFolienType(type) {
 			userId : userId,
 			folienId : nowFolienId,
 			folienTyp : type,
-			sessionId : sessionId
+			sessionId : 0
 		};
 	var folienTypChangeJson = JSON.stringify(folienTypChange);
 	socket.send(folienTypChangeJson);
@@ -293,7 +293,7 @@ $('#folienNavThumbsSlick').on('click', 'img', function(e) {
 	var folienInfoRequest = {
 			type : "folienInfoRequest",
 			userId : userId,
-			sessionId : "",//sessionId,
+			sessionId : 0,//sessionId,
 			folienId : nowFolienId
 		};
 	var folienInfoRequestJson = JSON.stringify(folienInfoRequest);
@@ -317,7 +317,7 @@ $('#useThisFoil').click(function(e) {
 			userId : userId,
 			kursId : kursId,
 			folienId : nowFolienId,
-			sessionId : sessionId
+			sessionId : 0
 		};
 	var folienUpdateRequestJson = JSON.stringify(folienUpdateRequest);
 	socket.send(folienUpdateRequestJson);
@@ -349,7 +349,7 @@ $('#delIntBereich').click(function(e) {
 			userId : userId,
 			kursId : kursId,
 			folienId : nowFolienId,
-			sessionId : sessionId,
+			sessionId : 0,
 			bereichId : ausgIntBereich
 		};
 	var delBereichJson = JSON.stringify(delBereich);
@@ -400,7 +400,7 @@ $('#notUseThisFoil').click(function(e) {
 			userId : userId,
 			kursId : kursId,
 			folienId : nowFolienId,
-			sessionId : sessionId
+			sessionId : 0
 		};
 	var folieInaktivierenJson = JSON.stringify(folieInaktivieren);
 	socket.send(folieInaktivierenJson);
@@ -475,3 +475,4 @@ $("input[name=intModus]").change(function() {
     }
 });
 
+$('img').on('dragstart', function(event) { event.preventDefault(); });
