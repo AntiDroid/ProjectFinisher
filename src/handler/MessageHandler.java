@@ -51,25 +51,23 @@ public class MessageHandler {
 		switch(type){
 		
 		case "deleteFoliensatz":{
-			/*
-			 *  deleteFoliensatz = {
-			type : "deleteFoliensatz",
-			userId : userId,
-			folienSatzId : nowfolienSatzId
-		};
-			 */
+			 
+			 //int userID = jsonData.get("userId").getAsInt(); 
+			 int fSID = jsonData.get("folienSatzId").getAsInt();
+			
+			 dbm.delete(dbm.getFoliensatz(fSID));
+			 
 			 break;
 		}
 		case "folieInaktivieren":{
-			/*
-			 * folieInaktivieren = {
-			type : "folieInaktivieren",
-			userId : userId,
-			kursId : kursId,
-			folienId : nowFolienId,
-			sessionId : sessionId
-		};
-			 */
+
+			//int userID = jsonData.get("userId").getAsInt();
+			//int kursID = jsonData.get("kursId").getAsInt();
+			int folienID = jsonData.get("folienId").getAsInt();
+			int sessionID = jsonData.get("sessionId").getAsInt();
+
+			//TODO Mach was
+			
 			break;
 		}
 		case "newBereich":{
@@ -77,7 +75,7 @@ public class MessageHandler {
 			//int userID = jsonData.get("userId").getAsInt();
 			//int kursID = jsonData.get("kursId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
-			String sessionID = jsonData.get("sessionId").getAsString();
+			int sessionID = jsonData.get("sessionId").getAsInt();
 			int oLX = jsonData.get("oLX").getAsInt();
 			int oLY = jsonData.get("oLY").getAsInt();
 			int uRX = jsonData.get("uRX").getAsInt();
@@ -97,7 +95,7 @@ public class MessageHandler {
 			//int userID = jsonData.get("userId").getAsInt();
 			//int kursID = jsonData.get("kursId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
-			String sessionID = jsonData.get("sessionId").getAsString();
+			int sessionID = jsonData.get("sessionId").getAsInt();
 			int bereichID = jsonData.get("bereichId").getAsInt();
 			
 			dbm.delete(dbm.getAuswahlbereich(bereichID));
@@ -133,7 +131,7 @@ public class MessageHandler {
 			// int userID = jsonData.get("userId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
 			char folienTyp = jsonData.get("folienTyp").getAsCharacter();
-			String sessionID = jsonData.get("sessionId").getAsString();
+			int sessionID = jsonData.get("sessionId").getAsInt();
 			
 			Folie f = dbm.getFolie(folienID);
 			f.setFolienTyp(folienTyp);
@@ -187,7 +185,7 @@ public class MessageHandler {
 			
 			// int userID = jsonData.get("userId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
-			String sessionID = jsonData.get("sessionId").getAsString();
+			int sessionID = jsonData.get("sessionId").getAsInt();
 			
 			sendFolienInfo(session, gson, dbm, folienID, sessionID);
 			
@@ -375,7 +373,7 @@ public class MessageHandler {
 		return false;
 	}
 	
-	public void sendFolienInfo(Session session, Gson gson, DBManager dbm, int folienID, String sessionID){
+	public void sendFolienInfo(Session session, Gson gson, DBManager dbm, int folienID, int sessionID){
 		
 		Folie folie = dbm.getFolie(folienID);
 		ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);

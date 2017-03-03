@@ -1132,7 +1132,7 @@ public class DBManager {
 	}
 	
 	// # was wenn alle Uservotings einer folie und session gebraucht werden?
-	public ArrayList<Uservoting> getUservotings(int studentID, int folienID, String sessionID) {
+	public ArrayList<Uservoting> getUservotings(int studentID, int folienID, int sessionID) {
 
 		ArrayList<Uservoting> list = new ArrayList<Uservoting>();
 
@@ -1144,15 +1144,15 @@ public class DBManager {
 			
 			if(studentID > 0)
 				sql += " AND StudentenID = ?";
-			if(!sessionID.equals(""))
+			if(sessionID > 0)
 				sql += " AND SessionID = ?";
 			
 			stat = conn.prepareStatement(sql);
 			stat.setInt(1, folienID);
 			if(studentID != 0)
 				stat.setInt(2, studentID);
-			if(!sessionID.equals(""))
-				stat.setString(3, sessionID);
+			if(sessionID > 0)
+				stat.setInt(3, sessionID);
 			
 			rs = stat.executeQuery();
 
