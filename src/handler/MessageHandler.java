@@ -407,6 +407,8 @@ abstract class Message {
 	
 	static public HashMap<Integer, ArrayList<Session>> kursSessions = new HashMap<Integer, ArrayList<Session>>();
 	static public HashMap<Integer, Folie> aktiveFolie = new HashMap<Integer, Folie>();
+	//TODO aktive Folie eines Kurses
+	
 	
 	String type;
 	

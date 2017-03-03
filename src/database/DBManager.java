@@ -918,6 +918,8 @@ public class DBManager {
 				obj.setID(kursID);
 				obj.setName(rs.getString("Name"));
 				obj.setPasswort(rs.getString("Passwort"));
+				obj.setLehrerID(rs.getInt("LehrerID"));
+				obj.setLehrer(getLehrer(rs.getInt("LehrerID")));
 			}
 
 		} catch (SQLException e) {
