@@ -845,8 +845,7 @@ public class DBManager {
 
 		PreparedStatement stat = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM Kurs "
-				+ "WHERE LehrerID = ?";
+		String sql = "SELECT * FROM Kurs WHERE LehrerID = ?";
 
 		try {
 			
