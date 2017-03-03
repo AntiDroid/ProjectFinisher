@@ -238,8 +238,8 @@ public class MessageHandler {
 				}
 			}
 			
-			ArrayList<Lehrer> lehrerListe = dbm.getKurslehrer(kursID);
-			lehrerName = lehrerListe.get(0).getVorname()+" "+lehrerListe.get(0).getNachname();
+			Kurs k = dbm.getKurs(kursID);
+			lehrerName = k.getLehrer().getVorname()+" "+k.getLehrer().getNachname();
 			
 			KursInfoMessageStudent responseObj = new KursInfoMessageStudent(kursName, lehrerName, f, bereichList);
 			

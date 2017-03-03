@@ -617,77 +617,6 @@ public class DBManager {
 		return list;
 	}
 
-	public ArrayList<Lehrer> getKurslehrer(int kursID) {
-
-		ArrayList<Lehrer> list = new ArrayList<Lehrer>();
-
-		PreparedStatement stat = null;
-		ResultSet rs = null;
-		String sql = "SELECT * FROM Lehrer JOIN Berechtigung USING(LehrerID) "
-				+ "JOIN Kurs USING(KursID)"
-				+ " WHERE KursID = ?";
-
-		try {
-
-			stat = conn.prepareStatement(sql);
-			stat.setInt(1, kursID);
-
-			rs = stat.executeQuery();
-
-			while (rs.next()) {
-
-				Lehrer obj = new Lehrer();
-
-				obj.setID(rs.getInt("LehrerID"));
-				obj.setBenutzername(rs.getString("Benutzername"));
-				obj.setVorname(rs.getString("Vorname"));
-				obj.setNachname(rs.getString("Nachname"));
-				obj.setPasswort(rs.getString("Passwort"));
-				
-				list.add(obj);
-			}
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Kurslehrer");
-		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-		}
-
-		return list;
-	}
-	
-	public char getBerechtigung(int lehrerID, int kursID) {
-
-		char res = 'X';
-
-		PreparedStatement stat = null;
-		ResultSet rs = null;
-		String sql = "SELECT Berechtigungstyp FROM Berechtigung WHERE LehrerID = ? AND KursID = ?";
-		
-		try {
-
-			stat = conn.prepareStatement(sql);
-			stat.setInt(1, lehrerID);
-			stat.setInt(2, kursID);
-
-			rs = stat.executeQuery();
-
-			if (rs.next())
-				res = rs.getString("Berechtigungstyp").charAt(0);
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Berechtigung");
-		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-		}
-
-		return res;
-	}
-
 	public ArrayList<Folie> getFolien(int folienSatzID) {
 
 		ArrayList<Folie> list = new ArrayList<Folie>();
@@ -845,8 +774,7 @@ public class DBManager {
 
 		PreparedStatement stat = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM Kurs "
-				+ "WHERE LehrerID = ?";
+		String sql = "SELECT * FROM Kurs WHERE LehrerID = ?";
 
 		try {
 			
