@@ -32,13 +32,19 @@ public class ImgServlet extends HttpServlet {
 			String fPathLocal = System.getProperty("java.io.tmpdir");
 			
 			String folienID = request.getParameter("id");
+			String isSmall = request.getParameter("thumb");
+			
 			Folie f = dbm.getFolie(Integer.parseInt(folienID));
 			
 			response.setContentType("image/png");
 			
 			BufferedImage bi = null;
 			try{
-				bi = ImageIO.read(new File(fPathLocal+f.getfPath()));
+				
+				if(isSmall != null)
+					bi = ImageIO.read(new File(fPathLocal+f.getfPath()));
+				else
+					bi = (BufferedImage) ImageIO.read(new File(fPathLocal+f.getfPath())).getScaledInstance(100, 100, BufferedImage.TYPE_INT_RGB);
 			}catch(IOException e){
 				bi = ImageIO.read(new File(getServletContext().getRealPath("imgs/na.jpg")));
 			}

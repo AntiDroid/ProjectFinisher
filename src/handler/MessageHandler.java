@@ -18,7 +18,6 @@ import models.Auswahlbereich;
 import models.Folie;
 import models.Foliensatz;
 import models.Kurs;
-import models.Lehrer;
 import models.Uservoting;
 import database.DBManager;
 
