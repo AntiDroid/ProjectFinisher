@@ -1,6 +1,8 @@
 package handler;
 
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -41,10 +43,17 @@ public class ImgServlet extends HttpServlet {
 			BufferedImage bi = null;
 			try{
 				
-				if(isSmall != null)
+				if(isSmall == null)
 					bi = ImageIO.read(new File(fPathLocal+f.getfPath()));
-				else
-					bi = (BufferedImage) ImageIO.read(new File(fPathLocal+f.getfPath())).getScaledInstance(100, 100, BufferedImage.TYPE_INT_RGB);
+				else{				
+					Image img = ImageIO.read(new File(fPathLocal+f.getfPath())).getScaledInstance(100, 100, BufferedImage.TYPE_INT_RGB);
+					
+					bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+
+				    Graphics2D bGr = bi.createGraphics();
+				    bGr.drawImage(img, 0, 0, null);
+				    bGr.dispose();
+				}
 			}catch(IOException e){
 				bi = ImageIO.read(new File(getServletContext().getRealPath("imgs/na.jpg")));
 			}
