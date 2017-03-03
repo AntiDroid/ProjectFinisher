@@ -12,9 +12,11 @@ CREATE TABLE Lehrer (
 
 CREATE TABLE Kurs (
         KursID            	int PRIMARY KEY AUTO_INCREMENT,
+        LehrerID			int NOT NULL,
         Name              	varchar(30) UNIQUE NOT NULL,
-        Passwort            varchar(30) NOT NULL
+        Passwort            varchar(30) NOT NULL,
         -- Namenkürzel
+        FOREIGN KEY (LehrerID) REFERENCES Lehrer(LehrerID) ON DELETE CASCADE
 );
 
 CREATE TABLE Foliensatz (
@@ -65,7 +67,7 @@ CREATE TABLE Kursteilnahme (
 
 CREATE TABLE Uservoting (
         VotingID            int PRIMARY KEY AUTO_INCREMENT,
-        SessionID           varchar(32) NOT NULL,
+        BefID           int NOT NULL,
         StudentenID         int NOT NULL,
         FolienID			int NOT NULL,
         KoordX				int NOT NULL,
@@ -75,12 +77,20 @@ CREATE TABLE Uservoting (
         FOREIGN KEY (FolienID) REFERENCES Folie(FolienID) ON DELETE CASCADE
 );
 
+CREATE TABLE BefragungsSession (
+        BefID           int PRIMARY KEY AUTO_INCREMENT,
+        FolienID		int NOT NULL,
+        Beginn			timestamp NOT NULL,
+        Ende			timestamp NOT NULL,
+        FOREIGN KEY (FolienID) REFERENCES Folie(FolienID) ON DELETE CASCADE
+);
+
 INSERT INTO Student VALUES(null, 'Student1', 'Talip', 'Vural', 'stud');
 INSERT INTO Lehrer VALUES(null, 'Lehrer1', 'Orcun', 'Döger', 'lehr');
 
-INSERT INTO Kurs VALUES(null, 'Mathe', 'PW');
-INSERT INTO Kurs VALUES(null, 'Englisch', 'PW');
-INSERT INTO Kurs VALUES(null, 'Deutsch', 'PW');
+INSERT INTO Kurs VALUES(null, 1, 'Mathe', 'PW');
+INSERT INTO Kurs VALUES(null, 1, 'Englisch', 'PW');
+INSERT INTO Kurs VALUES(null, 1, 'Deutsch', 'PW');
 
 -- 								ID, Kurs, Student
 INSERT INTO Kursteilnahme VALUES(null, 1, 1);

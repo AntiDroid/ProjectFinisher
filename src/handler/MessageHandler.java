@@ -283,6 +283,7 @@ public class MessageHandler {
 			try {
 			
 				//TODO nach allen Broadcast die SessionListe leeren und OK antwort verlangen mit der man Liste wieder füllt
+				// oder je nach IllegalStateException die Liste korrigieren
 				
 				for(Session s: Message.kursSessions.get(kursID)){
 					s.getBasicRemote().sendText(gson.toJson(responseObj));

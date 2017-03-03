@@ -845,10 +845,8 @@ public class DBManager {
 
 		PreparedStatement stat = null;
 		ResultSet rs = null;
-		String sql = "SELECT k.KursID, k.Name, k.Passwort FROM Lehrer l "
-				+ "JOIN Berechtigung USING(LehrerID) "
-				+ "JOIN Kurs k USING(KursID) "
-				+ "WHERE l.LehrerID = ?";
+		String sql = "SELECT * FROM Kurs "
+				+ "WHERE LehrerID = ?";
 
 		try {
 			
@@ -1186,36 +1184,6 @@ public class DBManager {
 		return list;
 	}
 
-	public int getLetzteAktiveFolienID(int lID, int fSatzID, int fID) {
-
-		PreparedStatement stat = null;
-		ResultSet rs = null;
-		String sql = "SELECT LetzteFolieID FROM LetzteAktiveFolie WHERE LehrerID = ?"
-				+ " AND FoliensatzID = ? AND LetzteFolieID = ?";
-
-		try {
-
-			stat = conn.prepareStatement(sql);
-			stat.setInt(1, lID);
-			stat.setInt(2, fSatzID);
-			stat.setInt(3, fID);
-
-			rs = stat.executeQuery();
-
-			if (rs.next())
-				return rs.getInt("LetzteFolieID");
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - letzte aktive Folie");
-		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-		}
-
-		return -1;
-	}
-
 	public boolean isKursBeteiligt(String kurs, String student) {
 	
 		PreparedStatement stat = null;
@@ -1325,29 +1293,4 @@ public class DBManager {
 				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
 			}
 	}
-	
-	public void addBerechtigung(int kursID, int lehrerID, String ber){
-		
-		PreparedStatement stat = null;
-		ResultSet rs = null;
-	
-		String sql = "INSERT INTO Berechtigung VALUES(?, ?, ?, ?)";
-		
-		try {
-			
-			stat = conn.prepareStatement(sql);
-			stat.setString(1, null);
-			stat.setInt(2, kursID);
-			stat.setInt(3, lehrerID);
-			stat.setString(4, ber);
-			stat.execute();
-	
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Insertproblem - Kursteilnahme");
-		} finally {
-			try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-		}
-}
 }
