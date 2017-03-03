@@ -46,9 +46,9 @@ public class ImgServlet extends HttpServlet {
 				if(isSmall == null)
 					bi = ImageIO.read(new File(fPathLocal+f.getfPath()));
 				else{				
-					Image img = ImageIO.read(new File(fPathLocal+f.getfPath())).getScaledInstance(250, 250, BufferedImage.TYPE_INT_RGB);
+					Image img = ImageIO.read(new File(fPathLocal+f.getfPath())).getScaledInstance(250, 250, BufferedImage.SCALE_SMOOTH);
 					
-					bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.TYPE_INT_ARGB);
+					bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.SCALE_SMOOTH);
 
 				    Graphics2D bGr = bi.createGraphics();
 				    bGr.drawImage(img, 0, 0, null);
