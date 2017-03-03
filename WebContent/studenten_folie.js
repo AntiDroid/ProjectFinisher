@@ -208,7 +208,7 @@ $('#submitBtn').click(function(e) {
 				bereichNr : bereichNr,
 				posX : clickX,
 				posY : clickY,
-				sessionId : sessionId
+				sessionId : 0
 			};
 		var bereichAntwortJson = JSON.stringify(bereichAntwort);
 		socket.send(bereichAntwortJson);
@@ -221,7 +221,7 @@ $('#submitBtn').click(function(e) {
 				folienId : folienId,
 				posX : clickX,
 				posY : clickY,
-				sessionId : sessionId
+				sessionId : 0
 			};
 		var heatplotAntwortJson = JSON.stringify(heatplotAntwort);
 		socket.send(heatplotAntwortJson);

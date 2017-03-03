@@ -96,7 +96,7 @@
 	</div>
 
 	<div class="imgDiv">
-			<img id="folienImg" src="ImgServlet"/>
+			<img id="folienImg" src="ImgServlet?id=0"/>
 	</div>
 	<img id="pin" src="imgs/pin.png" style="display: none; position: absolute;" />
 
