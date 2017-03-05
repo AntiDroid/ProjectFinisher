@@ -60,8 +60,6 @@ socket.onmessage = function(evt) {
 			folie = msg.folie;
 			bereichList = msg.bereichList;
 			folienUpdate(msg);
-			
-			activateAnsicht();
 		}
 		else deactivateAnsicht();
 	} 
@@ -70,8 +68,6 @@ socket.onmessage = function(evt) {
 			folie = msg.folie;
 			bereichList = msg.bereichList;
 			folienUpdate(msg);
-			
-			activateAnsicht();
 		}
 		else deactivateAnsicht();
 	}
@@ -93,7 +89,9 @@ function folienUpdate(msg) {
 	folienTyp = 'A';
 	folienId = folie.folienID;
 	
-	//!!Überprüfen, ob schon beantwortet wurde
+	if(msg.beantwortet != null){
+	beantwortet = msg.beantwortet;
+	}
 	
 	$("#folienImg").prop("src", "ImgServlet?id=" + folie.folienID);
 	//var proportion = $("#folienImg").width()/$("#folienImg").height();
@@ -105,6 +103,7 @@ function folienUpdate(msg) {
 	
 	
 	folienReset();
+	activateAnsicht();
 }
 
 function folienReset(){
@@ -140,55 +139,56 @@ var clickY = 0;
 var bereichNr = 0;
 
 $('#folienImg').mousedown(function(e) {
-	
-	if(folieAktiv && folienTyp != 'A' && !beantwortet){
-		var offset_x = $(this).offset().left - $(window).scrollLeft();
-		var offset_y = $(this).offset().top - $(window).scrollTop();
-	
-		var x = (e.clientX - offset_x);
-		var y = (e.clientY - offset_y);
-	
-		var imgW = $(this).width();
-		var imgH = $(this).height();
-	
-		var relX = Math.round((x / imgW) * 100);
-		var relY = Math.round((y / imgH) * 100);
-	
-		if(folienTyp == 'C'){
-			// mit bereichlist überprüfen...
-			var inBereich = false;
-			for (var i = 0; i < bereichList.length; i++) {
-				if(relX >= bereichList[i].obenLinksX && relX <= bereichList[i].untenRechtsX){
-					if(relY >= bereichList[i].obenLinksY && relY <= bereichList[i].untenRechtsY){
-						inBereich = true;
-						bereichNr = i;
-						break;
+	if(!beantwortet){
+		if(folieAktiv && folienTyp != 'A'){
+			var offset_x = $(this).offset().left - $(window).scrollLeft();
+			var offset_y = $(this).offset().top - $(window).scrollTop();
+		
+			var x = (e.clientX - offset_x);
+			var y = (e.clientY - offset_y);
+		
+			var imgW = $(this).width();
+			var imgH = $(this).height();
+		
+			var relX = Math.round((x / imgW) * 100);
+			var relY = Math.round((y / imgH) * 100);
+		
+			if(folienTyp == 'C'){
+				// mit bereichlist überprüfen...
+				var inBereich = false;
+				for (var i = 0; i < bereichList.length; i++) {
+					if(relX >= bereichList[i].obenLinksX && relX <= bereichList[i].untenRechtsX){
+						if(relY >= bereichList[i].obenLinksY && relY <= bereichList[i].untenRechtsY){
+							inBereich = true;
+							bereichNr = i;
+							break;
+						}
 					}
 				}
+				
+				if(inBereich) { 
+					clickX = relX;
+					clickY = relY;
+					pinSet = true; 
+				}
+				else { pinSet = false; }
 			}
-			
-			if(inBereich) { 
+			else if (folienTyp == 'H') {
 				clickX = relX;
 				clickY = relY;
 				pinSet = true; 
 			}
-			else { pinSet = false; }
-		}
-		else if (folienTyp == 'H') {
-			clickX = relX;
-			clickY = relY;
-			pinSet = true; 
-		}
-		
-		
-		
-		if(pinSet){
-			$('#pin').css('left', e.pageX).css('top', e.pageY - 25).show();
-			enableButtons();
-		}
-		if(!pinSet){
-			$('#pin').hide;
-			disableButtons();
+			
+			
+			
+			if(pinSet){
+				$('#pin').css('left', e.pageX).css('top', e.pageY - 25).show();
+				enableButtons();
+			}
+			if(!pinSet){
+				$('#pin').hide;
+				disableButtons();
+			}
 		}
 	}
 });

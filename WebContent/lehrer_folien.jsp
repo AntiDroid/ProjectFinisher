@@ -178,6 +178,12 @@
 		#fSatzLoeschenModalBtn{
 			width: 100%;
 		}
+		
+		#heatplotCanvas{
+			position: absolute;
+			width: 100%;
+			height: 100%;
+		}
 
 	</style>
 </head>
@@ -215,7 +221,7 @@
 			<div class="row"></div>
 				<div class="folienNavDiv text-center">
 					<button class="folienNavBtn btn btn-xs">zurück</button>
-					<span id="folienNavAnzahl">7 Seiten</span>
+					<span id="folienNavAnzahl">0 Seiten</span>
 					<button class="folienNavBtn btn btn-xs">vor</button>
 				</div>
 
@@ -233,6 +239,7 @@
 
 				<div class="col-md-8">
 					<div id="canvasDiv">
+						<canvas id="heatplotCanvas" class="folieVorschau"></canvas>
 						<canvas id="folieCanvas" class="folieVorschau"></canvas>
 					</div>
 				</div>
@@ -391,6 +398,7 @@
 <script src="bootstrap/js/bootstrap.min.js"></script>
 <script src="slick/slick.js" type="text/javascript" charset="utf-8"></script>
 <script src="canvasjs/canvasjs.min.js"></script>
+<script src="heatmap/webgl-heatmap.js"></script>
 <script type="text/javascript">
 	var userId = <%=user.getID()%>;
 	var vorname = "<%=user.getVorname()%>";

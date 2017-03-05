@@ -3,6 +3,7 @@ var folienList = null;
 var aktuelleFolie = null;
 var bereichList = null;
 var bAuswerteList = null;
+var votings = null;
 
 var nowfolienSatzId = 0;
 var nowFolienId = 0;
@@ -15,9 +16,18 @@ else $("#allFoliensatzAnsicht").show();
 
 var canvas = document.getElementById("folieCanvas");
 var ctx = canvas.getContext("2d");
-//ctx.globalAlpha = 0.4;
-//ctx.fillStyle="#ee00ff";
-//ctx.fillRect(20, 20, 160, 100);
+
+window.onload = function(){
+	try {
+		var heatplotCanvas = document.getElementById("heatplotCanvas");
+		var heatmap = createWebGLHeatmap({canvas: heatplotCanvas});
+		
+		heatmap.addPoint(50, 50, 30, 0.9);
+		//heatmap.adjustSize();
+		heatmap.update();
+		heatmap.display();
+	} catch (e) {console.out(e);}
+}
 
 
 // Websocket
@@ -103,6 +113,26 @@ socket.onmessage = function(evt) {
 					    ctx.fillRect(relToAbsX(oLX), relToAbsY(oLY), relToAbsX(uRX)-relToAbsX(oLX), relToAbsY(uRY)-relToAbsY(oLY));
 					}
 				}
+			    else if (msg.folie.folienTyp == 'H') {
+			    	votings = msg.votings;
+					if(votings != null)
+					try {
+						for (var i = 0; i < votings.length; i++) {
+							var relX = votings[i].koordX;
+							var relY = votings[i].koordY;
+							
+							var absX = Math.round(relToAbsX(relX));
+							var absY = Math.round(relToAbsY(relY));
+							
+					        heatmap.addPoint(absX, absY, 30, 1);
+							}
+						
+						heatmap.update();
+						heatmap.display();
+					} catch (e) {
+						console.log(e);
+					}
+				}
 			};
 			//CANVAS ENDE
 			
@@ -150,7 +180,7 @@ socket.onmessage = function(evt) {
 				$("#allIntDiv").fadeIn(350);
 				$("#intBerDiv").slideUp(200);
 				
-				var votings = msg.votings;
+				votings = msg.votings;
 				var htmlString = "";
 				if(votings != null){
 					for (var i = 0; i < votings.length; i++) {
@@ -476,3 +506,4 @@ $("input[name=intModus]").change(function() {
 });
 
 $('img').on('dragstart', function(event) { event.preventDefault(); });
+

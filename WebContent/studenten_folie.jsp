@@ -70,7 +70,7 @@
 			text-align: center;
     		font-size: 4vw;
     		color: #c4c4c4;
-			transform: translateY(100%);
+			transform: translateY(200%);
 		}
 		
 	</style>
