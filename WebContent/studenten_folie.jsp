@@ -107,10 +107,10 @@
 
 	<div class="row">
 		<div class="col-xs-6">
-			<button id="clearBtn" class="btn text-left" disabled>Marker<br/>LÃ¶schen</button>
+			<button id="clearBtn" class="btn text-left" disabled>Marker<br/>Löschen</button>
 		</div>
 		<div class="col-xs-6">
-			<button id="submitBtn" class="btn btn-success text-right submitButton" disabled>BestÃ¤tigen</button>
+			<button id="submitBtn" class="btn btn-success text-right submitButton" disabled>Bestätigen</button>
 		</div>
 	</div>
 </div>
