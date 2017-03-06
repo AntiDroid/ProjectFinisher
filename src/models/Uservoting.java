@@ -3,7 +3,7 @@ package models;
 public class Uservoting {
 
 	private int votingID;
-	private String sessionID;
+	private int befID;
 	private int studentenID, folienID;
 	private Student student;
 	private Folie folie;
@@ -11,9 +11,9 @@ public class Uservoting {
 	private int koordX, koordY;
 	private String auswahloption;
 	
-	public Uservoting(String sesID, int stID, Student s, int fID, Folie f, int kX, int kY, String ao) {
+	public Uservoting(int befID, int stID, Student s, int fID, Folie f, int kX, int kY, String ao) {
 		this.votingID = -1;
-		this.sessionID = sesID;
+		this.befID = befID;
 		this.studentenID = stID;
 		this.student = s;
 		this.folienID = fID;
@@ -33,14 +33,6 @@ public class Uservoting {
 
 	public void setID(int votingID) {
 		this.votingID = votingID;
-	}
-
-	public String getSessionID() {
-		return sessionID;
-	}
-
-	public void setSessionID(String sessionID) {
-		this.sessionID = sessionID;
 	}
 
 	public int getStudentenID() {
@@ -97,5 +89,13 @@ public class Uservoting {
 
 	public void setStudent(Student student) {
 		this.student = student;
+	}
+
+	public int getBefID() {
+		return befID;
+	}
+
+	public void setBefID(int befID) {
+		this.befID = befID;
 	}
 }

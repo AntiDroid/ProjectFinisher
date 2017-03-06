@@ -299,9 +299,11 @@ public class MessageHandler {
 			int posX = jsonData.get("posX").getAsInt();
 			int posY = jsonData.get("posY").getAsInt();
 			String ao = jsonData.get("bereichNr").getAsString();
-			String sesID = jsonData.get("sessionId").getAsString();
+			int befID = jsonData.get("sessionId").getAsInt();
 		
-			Uservoting uv = new Uservoting(sesID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);
+			//TODO SessionID bzw. BefragungsID Sachen
+			
+			Uservoting uv = new Uservoting(befID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);
 			dbm.save(uv);
 			
 			break;   
@@ -315,9 +317,11 @@ public class MessageHandler {
 			int posX = jsonData.get("posX").getAsInt();
 			int posY = jsonData.get("posY").getAsInt();		
 			String ao = jsonData.get("bereichNr").getAsString();
-			String sesID = jsonData.get("sessionId").getAsString();
+			int befID = jsonData.get("sessionId").getAsInt();
 			
-			Uservoting uv = new Uservoting(sesID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);
+			//TODO SessionID bzw. BefragungsID Sachen
+			
+			Uservoting uv = new Uservoting(befID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);
 			dbm.save(uv);
 			
 			break;

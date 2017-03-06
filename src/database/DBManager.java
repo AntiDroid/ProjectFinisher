@@ -220,14 +220,15 @@ public class DBManager {
 	
 			ResultSet rs = null;
 			Statement statGetID = null;
-			String sql = "INSERT INTO Kurs VALUES (?, ?, ?)";
+			String sql = "INSERT INTO Kurs VALUES (?, ?, ?, ?)";
 	
 			try {
 	
 				stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
-				stat.setString(2, k.getName());
-				stat.setString(3, k.getPasswort());
+				stat.setInt(2, k.getLehrerID());
+				stat.setString(3, k.getName());
+				stat.setString(4, k.getPasswort());
 				stat.execute();
 	
 				statGetID = conn.createStatement();
@@ -396,7 +397,7 @@ public class DBManager {
 	
 				stat = conn.prepareStatement(sql);
 				stat.setString(1, null);
-				stat.setString(2, u.getSessionID());
+				stat.setInt(2, u.getBefID());
 				stat.setInt(3, u.getStudentenID());
 				stat.setInt(4, u.getFolienID());
 				stat.setInt(5, u.getKoordX());
@@ -421,13 +422,13 @@ public class DBManager {
 			
 		} else {
 	
-			String sql = "UPDATE Uservoting SET SessionID = ?, StudentenID = ?, FolienID = ?, "
+			String sql = "UPDATE Uservoting SET BefID = ?, StudentenID = ?, FolienID = ?, "
 					+ "KoordX = ?, KoordY = ?, Auswahloption = ? WHERE VotingID = ?";
 	
 			try {
 	
 				stat = conn.prepareStatement(sql);
-				stat.setString(1, u.getSessionID());
+				stat.setInt(1, u.getBefID());
 				stat.setInt(2, u.getStudentenID());
 				stat.setInt(3, u.getFolienID());
 				stat.setInt(4, u.getKoordX());
@@ -1062,7 +1063,7 @@ public class DBManager {
 	}
 	
 	// # was wenn alle Uservotings einer folie und session gebraucht werden?
-	public ArrayList<Uservoting> getUservotings(int studentID, int folienID, int sessionID) {
+	public ArrayList<Uservoting> getUservotings(int studentID, int folienID, int befID) {
 
 		ArrayList<Uservoting> list = new ArrayList<Uservoting>();
 
@@ -1074,15 +1075,15 @@ public class DBManager {
 			
 			if(studentID > 0)
 				sql += " AND StudentenID = ?";
-			if(sessionID > 0)
-				sql += " AND SessionID = ?";
+			if(befID > 0)
+				sql += " AND BefID = ?";
 			
 			stat = conn.prepareStatement(sql);
 			stat.setInt(1, folienID);
 			if(studentID != 0)
 				stat.setInt(2, studentID);
-			if(sessionID > 0)
-				stat.setInt(3, sessionID);
+			if(befID > 0)
+				stat.setInt(3, befID);
 			
 			rs = stat.executeQuery();
 
@@ -1091,7 +1092,7 @@ public class DBManager {
 				Uservoting obj = new Uservoting();
 
 				obj.setID(rs.getInt("VotingID"));
-				obj.setSessionID(rs.getString("SessionID"));
+				obj.setBefID(rs.getInt("BefID"));
 				obj.setStudentenID(studentID);
 				obj.setStudent(getStudent(studentID));
 				obj.setFolienID(folienID);
