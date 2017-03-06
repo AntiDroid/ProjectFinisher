@@ -22,7 +22,8 @@ var heatmap = null;
 
 
 // Websocket
-var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
+//var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
+var socket = new WebSocket("ws://192.168.0.3:8080/ProjectFinisher/MessageHandler");
 
 socket.onopen = function() {
 	console.log("Websocket Open :)");
@@ -294,26 +295,9 @@ function absToRelY(abs) {
 	return rel;
 }
 
-
-//Onklick
-//Folienatz laden
-$('#folienSatzListe').on('click', 'option', function(e) {
-	$("#fSatzLoeschenModalBtn").show();
-	$("#notUseThisFoil").hide();
+function folienNavSelect(element){
 	quitNewBereich();
-	nowfolienSatzId = $(this).val();
-	
-	var folienSatzRequest = {
-			type : "folienSatzRequest",
-			userId : userId,
-			folienSatzId : nowfolienSatzId
-		};
-	var folienSatzRequestJson = JSON.stringify(folienSatzRequest);
-	socket.send(folienSatzRequestJson);
-});
-$('#folienNavThumbsSlick').on('click', 'img', function(e) {
-	quitNewBereich();
-	nowFolienId = $(this).attr("name");
+	nowFolienId = $(element).prop("name");
 	
 	if(nowFolienId == aktiveFolienId){
 		disableControls();
@@ -331,7 +315,25 @@ $('#folienNavThumbsSlick').on('click', 'img', function(e) {
 	socket.send(folienInfoRequestJson);
 	
 	$(".folieThumbnail").removeClass("xAusgFolie");
-	$(this).addClass("xAusgFolie");
+	$(element).addClass("xAusgFolie");
+}
+
+
+//Onklick
+//Folienatz laden
+$('#folienSatzListe').change(function(e) {
+	$("#fSatzLoeschenModalBtn").show();
+	$("#notUseThisFoil").hide();
+	quitNewBereich();
+	nowfolienSatzId = $(this).children(":selected").val();
+	
+	var folienSatzRequest = {
+			type : "folienSatzRequest",
+			userId : userId,
+			folienSatzId : nowfolienSatzId
+		};
+	var folienSatzRequestJson = JSON.stringify(folienSatzRequest);
+	socket.send(folienSatzRequestJson);
 });
 
 $('#useThisFoil').click(function(e) {
@@ -367,10 +369,10 @@ $('#delThisFoil').click(function(e) {
 	socket.send(folienDeleteRequestJson);
 });
 
-$('#intBereichList').on('click', 'option', function(e) {
+$('#intBereichList').change(function(e) {
 	$('#delIntBereich').prop("disabled", false);
 	
-	ausgIntBereich = $(this).val();
+	ausgIntBereich = $(this).children(":selected").val();
 });
 $('#delIntBereich').click(function(e) {
 	$('#delIntBereich').prop("disabled", true);
@@ -451,6 +453,26 @@ $('#delFolienSatzBtn').click(function(e) {
 	location.reload(); 
 });
 
+$('#folienNavThumbsSlick').on('click', 'img', function(e) {
+	folienNavSelect(this);
+});
+$('#backButton').click(function(e) {
+	var currentIndex = $(".xAusgFolie").parent().index();
+	if(currentIndex != 0){
+		var toIndex = currentIndex-1;
+		
+		folienNavSelect($("img").eq(toIndex));
+	}
+});
+$('#forwardButton').click(function(e) {
+	var currentIndex = $(".xAusgFolie").parent().index();
+	if(currentIndex < folienList.length-1){
+		var toIndex = currentIndex+1;
+		
+		folienNavSelect($("img").eq(toIndex));
+	}
+});
+	
 
 
 //OnReady

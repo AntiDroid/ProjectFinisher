@@ -9,7 +9,8 @@ var bereichList = []; // obenLinksX, obenLinksY, untenRechtsX, untenRechtsY
 
 
 // Websocket
-var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
+//var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
+var socket = new WebSocket("ws://192.168.0.3:8080/ProjectFinisher/MessageHandler");
 
 socket.onopen = function() {
 	console.log("Websocketverbindung hergestellt :)");

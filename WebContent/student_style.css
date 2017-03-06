@@ -1,0 +1,33 @@
+#allesContainer {
+	max-width: 72em;
+}
+
+.imgDiv {
+	text-align: center;
+}
+
+.imgDiv img {
+	max-height: 100vh;
+	object-fit: contain;
+	max-width: 100%;
+	margin: 4px 0;
+	border-style: solid;
+	border-color: #ccc;
+	border-width: thin;
+}
+
+.submitButton {
+	padding: 12px 7px;
+	float: right;
+}
+
+#kursName {
+	font-weight: bold;
+}
+
+#noFoil {
+	text-align: center;
+	font-size: 4vw;
+	color: #c4c4c4;
+	transform: translateY(200%);
+}

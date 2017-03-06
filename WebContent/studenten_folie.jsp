@@ -35,85 +35,42 @@
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
 	<link rel="stylesheet" href="style.css">
-	<script type="text/javascript">
-	</script>
-	<style type="text/css">
-		#allesContainer{
-			max-width: 72em;
-		}
-		
-		.imgDiv{
-		   text-align: center;
-		}
-		.imgDiv img {
-		   height: 100vh;
-		   object-fit: contain;
-		   max-width: 100%;
-		   
-		   margin: 4px 0;
-		   border-style: solid;
-		   border-color: #ccc;
-		   border-width: thin;
-
-		}
-
-		.submitButton{
-			padding: 12px 7px;
-			float: right;
-		}
-		
-		#kursName{
-			font-weight: bold;
-		}
-		
-		#noFoil{
-			text-align: center;
-    		font-size: 4vw;
-    		color: #c4c4c4;
-			transform: translateY(200%);
-		}
-		
-		#folienTyp{
-			font-weight: bold;
-			color: lime;
-		}
-		
-	</style>
+	<link rel="stylesheet" href="student_style.css">
 </head>
 <body>
 
-<div class="navbar navbar-inverse navbar-static-top">
-	<div class="container">
-		<a id="userName" href="index.jsp" class="navbar-brand"></a>
-		<form action="LogoutServlet" method="post">
-		<button class="navbar-right logoutButton btn btn-danger">Logout</button>
-		</form>
-	</div>
-</div>
-
-<div id="noFoil">Zurzeit ist keine Folie Aktiv...</div>
-<div id="allesContainer" class="container" hidden>
-
-	<div class="row">
-		<div id="lehrerName" class="text-left col-sm-4">Lehrer</div>
-		<div id="kursName" class="text-center col-sm-4">Kursname</div>
-		<div id="folienTyp" class="text-right col-sm-4">Folientyp</div>
-	</div>
-
-	<div class="imgDiv">
-			<img id="folienImg" src="ImgServlet?id=0"/>
-	</div>
-	<img id="pin" src="imgs/pin.png" style="display: none; position: absolute;" />
-
-	<div class="row">
-		<div class="col-xs-6">
-			<button id="clearBtn" class="btn text-left" disabled>Marker<br/>Löschen</button>
-		</div>
-		<div class="col-xs-6">
-			<button id="submitBtn" class="btn btn-success text-right submitButton" disabled>Bestätigen</button>
+	<div class="navbar navbar-inverse navbar-static-top">
+		<div class="container">
+			<a id="userName" href="index.jsp" class="navbar-brand"></a>
+			<form action="LogoutServlet" method="post">
+			<button class="navbar-right logoutButton btn btn-danger">Logout</button>
+			</form>
 		</div>
 	</div>
-</div>
+	
+	<div id="noFoil">Zurzeit ist keine Folie Aktiv...</div>
+	<div id="allesContainer" class="container" hidden>
+	
+		<div class="row">
+			<div id="lehrerName" class="text-left col-sm-4">Lehrer</div>
+			<div id="kursName" class="text-center col-sm-4">Kursname</div>
+			<div id="folienTyp" class="text-right col-sm-4">Folientyp</div>
+		</div>
+	
+		<div class="imgDiv">
+				<img id="folienImg" src="ImgServlet?id=0"/>
+		</div>
+		<img id="pin" src="imgs/pin.png" style="display: none; position: absolute;" />
+	
+		<div class="row">
+			<div class="col-xs-6">
+				<button id="clearBtn" class="btn text-left" disabled>Marker<br/>Löschen</button>
+			</div>
+			<div class="col-xs-6">
+				<button id="submitBtn" class="btn btn-success text-right submitButton" disabled>Bestätigen</button>
+			</div>
+		</div>
+	</div>
 
 
 <script src="jquery/jquery-3.1.1.js"></script>
