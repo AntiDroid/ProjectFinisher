@@ -3,6 +3,9 @@ package handler;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import java.util.concurrent.ConcurrentHashMap;
 
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -68,7 +71,9 @@ public class MessageHandler {
 				
 			Message.aktiveFolie.put(kursID, null);
 			
-			for(Session s: Message.kursSessions.get(kursID)){
+			for(int i = Message.kursSessions.get(kursID).size(); i > 0; i--){
+				
+				Session s = Message.kursSessions.get(kursID).get(i-1);
 				
 				try{
 					s.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -287,7 +292,9 @@ public class MessageHandler {
 			
 			Message.aktiveFolie.put(kursID, f);
 				
-			for(Session s: Message.kursSessions.get(kursID)){
+			for(int i = Message.kursSessions.get(kursID).size(); i > 0; i--){
+				
+				Session s = Message.kursSessions.get(kursID).get(i-1);
 				
 				try{
 					s.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -417,8 +424,8 @@ public class MessageHandler {
 
 abstract class Message {
 	
-	static public HashMap<Integer, ArrayList<Session>> kursSessions = new HashMap<Integer, ArrayList<Session>>();
-	static public HashMap<Integer, Folie> aktiveFolie = new HashMap<Integer, Folie>();
+	static public ConcurrentHashMap<Integer, ArrayList<Session>> kursSessions = new ConcurrentHashMap<Integer, ArrayList<Session>>();
+	static public ConcurrentHashMap<Integer, Folie> aktiveFolie = new ConcurrentHashMap<Integer, Folie>();
 	
 	String type;
 	
