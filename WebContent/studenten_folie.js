@@ -9,7 +9,7 @@ var bereichList = []; // obenLinksX, obenLinksY, untenRechtsX, untenRechtsY
 
 
 // Websocket
-var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
+var socket = new WebSocket("ws://192.168.0.104:8080/ProjectFinisher/MessageHandler");
 
 socket.onopen = function() {
 	console.log("Websocketverbindung hergestellt :)");
@@ -97,10 +97,9 @@ function folienUpdate(msg) {
 	//var proportion = $("#folienImg").width()/$("#folienImg").height();
 	//$("#folienImg").width(proportion*100+"%");
 	$("#lehrerName").html(msg.lehrerName);
-	$("#folienName").html(folie.fSatz.name);
 	
 	folienTyp = folie.folienTyp; 
-	
+	if(folienTyp != null)$("#folienTyp").html(""+folienTyp);
 	
 	folienReset();
 	activateAnsicht();

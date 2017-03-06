@@ -30,7 +30,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Folienname</title>
+	<title>Folie</title>
 
 	<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
 	<link rel="stylesheet" href="bootstrap/css/bootstrap-theme.min.css">
@@ -92,7 +92,7 @@
 	<div class="row">
 		<div id="lehrerName" class="text-left col-sm-4">Lehrer</div>
 		<div id="kursName" class="text-center col-sm-4">Kursname</div>
-		<div id="folienName" class="text-right col-sm-4">Folienname</div>
+		<div id="folienTyp" class="text-right col-sm-4">Folientyp</div>
 	</div>
 
 	<div class="imgDiv">
