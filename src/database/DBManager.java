@@ -1133,7 +1133,7 @@ public class DBManager {
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			System.out.println("Selectproblem - isKursBeteiligt");
+			System.out.println("Selectproblem - getCurrentBef");
 		} finally {
 		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
@@ -1226,6 +1226,36 @@ public class DBManager {
 		}
 	
 		return false;
+	}
+	
+	public boolean isBeantwortet(int befID, int folienID, int studentID){
+		
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Uservoting WHERE BefID = ? AND FolienID = ? AND StudentenID = ?";
+	
+		try {
+	
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, befID);
+			stat.setInt(2, folienID);
+			stat.setInt(3, studentID);
+	
+			rs = stat.executeQuery();
+	
+			if (rs.next())
+				return true;
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - isBeantwortet");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+	
+		return false;
+		
 	}
 	
 	public void addKursteilnahme(int kursID, int studentID){
