@@ -63,8 +63,21 @@ public class MessageHandler {
 			//int userID = jsonData.get("userId").getAsInt();
 			int kursID = jsonData.get("kursId").getAsInt();
 			//int folienID = jsonData.get("folienId").getAsInt();
-
+			
+			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(null, null);
+				
 			Message.aktiveFolie.put(kursID, null);
+			
+			for(Session s: Message.kursSessions.get(kursID)){
+				
+				try{
+					s.getBasicRemote().sendText(gson.toJson(responseObj));
+				}catch(IllegalStateException e){
+					Message.kursSessions.get(kursID).remove(s);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
 			
 			break;
 		}
