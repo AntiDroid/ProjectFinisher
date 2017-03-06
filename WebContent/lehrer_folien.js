@@ -22,7 +22,7 @@ var heatmap = null;
 
 
 // Websocket
-var socket = new WebSocket("ws://192.168.0.104:8080/ProjectFinisher/MessageHandler");
+var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
 
 socket.onopen = function() {
 	console.log("Websocket Open :)");
