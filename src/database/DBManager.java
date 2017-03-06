@@ -1114,6 +1114,33 @@ public class DBManager {
 
 		return list;
 	}
+	
+	public int getCurrentBef(int folienID){
+		
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT BefID FROM BefragungsEinheit WHERE FolienID = ? AND (Beginn > NOW() AND Ende IS NULL)";
+	
+		try {
+	
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, folienID);
+	
+			rs = stat.executeQuery();
+	
+			if (rs.next())
+				return rs.getInt("BefID");
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - isKursBeteiligt");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+	
+		return 0;
+	}
 
 	public boolean isKursBeteiligt(String kurs, String student) {
 	

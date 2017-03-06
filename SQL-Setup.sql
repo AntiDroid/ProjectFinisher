@@ -77,11 +77,11 @@ CREATE TABLE Uservoting (
         FOREIGN KEY (FolienID) REFERENCES Folie(FolienID) ON DELETE CASCADE
 );
 
-CREATE TABLE BefragungsSession (
+CREATE TABLE BefragungsEinheit (
         BefID           int PRIMARY KEY AUTO_INCREMENT,
         FolienID		int NOT NULL,
         Beginn			timestamp NOT NULL,
-        Ende			timestamp NOT NULL,
+        Ende			timestamp NULL,
         FOREIGN KEY (FolienID) REFERENCES Folie(FolienID) ON DELETE CASCADE
 );
 

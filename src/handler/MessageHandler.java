@@ -63,7 +63,6 @@ public class MessageHandler {
 			//int userID = jsonData.get("userId").getAsInt();
 			int kursID = jsonData.get("kursId").getAsInt();
 			//int folienID = jsonData.get("folienId").getAsInt();
-			//int sessionID = jsonData.get("sessionId").getAsInt();
 
 			Message.aktiveFolie.put(kursID, null);
 			
@@ -74,7 +73,6 @@ public class MessageHandler {
 			//int userID = jsonData.get("userId").getAsInt();
 			//int kursID = jsonData.get("kursId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
-			int sessionID = jsonData.get("sessionId").getAsInt();
 			int oLX = jsonData.get("oLX").getAsInt();
 			int oLY = jsonData.get("oLY").getAsInt();
 			int uRX = jsonData.get("uRX").getAsInt();
@@ -85,7 +83,7 @@ public class MessageHandler {
 			Auswahlbereich ab = new Auswahlbereich(folienID, f, oLX, oLY, uRX, uRY);
 			dbm.save(ab);
 			
-			sendFolienInfo(session, gson, dbm, folienID, sessionID);
+			sendFolienInfo(session, gson, dbm, folienID);
 			
 			break;
 		}
@@ -94,12 +92,11 @@ public class MessageHandler {
 			//int userID = jsonData.get("userId").getAsInt();
 			//int kursID = jsonData.get("kursId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
-			int sessionID = jsonData.get("sessionId").getAsInt();
 			int bereichID = jsonData.get("bereichId").getAsInt();
 			
 			dbm.delete(dbm.getAuswahlbereich(bereichID));
 			
-			sendFolienInfo(session, gson, dbm, folienID, sessionID);
+			sendFolienInfo(session, gson, dbm, folienID);
 			
 			break;
 		}
@@ -130,13 +127,12 @@ public class MessageHandler {
 			// int userID = jsonData.get("userId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
 			char folienTyp = jsonData.get("folienTyp").getAsCharacter();
-			int sessionID = jsonData.get("sessionId").getAsInt();
 			
 			Folie f = dbm.getFolie(folienID);
 			f.setFolienTyp(folienTyp);
 			dbm.save(f);
 			
-			sendFolienInfo(session, gson, dbm, folienID, sessionID);
+			sendFolienInfo(session, gson, dbm, folienID);
 			
 			break;
 		}
@@ -184,9 +180,8 @@ public class MessageHandler {
 			
 			// int userID = jsonData.get("userId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
-			int sessionID = jsonData.get("sessionId").getAsInt();
 			
-			sendFolienInfo(session, gson, dbm, folienID, sessionID);
+			sendFolienInfo(session, gson, dbm, folienID);
 			
 			break;
 		}
@@ -295,15 +290,14 @@ public class MessageHandler {
 		{
 			int userId = jsonData.get("userId").getAsInt();
 			//int kursId = jsonData.get("kursId").getAsInt();
-			int folienId = jsonData.get("folienId").getAsInt();
+			int folienID = jsonData.get("folienId").getAsInt();
 			int posX = jsonData.get("posX").getAsInt();
 			int posY = jsonData.get("posY").getAsInt();
 			String ao = jsonData.get("bereichNr").getAsString();
-			int befID = jsonData.get("sessionId").getAsInt();
-		
-			//TODO SessionID bzw. BefragungsID Sachen
 			
-			Uservoting uv = new Uservoting(befID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);
+			int befID = dbm.getCurrentBef(folienID);
+			
+			Uservoting uv = new Uservoting(befID, userId, dbm.getStudent(userId), folienID, dbm.getFolie(folienID), posX, posY, ao);
 			dbm.save(uv);
 			
 			break;   
@@ -311,17 +305,16 @@ public class MessageHandler {
 		
 		case "heatplotAntwort":
 		{
-			int userId = jsonData.get("userId").getAsInt();
+			int userID = jsonData.get("userId").getAsInt();
 			//int kursId = jsonData.get("kursId").getAsInt();
-			int folienId = jsonData.get("folienId").getAsInt();
+			int folienID = jsonData.get("folienId").getAsInt();
 			int posX = jsonData.get("posX").getAsInt();
 			int posY = jsonData.get("posY").getAsInt();		
 			String ao = jsonData.get("bereichNr").getAsString();
-			int befID = jsonData.get("sessionId").getAsInt();
 			
-			//TODO SessionID bzw. BefragungsID Sachen
+			int befID = dbm.getCurrentBef(folienID);
 			
-			Uservoting uv = new Uservoting(befID, userId, dbm.getStudent(userId), folienId, dbm.getFolie(folienId), posX, posY, ao);
+			Uservoting uv = new Uservoting(befID, userID, dbm.getStudent(userID), folienID, dbm.getFolie(folienID), posX, posY, ao);
 			dbm.save(uv);
 			
 			break;
@@ -376,11 +369,11 @@ public class MessageHandler {
 		return false;
 	}
 	
-	public void sendFolienInfo(Session session, Gson gson, DBManager dbm, int folienID, int sessionID){
+	public void sendFolienInfo(Session session, Gson gson, DBManager dbm, int folienID){
 		
 		Folie folie = dbm.getFolie(folienID);
 		ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
-		ArrayList<Uservoting> votings = dbm.getUservotings(0, folienID, sessionID);
+		ArrayList<Uservoting> votings = dbm.getUservotings(0, folienID, 0);
 		ArrayList<Integer> bAuswertung = new ArrayList<Integer>();
 		
 		for(Auswahlbereich aw: bereichList){
