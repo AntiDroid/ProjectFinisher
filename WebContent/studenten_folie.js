@@ -101,15 +101,15 @@ function folienUpdate(msg) {
 	folienTyp = folie.folienTyp; 
 	if(folienTyp == 'A'){
 		$("#folienTyp").html("Ansicht");
-		$("#folienTyp").css("color", "blue");
+		$("#folienTyp").css("color", "DarkBlue");
 	}
 	else if(folienTyp == 'C'){
-		$("#folienTyp").html("Choice");
-		$("#folienTyp").css("color", "orange");
+		$("#folienTyp").html("Auswahl");
+		$("#folienTyp").css("color", "DarkOrange");
 	}
 	else if(folienTyp == 'H'){
 		$("#folienTyp").html("Frei");
-		$("#folienTyp").css("color", "green");
+		$("#folienTyp").css("color", "DarkOrange");
 	}
 	
 	folienReset();
@@ -119,7 +119,7 @@ function folienUpdate(msg) {
 function folienReset(){
 	var clickX = 0;
 	var clickY = 0;
-	$('#pin').hide;
+	$('#pin').hide();
 	disableButtons();
 }
 
