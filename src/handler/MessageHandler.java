@@ -235,7 +235,9 @@ public class MessageHandler {
 			Kurs k = dbm.getKurs(kursID);
 			lehrerName = k.getLehrer().getVorname()+" "+k.getLehrer().getNachname();
 			
-			KursInfoMessageStudent responseObj = new KursInfoMessageStudent(kursName, lehrerName, f, bereichList);
+			boolean isBeantwortet = dbm.isBeantwortet(dbm.getCurrentBef(f.getID()), f.getID(), studentID);
+			
+			KursInfoMessageStudent responseObj = new KursInfoMessageStudent(kursName, lehrerName, f, bereichList, isBeantwortet);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -467,13 +469,15 @@ class KursInfoMessageStudent extends Message {
 	String lehrerName;
 	Folie folie;
 	ArrayList<Auswahlbereich> bereichList;
+	boolean beantwortet;
 	
-	public KursInfoMessageStudent(String kN, String lN, Folie f, ArrayList<Auswahlbereich> bl){
+	public KursInfoMessageStudent(String kN, String lN, Folie f, ArrayList<Auswahlbereich> bl, boolean beant){
 		super("kursInfo");
 		this.kursName = kN;
 		this.lehrerName = lN;
 		this.folie = f;
 		this.bereichList = bl;
+		this.beantwortet = beant;
 	}
 }
 
