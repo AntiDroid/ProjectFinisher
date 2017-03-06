@@ -17,21 +17,12 @@ else $("#allFoliensatzAnsicht").show();
 var canvas = document.getElementById("folieCanvas");
 var ctx = canvas.getContext("2d");
 
-window.onload = function(){
-	try {
-		var heatplotCanvas = document.getElementById("heatplotCanvas");
-		var heatmap = createWebGLHeatmap({canvas: heatplotCanvas});
-		
-		heatmap.addPoint(50, 50, 30, 0.9);
-		//heatmap.adjustSize();
-		heatmap.update();
-		heatmap.display();
-	} catch (e) {console.out(e);}
-}
+var heatplotCanvas = document.getElementById("heatplotCanvas");
+var heatmap = null;
 
 
 // Websocket
-var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
+var socket = new WebSocket("ws://192.168.0.104:8080/ProjectFinisher/MessageHandler");
 
 socket.onopen = function() {
 	console.log("Websocket Open :)");
@@ -82,6 +73,11 @@ socket.onmessage = function(evt) {
 		}
 	}
 	else if (msg.type == "folienInfo"){
+		$("#heatplotCanvas").hide();
+		heatmap.clear();
+		heatmap.update();
+		heatmap.display();
+		
 		if(msg.folie != null){
 			aktuelleFolie = msg.folie;
 			
@@ -117,6 +113,9 @@ socket.onmessage = function(evt) {
 			    	votings = msg.votings;
 					if(votings != null)
 					try {
+						$("#heatplotCanvas").show();
+						heatmap.adjustSize();
+						
 						for (var i = 0; i < votings.length; i++) {
 							var relX = votings[i].koordX;
 							var relY = votings[i].koordY;
@@ -124,9 +123,8 @@ socket.onmessage = function(evt) {
 							var absX = Math.round(relToAbsX(relX));
 							var absY = Math.round(relToAbsY(relY));
 							
-					        heatmap.addPoint(absX, absY, 30, 1);
+					        heatmap.addPoint(absX, absY, 65, 0.45);
 							}
-						
 						heatmap.update();
 						heatmap.display();
 					} catch (e) {
@@ -147,6 +145,7 @@ socket.onmessage = function(evt) {
 				$("#heatplotRadioBtn").removeClass("active");
 				$("#allIntDiv").fadeIn(350);
 				$("#intBerDiv").slideDown(200);
+				$("#histoBtn").show(300);
 				
 				bereichList = msg.bereichList;
 				var htmlString = "";
@@ -179,6 +178,7 @@ socket.onmessage = function(evt) {
 				$("#bereichRadioBtn").removeClass("active");
 				$("#allIntDiv").fadeIn(350);
 				$("#intBerDiv").slideUp(200);
+				$("#histoBtn").hide(300);
 				
 				votings = msg.votings;
 				var htmlString = "";
@@ -212,6 +212,7 @@ function updateFolienSatzList() {
 	$("#folienSatzListe").html(htmlString);
 }
 function updateFolien() {
+	$("#heatplotCanvas").hide();
 	ctx.clearRect(0, 0, canvas.width, canvas.height);
 	
 	$("#folienNavAnzahl").html(folienList.length+" Seiten");
@@ -470,7 +471,9 @@ $(document).ready(function(){
 	disableControls();
 	$("#notUseThisFoil").hide();
 	$("#fSatzLoeschenModalBtn").hide();
+	
 
+	heatmap = createWebGLHeatmap({canvas: heatplotCanvas, intensityToAlpha:true});
 });
 
 //OnChange
@@ -490,6 +493,8 @@ $("#interaktivSwitch").change(function() {
 		
 		$("#allIntDiv").fadeOut(450);
 	}
+	
+	
 });
 
 $("input[name=intModus]").change(function() {
@@ -497,11 +502,13 @@ $("input[name=intModus]").change(function() {
 		changeFolienType('C');
 		
         $("#intBerDiv").slideDown(200);
+        $("#histoBtn").show(300);
     }
     else if($(this).val() == "Heatplot") {
     	changeFolienType('H');
     	
         $("#intBerDiv").slideUp(200);
+        $("#histoBtn").hide(300);
     }
 });
 
