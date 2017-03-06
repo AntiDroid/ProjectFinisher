@@ -310,11 +310,11 @@ public class MessageHandler {
 			int folienID = jsonData.get("folienId").getAsInt();
 			int posX = jsonData.get("posX").getAsInt();
 			int posY = jsonData.get("posY").getAsInt();		
-			String ao = jsonData.get("bereichNr").getAsString();
+			//String ao = jsonData.get("bereichNr").getAsString();
 			
 			int befID = dbm.getCurrentBef(folienID);
 			
-			Uservoting uv = new Uservoting(befID, userID, dbm.getStudent(userID), folienID, dbm.getFolie(folienID), posX, posY, ao);
+			Uservoting uv = new Uservoting(befID, userID, dbm.getStudent(userID), folienID, dbm.getFolie(folienID), posX, posY, "0");
 			dbm.save(uv);
 			
 			break;

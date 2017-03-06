@@ -73,6 +73,11 @@
 			transform: translateY(200%);
 		}
 		
+		#folienTyp{
+			font-weight: bold;
+			color: lime;
+		}
+		
 	</style>
 </head>
 <body>
