@@ -1,6 +1,7 @@
 package handler;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -15,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import models.Auswahlbereich;
+import models.Befragung;
 import models.Folie;
 import models.Foliensatz;
 import models.Kurs;
@@ -38,7 +40,7 @@ public class MessageHandler {
 	@OnMessage
 	public void onMessage(Session session, String message) {
 		
-	   System.out.println(message);
+	    System.out.println(message);
 		DBManager dbm = new DBManager();
 		
 		Gson gson = new Gson();
@@ -62,12 +64,13 @@ public class MessageHandler {
 
 			//int userID = jsonData.get("userId").getAsInt();
 			int kursID = jsonData.get("kursId").getAsInt();
-			//int folienID = jsonData.get("folienId").getAsInt();
+			int folienID = jsonData.get("folienId").getAsInt();
 			
 			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(null, null);
 				
-			System.out.println(Message.aktiveFolie.get(kursID));
-			Message.aktiveFolie.remove(kursID, null);
+			Befragung curBef = dbm.getBefragung(dbm.getCurrentBef(folienID));
+			curBef.setEnde(new Timestamp(System.currentTimeMillis()));
+			dbm.save(curBef);
 			
 			for(int i = Message.kursSessions.get(kursID).size(); i > 0; i--){
 				
@@ -127,7 +130,7 @@ public class MessageHandler {
 			
 			ArrayList<Foliensatz> folienSatzList = dbm.getFoliensätze(kursID);
 			
-			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursSessions.size());
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursSessions.size(), dbm.getAktiveFolie(kursID).getID());
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -158,9 +161,8 @@ public class MessageHandler {
 			int kursID = jsonData.get("kursId").getAsInt();
 		
 			ArrayList<Foliensatz> folienSatzList = dbm.getFoliensätze(kursID);
-
 			
-			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursSessions.size());
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursSessions.size(), dbm.getAktiveFolie(kursID).getID());
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -233,7 +235,7 @@ public class MessageHandler {
 			
 			String kursName = "";
 			String lehrerName = "";
-			Folie f = Message.aktiveFolie.get(kursID);
+			Folie f = dbm.getAktiveFolie(kursID);
 			ArrayList<Auswahlbereich> bereichList = null;
 			boolean isBeantwortet = false;
 			
@@ -288,7 +290,8 @@ public class MessageHandler {
 			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
 			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(f, bereichList);
 			
-			Message.aktiveFolie.put(kursID, f);
+			Befragung bef = new Befragung(f, f.getID(), new Timestamp(System.currentTimeMillis()), null);
+			dbm.save(bef);
 				
 			for(int i = Message.kursSessions.get(kursID).size(); i > 0; i--){
 				
@@ -423,7 +426,6 @@ public class MessageHandler {
 abstract class Message {
 	
 	static public ConcurrentHashMap<Integer, ArrayList<Session>> kursSessions = new ConcurrentHashMap<Integer, ArrayList<Session>>();
-	static public ConcurrentHashMap<Integer, Folie> aktiveFolie = new ConcurrentHashMap<Integer, Folie>();
 	
 	String type;
 	
@@ -436,11 +438,13 @@ class KursInfoMessageLehrer extends Message {
 	
 	ArrayList<Foliensatz> folienSatzList;
 	int anzOnline;
+	int aktiveFolienId;
 	
-	public KursInfoMessageLehrer(ArrayList<Foliensatz> fsl, int aO){
+	public KursInfoMessageLehrer(ArrayList<Foliensatz> fsl, int aO, int aktFID){
 		super("lehrerKursInfo");
 		this.folienSatzList = fsl;
 		this.anzOnline = aO;
+		this.aktiveFolienId = aktFID;
 	}
 }
 

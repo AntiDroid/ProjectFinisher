@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import models.Auswahlbereich;
+import models.Befragung;
 import models.Folie;
 import models.Foliensatz;
 import models.Kurs;
@@ -102,6 +103,63 @@ public class DBManager {
 		}
 	}
 
+	public void save(Befragung b) {
+
+		PreparedStatement stat = null;
+		
+		if (b.getID() < 0) {
+
+			ResultSet rs = null;
+			Statement statGetID = null;
+			String sql = "INSERT INTO Befragung VALUES(?, ?, ?, ?)";
+			
+			try {
+
+				stat = conn.prepareStatement(sql);
+				stat.setString(1, null);
+				stat.setInt(2, b.getFolienID());
+				stat.setTimestamp(3, b.getBeginn());
+				stat.setTimestamp(4, b.getEnde());
+				stat.execute();
+
+				statGetID = conn.createStatement();
+				rs = statGetID.executeQuery("SELECT LAST_INSERT_ID()");
+
+				if (rs.next())
+					b.setID(rs.getInt(1));
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Insertproblem - Befragung");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+			
+		} else {
+
+			String sql = "UPDATE Befragung SET FolienID = ?, Beginn = ?, Ende = ? WHERE BereichID = ?";
+
+			try {
+
+				stat = conn.prepareStatement(sql);
+				stat.setInt(1, b.getFolienID());
+				stat.setTimestamp(2, b.getBeginn());
+				stat.setTimestamp(3, b.getEnde());
+				stat.setInt(4, b.getID());
+				stat.execute();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+				System.out.println("Updateproblem - Befragung");
+			} finally {
+			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			}
+			
+		}
+	}
+	
 	public void save(Folie f) {
 	
 		PreparedStatement stat = null;
@@ -460,6 +518,25 @@ public class DBManager {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			System.out.println("Deleteproblem - Auswahlbereich");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+	}
+	
+	public void delete(Befragung b) {
+
+		PreparedStatement stat = null;
+		String sql = "DELETE FROM Befragung WHERE BefID = ?";
+
+		try {
+
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, b.getID());
+			stat.execute();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Deleteproblem - Befragung");
 		} finally {
 		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
 		}
@@ -1115,16 +1192,83 @@ public class DBManager {
 		return list;
 	}
 	
-	public int getCurrentBef(int folienID){
+	public Befragung getBefragung(int befID) {
+
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Befragung WHERE BefID = ?";
+		Befragung obj = new Befragung();
+
+		try {
+
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, befID);
+			rs = stat.executeQuery();
+
+			if (rs.next()) {
+				obj.setID(befID);
+				obj.setFolie(getFolie(rs.getInt("FolienID")));
+				obj.setFolienID(rs.getInt("FolienID"));
+				obj.setBeginn(rs.getTimestamp("Beginn"));
+				obj.setEnde(rs.getTimestamp("Ende"));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - Befragung");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+
+		return obj;
+	}
+	
+	public Folie getAktiveFolie(int kursID){
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
-		String sql = "SELECT BefID FROM BefragungsEinheit WHERE FolienID = ? AND (Beginn > NOW() AND Ende IS NULL)";
+		String sql = "SELECT FolienID FROM Folie "
+				+ "JOIN Foliensatz USING(FoliensatzID) "
+				+ "JOIN Kurs k USING(KursID) "
+				+ "JOIN Befragung b USING(FolienID) "
+				+ "WHERE b.Ende IS NULL AND k.KursID = ?";
+
+		try {
+
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, kursID);
+			rs = stat.executeQuery();
+
+			if (rs.next()) 
+				return getFolie(rs.getInt("FolienID"));
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - Befragung");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+
+		return null;
+		
+	}
+	
+	public int getCurrentBef(int kursID){
+		
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT BefID FROM Befragung "
+				+ "JOIN Folie USING(FolienID) "
+				+ "JOIN Foliensatz USING(FoliensatzID) "
+				+ "JOIN Kurs USING (KursID) "
+				+ "WHERE FolienID = ? AND (Beginn > NOW() AND Ende IS NULL)";
 	
 		try {
 	
 			stat = conn.prepareStatement(sql);
-			stat.setInt(1, folienID);
+			stat.setInt(1, kursID);
 	
 			rs = stat.executeQuery();
 	
@@ -1146,7 +1290,8 @@ public class DBManager {
 	
 		PreparedStatement stat = null;
 		ResultSet rs = null;
-		String sql = "SELECT KursID, Name FROM Kursteilnahme JOIN Kurs k USING(KursID) "
+		String sql = "SELECT KursID, Name FROM Kursteilnahme "
+				+ "JOIN Kurs k USING(KursID) "
 				+ "JOIN Student s USING(StudentenID) "
 				+ "WHERE k.Name = ? AND s.Benutzername = ?";
 	
