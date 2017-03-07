@@ -48,7 +48,7 @@
 		</div>
 	</div>
 	
-	<div id="noFoil">Zurzeit ist keine Folie Aktiv...</div>
+	<div id="noFoil">Zurzeit ist keine Folie aktiv...</div>
 	<div id="allesContainer" class="container" hidden>
 	
 		<div class="row">

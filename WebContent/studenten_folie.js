@@ -109,7 +109,7 @@ function folienUpdate(msg) {
 		$("#folienTyp").css("color", "DarkOrange");
 	}
 	else if(folienTyp == 'H'){
-		$("#folienTyp").html("Frei");
+		$("#folienTyp").html("freie Auswahl");
 		$("#folienTyp").css("color", "DarkOrange");
 	}
 	
@@ -242,7 +242,7 @@ $('#submitBtn').click(function(e) {
 //Klick auf Loeschen
 $('#clearBtn').click(function(e) {
 	disableButtons();
-	$('#pin').hide;
+	$('#pin').hide();
 	clickX = 0;
 	clickY = 0;
 });

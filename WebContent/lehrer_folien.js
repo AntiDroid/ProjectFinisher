@@ -58,6 +58,7 @@ socket.onmessage = function(evt) {
 	if (msg.type == "lehrerKursInfo") {
 		if(msg.folienSatzList != null){
 			folienSatzList = msg.folienSatzList;
+			aktiveFolienId = msg.aktiveFolienId;
 			updateFolienSatzList();
 		}
 		if(msg.anzOnline != null){
@@ -162,6 +163,9 @@ socket.onmessage = function(evt) {
 				}
 				$("#intBereichList").html(htmlString);
 				
+				befList = msg.befList;
+				befListUpdate(befList);
+				
 				bAuswerteList = msg.bAuswerteList;
 				var htmlString = "";
 				if(bAuswerteList != null){
@@ -195,16 +199,23 @@ socket.onmessage = function(evt) {
 			}
 		}
 	}
-	else if (msg.type == "welcheFolieAktiv"){
-		//TODO zur bestätigung, dass die folie aktiviert worden ist
-		aktiveFolie = msg.folienId;
-	}
 	
 
 };
 
 
 //Functions
+
+function befListUpdate(befList){
+	var htmlString = "";
+	if(befList != null){
+		for (var i = 0; i < befList.length; i++) {
+			htmlString += "<option value='"+befList[i].befID+"'>"+befList[i].date+"</option>";
+		}
+	}
+	$("#befList").html(htmlString);
+}
+
 function updateFolienSatzList() {
 	var htmlString = "";
 	for (var i = 0; i < folienSatzList.length; i++) {
@@ -253,7 +264,7 @@ function enableControls() {
 	$("#delThisFoil").prop("disabled", false);
 	$("#interaktivControlsDiv").fadeIn(60);
 	
-	$("#notUseThisFoil").hide();
+	$("#notUseThisFoil").slideUp(220);
 }
 
 function disableControls() {
@@ -301,7 +312,7 @@ function folienNavSelect(element){
 	
 	if(nowFolienId == aktiveFolienId){
 		disableControls();
-		$("#notUseThisFoil").show();
+		$("#notUseThisFoil").slideDown(280);
 	}
 	else enableControls();
 	
@@ -319,11 +330,15 @@ function folienNavSelect(element){
 }
 
 
+
+
+
+
 //Onklick
 //Folienatz laden
 $('#folienSatzListe').change(function(e) {
 	$("#fSatzLoeschenModalBtn").show();
-	$("#notUseThisFoil").hide();
+	$("#notUseThisFoil").slideUp(280);
 	quitNewBereich();
 	nowfolienSatzId = $(this).children(":selected").val();
 	
@@ -339,7 +354,7 @@ $('#folienSatzListe').change(function(e) {
 $('#useThisFoil').click(function(e) {
 	quitNewBereich();
 	disableControls();
-	$("#notUseThisFoil").show();
+	$("#notUseThisFoil").slideDown(220);
 	aktiveFolienId = nowFolienId;
 	$(".folieThumbnail").removeClass("xAktiveFolie");
 	$(".folieThumbnail").removeClass("xAusgFolie");
@@ -367,6 +382,13 @@ $('#delThisFoil').click(function(e) {
 		};
 	var folienDeleteRequestJson = JSON.stringify(folienDeleteRequest);
 	socket.send(folienDeleteRequestJson);
+	var folienSatzRequest = {
+			type : "folienSatzRequest",
+			userId : userId,
+			folienSatzId : nowfolienSatzId
+		};
+	var folienSatzRequestJson = JSON.stringify(folienSatzRequest);
+	socket.send(folienSatzRequestJson);
 });
 
 $('#intBereichList').change(function(e) {
@@ -458,7 +480,7 @@ $('#folienNavThumbsSlick').on('click', 'img', function(e) {
 });
 $('#backButton').click(function(e) {
 	var currentIndex = $(".xAusgFolie").parent().index();
-	if(currentIndex != 0){
+	if(currentIndex > 0){
 		var toIndex = currentIndex-1;
 		
 		folienNavSelect($("img").eq(toIndex));
@@ -473,6 +495,55 @@ $('#forwardButton').click(function(e) {
 	}
 });
 	
+
+//OnChange
+$("#interaktivSwitch").change(function() {
+	if(this.checked) {
+		if($('input[name=intModus]:checked').val() == "Bereiche") {
+			changeFolienType('C');
+	    }
+	    else if($('input[name=intModus]:checked').val() == "Heatplot") {
+	    	changeFolienType('H');
+	    }
+		
+        $("#allIntDiv").fadeIn(350);
+	}
+	else{
+		changeFolienType('A');
+		
+		$("#allIntDiv").fadeOut(450);
+	}
+});
+
+$("input[name=intModus]").change(function() {
+    if($(this).val() == "Bereiche") {
+		changeFolienType('C');
+		
+        $("#intBerDiv").slideDown(200);
+        $("#histoBtn").show(300);
+    }
+    else if($(this).val() == "Heatplot") {
+    	changeFolienType('H');
+    	
+        $("#intBerDiv").slideUp(200);
+        $("#histoBtn").hide(300);
+    }
+});
+
+$('#befList').change(function(e) {
+	befListId = $(this).children(":selected").val();
+	
+	var befListRequest = {
+			type : "befListRequest",
+			userId : userId,
+			folienId : nowFolienId,
+			befListId : befListId
+		};
+	var befListRequestJson = JSON.stringify(befListRequest);
+	socket.send(befListRequestJson);
+});
+
+
 
 
 //OnReady
@@ -496,42 +567,6 @@ $(document).ready(function(){
 	
 
 	heatmap = createWebGLHeatmap({canvas: heatplotCanvas, intensityToAlpha:true});
-});
-
-//OnChange
-$("#interaktivSwitch").change(function() {
-	if(this.checked) {
-		if($('input[name=intModus]:checked').val() == "Bereiche") {
-			changeFolienType('C');
-	    }
-	    else if($('input[name=intModus]:checked').val() == "Heatplot") {
-	    	changeFolienType('H');
-	    }
-		
-        $("#allIntDiv").fadeIn(350);
-	}
-	else{
-		changeFolienType('A');
-		
-		$("#allIntDiv").fadeOut(450);
-	}
-	
-	
-});
-
-$("input[name=intModus]").change(function() {
-    if($(this).val() == "Bereiche") {
-		changeFolienType('C');
-		
-        $("#intBerDiv").slideDown(200);
-        $("#histoBtn").show(300);
-    }
-    else if($(this).val() == "Heatplot") {
-    	changeFolienType('H');
-    	
-        $("#intBerDiv").slideUp(200);
-        $("#histoBtn").hide(300);
-    }
 });
 
 $('img').on('dragstart', function(event) { event.preventDefault(); });

@@ -150,6 +150,16 @@
 	
 							<div class="auswDiv">
 								<div class="row">
+									<div class="col-md-4 vertical-middle">
+										<label for="befList">Befragungen:</label>
+									</div>
+									<div class="col-md-8">
+										<select id="befList" class="form-control">
+											<option></option>
+										</select>
+									</div>
+								</div>
+								<div class="row">
 									<div class="col-md-6">
 										<div class="text-center">Auswertungen:</div>
 										<select id="auswerteList" class="fWidth" size="5">
