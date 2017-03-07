@@ -51,6 +51,17 @@ public class MessageHandler {
 		
 		switch(type){
 		
+		case "befListRequest":{
+			 
+			 //int userID = jsonData.get("userId").getAsInt(); 
+			 int befListID = jsonData.get("befListId").getAsInt();
+			 int folienID = jsonData.get("folienId").getAsInt();
+			 
+			 sendFolienInfo(session, gson, dbm, folienID, befListID);
+			 
+			 break;
+		}
+		
 		case "deleteFoliensatz":{
 			 
 			 //int userID = jsonData.get("userId").getAsInt(); 
@@ -404,12 +415,16 @@ public class MessageHandler {
 		return false;
 	}
 	
-	public void sendFolienInfo(Session session, Gson gson, DBManager dbm, int folienID){
+	public void sendFolienInfo(Session session, Gson gson, DBManager dbm, int folienID, int befListID){
 		
 		Folie folie = dbm.getFolie(folienID);
 		ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
 		ArrayList<Uservoting> votings = dbm.getUservotings(0, folienID, 0);
 		ArrayList<Integer> bAuswertung = new ArrayList<Integer>();
+		ArrayList<Befragung> befList = new ArrayList<Befragung>();
+		//TODO BefList von allen de es für de Folie gibt mit folgenden Objekteigenschaften
+		//id - BefID
+		//date - Timestamp in Format HH:MM TT:MM:JJJJ
 		
 		for(Auswahlbereich aw: bereichList){
 		
@@ -466,13 +481,15 @@ class FolienInfoMessage extends Message {
 	ArrayList<Auswahlbereich> bereichList;
 	ArrayList<Integer> bAuswerteList;
 	ArrayList<Uservoting> votings;
+	ArrayList<Befragung> befList;
 	
-	public FolienInfoMessage(Folie f, ArrayList<Auswahlbereich> bereiche, ArrayList<Integer> bAL, ArrayList<Uservoting> hAL){
+	public FolienInfoMessage(Folie f, ArrayList<Auswahlbereich> bereiche, ArrayList<Integer> bAL, ArrayList<Uservoting> hAL, ArrayList<Befragung> befL){
 		super("folienInfo");
 		this.folie = f;
 		this.bereichList = bereiche;
 		this.bAuswerteList = bAL;
 		this.votings = hAL;
+		this.befList = befL;
 	}
 }
 
