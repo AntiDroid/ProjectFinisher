@@ -1224,6 +1224,44 @@ public class DBManager {
 		return obj;
 	}
 	
+	public ArrayList<Befragung> getBefragungen(int folienID) {
+
+		ArrayList<Befragung> list = new ArrayList<Befragung>();
+
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Befragung WHERE FolienID = ?";
+
+		try {
+
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, folienID);
+			rs = stat.executeQuery();
+
+			while (rs.next()) {
+
+				Befragung obj = new Befragung();
+
+				obj.setID(rs.getInt("BefID"));
+				obj.setFolie(getFolie(rs.getInt("FolienID")));
+				obj.setFolienID(rs.getInt("FolienID"));
+				obj.setBeginn(rs.getTimestamp("Beginn"));
+				obj.setEnde(rs.getTimestamp("Ende"));
+
+				list.add(obj);
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+			System.out.println("Selectproblem - Befragungen");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		}
+
+		return list;
+	}
+	
 	public Folie getAktiveFolie(int kursID){
 		
 		PreparedStatement stat = null;
