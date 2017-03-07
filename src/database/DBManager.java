@@ -139,7 +139,7 @@ public class DBManager {
 			
 		} else {
 
-			String sql = "UPDATE Befragung SET FolienID = ?, Beginn = ?, Ende = ? WHERE BereichID = ?";
+			String sql = "UPDATE Befragung SET FolienID = ?, Beginn = ?, Ende = ? WHERE BefID = ?";
 
 			try {
 
