@@ -2,9 +2,6 @@ package handler;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.websocket.OnClose;
@@ -69,7 +66,8 @@ public class MessageHandler {
 			
 			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(null, null);
 				
-			Message.aktiveFolie.put(kursID, null);
+			System.out.println(Message.aktiveFolie.get(kursID));
+			Message.aktiveFolie.replace(kursID, null);
 			
 			for(int i = Message.kursSessions.get(kursID).size(); i > 0; i--){
 				
@@ -237,9 +235,11 @@ public class MessageHandler {
 			String lehrerName = "";
 			Folie f = Message.aktiveFolie.get(kursID);
 			ArrayList<Auswahlbereich> bereichList = null;
+			boolean isBeantwortet = false;
 			
 			if(f != null){
 				bereichList = dbm.getAuswahlbereiche(f.getID());
+				isBeantwortet = dbm.isBeantwortet(dbm.getCurrentBef(f.getID()), f.getID(), studentID);
 			}
 				
 			ArrayList<Kurs> kList = dbm.getKurseStudent(studentID);
@@ -252,8 +252,6 @@ public class MessageHandler {
 			
 			Kurs k = dbm.getKurs(kursID);
 			lehrerName = k.getLehrer().getVorname()+" "+k.getLehrer().getNachname();
-			
-			boolean isBeantwortet = dbm.isBeantwortet(dbm.getCurrentBef(f.getID()), f.getID(), studentID);
 			
 			KursInfoMessageStudent responseObj = new KursInfoMessageStudent(kursName, lehrerName, f, bereichList, isBeantwortet);
 			
