@@ -1,7 +1,9 @@
 package handler;
 
 import java.io.IOException;
+import java.sql.Date;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -50,6 +52,17 @@ public class MessageHandler {
 		String type = jsonData.get("type").getAsString();
 		
 		switch(type){
+		
+		case "befListRequest":{
+			 
+			 //int userID = jsonData.get("userId").getAsInt(); 
+			 //int befListID = jsonData.get("befListId").getAsInt();
+			 int folienID = jsonData.get("folienId").getAsInt();
+			 
+			 sendFolienInfo(session, gson, dbm, folienID);
+			 
+			 break;
+		}
 		
 		case "deleteFoliensatz":{
 			 
@@ -410,6 +423,12 @@ public class MessageHandler {
 		ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
 		ArrayList<Uservoting> votings = dbm.getUservotings(0, folienID, 0);
 		ArrayList<Integer> bAuswertung = new ArrayList<Integer>();
+		ArrayList<BefMessageObject> befList = new ArrayList<BefMessageObject>();
+
+		ArrayList<Befragung> temp = dbm.getBefragungen(folienID);
+		
+		for(Befragung obj: temp)
+			befList.add(new BefMessageObject(obj.getID(), obj.getBeginn()));
 		
 		for(Auswahlbereich aw: bereichList){
 		
@@ -424,7 +443,7 @@ public class MessageHandler {
 			bAuswertung.add(counter);
 		}
 		
-		FolienInfoMessage responseObj = new FolienInfoMessage(folie, bereichList, bAuswertung, votings);
+		FolienInfoMessage responseObj = new FolienInfoMessage(folie, bereichList, bAuswertung, votings, befList);
 		
 		try {
 			session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -432,6 +451,19 @@ public class MessageHandler {
 			e.printStackTrace();
 		}
 		
+	}
+}
+
+class BefMessageObject {
+	
+	int id;
+	String date;
+	
+	public BefMessageObject(int id, Timestamp tsDate){
+		this.id = id;
+		
+		Date d = new Date(tsDate.getTime());
+		this.date = new SimpleDateFormat("yyyyMMdd").format(d);
 	}
 }
 
@@ -466,13 +498,15 @@ class FolienInfoMessage extends Message {
 	ArrayList<Auswahlbereich> bereichList;
 	ArrayList<Integer> bAuswerteList;
 	ArrayList<Uservoting> votings;
+	ArrayList<BefMessageObject> befList;
 	
-	public FolienInfoMessage(Folie f, ArrayList<Auswahlbereich> bereiche, ArrayList<Integer> bAL, ArrayList<Uservoting> hAL){
+	public FolienInfoMessage(Folie f, ArrayList<Auswahlbereich> bereiche, ArrayList<Integer> bAL, ArrayList<Uservoting> hAL, ArrayList<BefMessageObject> befL){
 		super("folienInfo");
 		this.folie = f;
 		this.bereichList = bereiche;
 		this.bAuswerteList = bAL;
 		this.votings = hAL;
+		this.befList = befL;
 	}
 }
 
