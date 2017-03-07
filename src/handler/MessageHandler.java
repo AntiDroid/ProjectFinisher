@@ -130,7 +130,13 @@ public class MessageHandler {
 			
 			ArrayList<Foliensatz> folienSatzList = dbm.getFoliensätze(kursID);
 			
-			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursSessions.size(), dbm.getAktiveFolie(kursID).getID());
+			Folie f = dbm.getAktiveFolie(kursID);
+			int aktiveFolie = 0;
+			
+			if(f != null)
+				aktiveFolie = f.getID();
+			
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursSessions.size(), aktiveFolie);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -162,7 +168,13 @@ public class MessageHandler {
 		
 			ArrayList<Foliensatz> folienSatzList = dbm.getFoliensätze(kursID);
 			
-			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursSessions.size(), dbm.getAktiveFolie(kursID).getID());
+			Folie f = dbm.getAktiveFolie(kursID);
+			int aktiveFolie = 0;
+			
+			if(f != null)
+				aktiveFolie = f.getID();
+			
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursSessions.size(), aktiveFolie);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
