@@ -67,7 +67,7 @@ public class MessageHandler {
 			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(null, null);
 				
 			System.out.println(Message.aktiveFolie.get(kursID));
-			Message.aktiveFolie.replace(kursID, null);
+			Message.aktiveFolie.remove(kursID, null);
 			
 			for(int i = Message.kursSessions.get(kursID).size(); i > 0; i--){
 				
