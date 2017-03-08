@@ -142,7 +142,6 @@ public class DBManager {
 			String sql = "UPDATE Befragung SET FolienID = ?, Beginn = ?, Ende = ? WHERE BefID = ?";
 
 			try {
-
 				stat = conn.prepareStatement(sql);
 				stat.setInt(1, b.getFolienID());
 				stat.setTimestamp(2, b.getBeginn());
@@ -1301,13 +1300,12 @@ public class DBManager {
 				+ "JOIN Folie USING(FolienID) "
 				+ "JOIN Foliensatz USING(FoliensatzID) "
 				+ "JOIN Kurs USING (KursID) "
-				+ "WHERE FolienID = ? AND (Beginn > NOW() AND Ende IS NULL)";
+				+ "WHERE FolienID = ? AND Ende IS NULL";
 	
 		try {
 	
 			stat = conn.prepareStatement(sql);
 			stat.setInt(1, kursID);
-	
 			rs = stat.executeQuery();
 	
 			if (rs.next())

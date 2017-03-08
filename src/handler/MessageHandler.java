@@ -424,7 +424,7 @@ public class MessageHandler {
 		ArrayList<Uservoting> votings = dbm.getUservotings(0, folienID, 0);
 		ArrayList<Integer> bAuswertung = new ArrayList<Integer>();
 		ArrayList<BefMessageObject> befList = new ArrayList<BefMessageObject>();
-
+		
 		ArrayList<Befragung> temp = dbm.getBefragungen(folienID);
 		
 		for(Befragung obj: temp)
