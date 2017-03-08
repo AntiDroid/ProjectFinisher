@@ -31,7 +31,6 @@ public class MessageHandler {
 	// Folientyp
 	// Heatplot 		- H
 	// Choice  			- C
-	// Multiple Choice 	- M
 	// reine Anzeige 	- A
 	
 	@OnOpen
@@ -430,8 +429,10 @@ public class MessageHandler {
 		
 		ArrayList<Befragung> temp = dbm.getBefragungen(folienID);
 		
-		for(Befragung obj: temp)
-			befList.add(new BefMessageObject(obj.getID(), obj.getBeginn()));
+		for(Befragung obj: temp){
+			if(dbm.getUservotings(0, folienID, obj.getID()).size() != 0)
+				befList.add(new BefMessageObject(obj.getID(), obj.getBeginn()));
+		}
 		
 		for(Auswahlbereich aw: bereichList){
 		
