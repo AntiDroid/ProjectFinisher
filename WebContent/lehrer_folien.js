@@ -208,13 +208,16 @@ socket.onmessage = function(evt) {
 //Functions
 
 function befListUpdate(befList){
-	var htmlString = "<option value='0'></option>"
+	
+	var htmlString = "";
 	if(befList != null){
+		if(befList.length > 0) htmlString += "<option value='0'>--All--</option>";
 		for (var i = 0; i < befList.length; i++) {
 			htmlString += "<option value='"+befList[i].id+"'>"+(i+1)+" "+befList[i].date+"</option>";
 		}
 	}
 	$("#befList").html(htmlString);
+	$("#befList").val(befId);
 }
 
 function updateFolienSatzList() {
@@ -460,6 +463,16 @@ $('#notUseThisFoil').click(function(e) {
 		};
 	var folieInaktivierenJson = JSON.stringify(folieInaktivieren);
 	socket.send(folieInaktivierenJson);
+	
+	var folienInfoRequest = {
+			type : "folienInfoRequest",
+			userId : userId,
+			sessionId : 0,//sessionId,
+			folienId : nowFolienId
+		};
+	var folienInfoRequestJson = JSON.stringify(folienInfoRequest);
+	socket.send(folienInfoRequestJson);
+	
 });
 
 $('#delFolienSatzBtn').click(function(e) {
