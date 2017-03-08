@@ -420,8 +420,9 @@ public class MessageHandler {
 	public void sendFolienInfo(Session session, Gson gson, DBManager dbm, int folienID){
 		
 		Folie folie = dbm.getFolie(folienID);
+		int kursID = folie.getfSatz().getKursID();
 		ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
-		ArrayList<Uservoting> votings = dbm.getUservotings(0, folienID, 0);
+		ArrayList<Uservoting> votings = dbm.getUservotings(0, folienID, dbm.getCurrentBef(kursID));
 		ArrayList<Integer> bAuswertung = new ArrayList<Integer>();
 		ArrayList<BefMessageObject> befList = new ArrayList<BefMessageObject>();
 		
