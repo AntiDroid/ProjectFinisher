@@ -345,8 +345,10 @@ public class MessageHandler {
 			
 			int befID = dbm.getCurrentBef(folienID);
 			
-			Uservoting uv = new Uservoting(befID, userId, dbm.getStudent(userId), folienID, dbm.getFolie(folienID), posX, posY, ao);
-			dbm.save(uv);
+			if(befID != 0){
+				Uservoting uv = new Uservoting(befID, userId, dbm.getStudent(userId), folienID, dbm.getFolie(folienID), posX, posY, ao);
+				dbm.save(uv);
+			}
 			
 			break;   
 		}
@@ -362,9 +364,10 @@ public class MessageHandler {
 			
 			int befID = dbm.getCurrentBef(folienID);
 			
-			Uservoting uv = new Uservoting(befID, userID, dbm.getStudent(userID), folienID, dbm.getFolie(folienID), posX, posY, "0");
-			dbm.save(uv);
-			
+			if(befID != 0){
+				Uservoting uv = new Uservoting(befID, userID, dbm.getStudent(userID), folienID, dbm.getFolie(folienID), posX, posY, "0");
+				dbm.save(uv);
+			}
 			break;
 		}
 		
