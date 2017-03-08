@@ -467,7 +467,7 @@ class BefMessageObject {
 		this.id = id;
 		
 		Date d = new Date(tsDate.getTime());
-		this.date = new SimpleDateFormat("HH:MM yyyy-MM-dd").format(d);
+		this.date = new SimpleDateFormat("HH:mm yyyy-MM-dd").format(d);
 	}
 }
 
