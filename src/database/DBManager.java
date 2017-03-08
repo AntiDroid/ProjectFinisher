@@ -1156,7 +1156,8 @@ public class DBManager {
 			
 			stat = conn.prepareStatement(sql);
 			stat.setInt(1, folienID);
-			if(studentID != 0)
+			
+			if(studentID > 0)
 				stat.setInt(2, studentID);
 			if(befID > 0)
 				stat.setInt(3, befID);
