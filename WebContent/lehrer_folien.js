@@ -75,6 +75,9 @@ socket.onmessage = function(evt) {
 			updateFolien();
 		}
 	}
+	else if (msg.type == "onlineUpdate"){
+		updateStudentsOnline(msg.anzOnline);
+	}
 	else if (msg.type == "folienInfo"){
 		$("#heatplotCanvas").hide();
 		heatmap.clear();
