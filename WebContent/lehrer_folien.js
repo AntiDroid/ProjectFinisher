@@ -10,6 +10,7 @@ var nowFolienId = 0;
 var aktiveFolienId = 0;
 var studentsOnline = 0;
 var ausgIntBereich = 0;
+var befId = 0;
 
 if(nowFolienId == 0) $("#allFoliensatzAnsicht").hide();
 else $("#allFoliensatzAnsicht").show();
@@ -207,13 +208,16 @@ socket.onmessage = function(evt) {
 //Functions
 
 function befListUpdate(befList){
+	
 	var htmlString = "";
 	if(befList != null){
+		if(befList.length > 0) htmlString += "<option value='0'>--All--</option>";
 		for (var i = 0; i < befList.length; i++) {
-			htmlString += "<option value='"+befList[i].befID+"'>"+befList[i].date+"</option>";
+			htmlString += "<option value='"+befList[i].id+"'>"+(i+1)+" "+befList[i].date+"</option>";
 		}
 	}
 	$("#befList").html(htmlString);
+	$("#befList").val(befId);
 }
 
 function updateFolienSatzList() {
@@ -459,6 +463,16 @@ $('#notUseThisFoil').click(function(e) {
 		};
 	var folieInaktivierenJson = JSON.stringify(folieInaktivieren);
 	socket.send(folieInaktivierenJson);
+	
+	var folienInfoRequest = {
+			type : "folienInfoRequest",
+			userId : userId,
+			sessionId : 0,//sessionId,
+			folienId : nowFolienId
+		};
+	var folienInfoRequestJson = JSON.stringify(folienInfoRequest);
+	socket.send(folienInfoRequestJson);
+	
 });
 
 $('#delFolienSatzBtn').click(function(e) {
@@ -531,16 +545,16 @@ $("input[name=intModus]").change(function() {
 });
 
 $('#befList').change(function(e) {
-	befListId = $(this).children(":selected").val();
+	befId = $(this).children(":selected").val();
 	
-	var befListRequest = {
-			type : "befListRequest",
+	var befRequest = {
+			type : "befRequest",
 			userId : userId,
 			folienId : nowFolienId,
-			befListId : befListId
+			befId : befId
 		};
-	var befListRequestJson = JSON.stringify(befListRequest);
-	socket.send(befListRequestJson);
+	var befRequestJson = JSON.stringify(befRequest);
+	socket.send(befRequestJson);
 });
 
 

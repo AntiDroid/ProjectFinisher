@@ -150,8 +150,8 @@
 	
 							<div class="auswDiv">
 								<div class="row" id="befragungRow">
-									<div class="col-md-4 vertical-middle">
-										<apan>Befragungen:</span>
+									<div class="col-md-4">
+										<apan class="vertical-middle" >Befragungen:</span>
 									</div>
 									<div class="col-md-8">
 										<select id="befList" class="form-control">
