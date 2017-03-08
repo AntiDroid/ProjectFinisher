@@ -12,8 +12,8 @@ var studentsOnline = 0;
 var ausgIntBereich = 0;
 var befId = 0;
 
-if(nowFolienId == 0) $("#allFoliensatzAnsicht").hide();
-else $("#allFoliensatzAnsicht").show();
+$("#fSatzLoeschenModalBtn").hide();
+$("#notUseThisFoil").hide();
 
 var canvas = document.getElementById("folieCanvas");
 var ctx = canvas.getContext("2d");
@@ -209,11 +209,11 @@ socket.onmessage = function(evt) {
 
 function befListUpdate(befList){
 	
-	var htmlString = "";
+	var htmlString = "<option value='0'>--None--</option>";
 	if(befList != null){
-		if(befList.length > 0) htmlString += "<option value='0'>--All--</option>";
+		if(befList.length > 0) htmlString = "<option value='0'>--All--</option>";
 		for (var i = 0; i < befList.length; i++) {
-			htmlString += "<option value='"+befList[i].id+"'>"+(i+1)+" "+befList[i].date+"</option>";
+			htmlString += "<option value='"+befList[i].id+"'>("+(i+1)+") "+befList[i].date+"</option>";
 		}
 	}
 	$("#befList").html(htmlString);
@@ -567,18 +567,8 @@ $(document).ready(function(){
 	  slidesToShow: 4,
 	  slidesToScroll: 3
 	});
-
-	if($("#interaktivSwitch").prop("checked")){
-		$("#allIntDiv").show();
-	}
-	else{
-		$("#allIntDiv").hide();
-	}
 	
 	disableControls();
-	$("#notUseThisFoil").hide();
-	$("#fSatzLoeschenModalBtn").hide();
-	
 
 	heatmap = createWebGLHeatmap({canvas: heatplotCanvas, intensityToAlpha:true});
 });

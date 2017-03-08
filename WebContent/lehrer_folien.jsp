@@ -58,7 +58,7 @@
 		<div class="col-md-2">
 
 		<div style="font-size: 20px">Foliensätze:</div>
-		<select id="folienSatzListe" class="form-control" size="24">
+		<select id="folienSatzListe" class="form-control" size="26">
 			<!-- Hier werden die Foliensätze dynamisch geladen -->
 		</select>
 
@@ -69,7 +69,7 @@
 		
 
 		</div>
-		<div id="allFoliensatzAnsicht" class="col-md-10">
+		<div id="allFoliensatzAnsicht" class="col-md-10" hidden>
 			<div class="row"></div>
 				<div class="folienNavDiv text-center">
 					<button id="backButton" class="folienNavBtn btn btn-xs">zurück</button>
@@ -120,7 +120,7 @@
 	                        </div>
 						</div>
 	
-						<div id="allIntDiv">
+						<div id="allIntDiv" hidden>
 							<div class="intModusDiv">
 								 <span class="verticalMiddle">Interaktionsmodus: </span>
 								 <span class="btn-group" data-toggle="buttons">
