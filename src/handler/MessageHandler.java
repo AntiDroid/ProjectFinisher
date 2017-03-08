@@ -53,13 +53,13 @@ public class MessageHandler {
 		
 		switch(type){
 		
-		case "befListRequest":{
+		case "befRequest":{
 			 
 			 //int userID = jsonData.get("userId").getAsInt(); 
-			 //int befListID = jsonData.get("befListId").getAsInt();
+			 int befID = jsonData.get("befId").getAsInt();
 			 int folienID = jsonData.get("folienId").getAsInt();
 			 
-			 sendFolienInfo(session, gson, dbm, folienID);
+			 sendFolienInfo(session, gson, dbm, folienID, befID);
 			 
 			 break;
 		}
@@ -115,7 +115,7 @@ public class MessageHandler {
 			Auswahlbereich ab = new Auswahlbereich(folienID, f, oLX, oLY, uRX, uRY);
 			dbm.save(ab);
 			
-			sendFolienInfo(session, gson, dbm, folienID);
+			sendFolienInfo(session, gson, dbm, folienID, 0);
 			
 			break;
 		}
@@ -128,7 +128,7 @@ public class MessageHandler {
 			
 			dbm.delete(dbm.getAuswahlbereich(bereichID));
 			
-			sendFolienInfo(session, gson, dbm, folienID);
+			sendFolienInfo(session, gson, dbm, folienID, 0);
 			
 			break;
 		}
@@ -170,7 +170,7 @@ public class MessageHandler {
 			f.setFolienTyp(folienTyp);
 			dbm.save(f);
 			
-			sendFolienInfo(session, gson, dbm, folienID);
+			sendFolienInfo(session, gson, dbm, folienID, 0);
 			
 			break;
 		}
@@ -224,7 +224,7 @@ public class MessageHandler {
 			// int userID = jsonData.get("userId").getAsInt();
 			int folienID = jsonData.get("folienId").getAsInt();
 			
-			sendFolienInfo(session, gson, dbm, folienID);
+			sendFolienInfo(session, gson, dbm, folienID, 0);
 			
 			break;
 		}
@@ -417,12 +417,11 @@ public class MessageHandler {
 		return false;
 	}
 	
-	public void sendFolienInfo(Session session, Gson gson, DBManager dbm, int folienID){
+	public void sendFolienInfo(Session session, Gson gson, DBManager dbm, int folienID, int befID){
 		
 		Folie folie = dbm.getFolie(folienID);
-		int kursID = folie.getfSatz().getKursID();
 		ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
-		ArrayList<Uservoting> votings = dbm.getUservotings(0, folienID, dbm.getCurrentBef(kursID));
+		ArrayList<Uservoting> votings = dbm.getUservotings(0, folienID, befID);
 		ArrayList<Integer> bAuswertung = new ArrayList<Integer>();
 		ArrayList<BefMessageObject> befList = new ArrayList<BefMessageObject>();
 		

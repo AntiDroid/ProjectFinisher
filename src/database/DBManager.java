@@ -1149,6 +1149,8 @@ public class DBManager {
 
 		try {
 			
+			
+			
 			if(studentID > 0)
 				sql += " AND StudentenID = ?";
 			if(befID > 0)
@@ -1157,10 +1159,13 @@ public class DBManager {
 			stat = conn.prepareStatement(sql);
 			stat.setInt(1, folienID);
 			
-			if(studentID > 0)
-				stat.setInt(2, studentID);
+			int count = 2;
+			if(studentID > 0){
+				stat.setInt(count, studentID);
+				count++;
+			}
 			if(befID > 0)
-				stat.setInt(3, befID);
+				stat.setInt(count, befID);
 			
 			rs = stat.executeQuery();
 
