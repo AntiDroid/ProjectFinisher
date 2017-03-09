@@ -23,8 +23,8 @@ var heatmap = null;
 
 
 // Websocket
-var socket = new WebSocket("ws://localhost:8080/ProjectFinisher/MessageHandler");
-//var socket = new WebSocket("ws://192.168.0.3:8080/ProjectFinisher/MessageHandler");
+var wsip = "localhost"
+var socket = new WebSocket("ws://"+wsip+":8080/ProjectFinisher/MessageHandler");
 
 socket.onopen = function() {
 	console.log("Websocket Open :)");
@@ -76,7 +76,8 @@ socket.onmessage = function(evt) {
 		}
 	}
 	else if (msg.type == "onlineUpdate"){
-		updateStudentsOnline(msg.anzOnline);
+		studentsOnline = msg.anzOnline;
+		updateStudentsOnline();
 	}
 	else if (msg.type == "folienInfo"){
 		$("#heatplotCanvas").hide();
@@ -292,7 +293,7 @@ function changeFolienType(type) {
 	socket.send(folienTypChangeJson);
 }
 
-function updateStudentsOnline(anzahl) {
+function updateStudentsOnline() {
 	$("#studentsOnline").html(studentsOnline+" Studenten Online");
 }
 
