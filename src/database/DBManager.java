@@ -6,6 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.logging.ConsoleHandler;
+import java.util.logging.Handler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import models.Auswahlbereich;
 import models.Befragung;
@@ -19,17 +23,21 @@ import models.Uservoting;
 public class DBManager {
 
 	Connection conn;
-
-	//	ev die System.out.println durch Einträge mit 
-	//	java.util.Logging oder log4j ersetzen, auch e.printStackTrace()
+	private final static Logger LOGGER = Logger.getLogger(DBManager.class.getName());
 	
 	public DBManager() {
 
 		try {
 			conn = ConnectionPool.getInstance().getConnection();
-		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Datenbankverbindung fehlgeschlagen!");
+			
+			Handler consoleHandler = new ConsoleHandler();
+			consoleHandler.setLevel(Level.INFO);  
+			LOGGER.addHandler(consoleHandler);
+			LOGGER.setLevel(Level.FINE);
+			
+		} catch (Exception e) {
+			LOGGER.severe("Datenbankverbindung fehlgeschlagen!");
+			LOGGER.severe(e.getMessage());
 		}
 	}
 
@@ -37,8 +45,8 @@ public class DBManager {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Trennung der DB-Verbindung fehlgeschlagen!");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Trennung der DB-Verbindung fehlgeschlagen!");
 		}
 	}
 
@@ -70,12 +78,12 @@ public class DBManager {
 					a.setID(rs.getInt(1));
 				
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Auswahlbereich");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Insertproblem - Auswahlbereich");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+				try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 			
 		} else {
@@ -94,10 +102,10 @@ public class DBManager {
 				stat.execute();
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Auswahlbereich");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Updateproblem - Auswahlbereich");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 			
 		}
@@ -129,12 +137,12 @@ public class DBManager {
 					b.setID(rs.getInt(1));
 				
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Befragung");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Insertproblem - Befragung");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+				try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 			
 		} else {
@@ -150,10 +158,10 @@ public class DBManager {
 				stat.execute();
 
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Befragung");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Updateproblem - Befragung");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 			
 		}
@@ -185,12 +193,12 @@ public class DBManager {
 					f.setID(rs.getInt(1));
 	
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Folie");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Insertproblem - Folie");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+				try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 			
 		} else {
@@ -207,10 +215,10 @@ public class DBManager {
 				stat.execute();
 	
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Folie");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Updateproblem - Folie");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 		}
 	}
@@ -240,12 +248,12 @@ public class DBManager {
 					f.setID(rs.getInt(1));
 				
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Foliensatz");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Insertproblem - Foliensatz");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+				try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 			
 		} else {
@@ -261,10 +269,10 @@ public class DBManager {
 				stat.execute();
 	
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Foliensatz");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Updateproblem - Foliensatz");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 		}
 	}
@@ -295,12 +303,12 @@ public class DBManager {
 					k.setID(rs.getInt(1));
 	
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Kurs");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Insertproblem - Kurs");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+				try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 			
 		} else {
@@ -316,10 +324,10 @@ public class DBManager {
 				stat.execute();
 	
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Kurs");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Updateproblem - Kurs");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 		}
 	}
@@ -351,12 +359,12 @@ public class DBManager {
 					p.setID(rs.getInt(1));
 	
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Lehrer");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Insertproblem - Lehrer");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+				try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 			
 		} else {
@@ -373,10 +381,10 @@ public class DBManager {
 				stat.execute();
 	
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Lehrer");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Updateproblem - Lehrer");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 		}
 	
@@ -409,12 +417,12 @@ public class DBManager {
 					st.setID(rs.getInt(1));
 	
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Student");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Insertproblem - Student");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+				try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 			
 		} else {
@@ -431,10 +439,10 @@ public class DBManager {
 				stat.execute();
 	
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Student");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Updateproblem - Student");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 			
 		}
@@ -469,12 +477,12 @@ public class DBManager {
 					u.setID(rs.getInt(1));
 	
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Uservoting");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Insertproblem - Uservoting");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
-			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+				try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			    try { if (statGetID != null) statGetID.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 			
 		} else {
@@ -495,10 +503,10 @@ public class DBManager {
 				stat.execute();
 	
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Updateproblem - Uservoting");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Updateproblem - Uservoting");
 			} finally {
-			    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+			    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 		}
 	}
@@ -515,10 +523,10 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Deleteproblem - Auswahlbereich");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Deleteproblem - Auswahlbereich");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 	}
 	
@@ -534,10 +542,10 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Deleteproblem - Befragung");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Deleteproblem - Befragung");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 	}
 
@@ -553,10 +561,10 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Deleteproblem - Folie");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Deleteproblem - Folie");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 	}
 
@@ -572,10 +580,10 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Deleteproblem - Foliensatz");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Deleteproblem - Foliensatz");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 	}
 
@@ -590,8 +598,8 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Deleteproblem - Kurs");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Deleteproblem - Kurs");
 		}
 	}
 
@@ -607,10 +615,10 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Deleteproblem - Lehrer");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Deleteproblem - Lehrer");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 	}
 
@@ -626,10 +634,10 @@ public class DBManager {
 			stat.execute();
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Deleteproblem - Student");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Deleteproblem - Student");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 		
 	}
@@ -646,10 +654,10 @@ public class DBManager {
 			stat.execute();
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Deleteproblem - Uservoting");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Deleteproblem - Uservoting");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 	}
 
@@ -684,11 +692,11 @@ public class DBManager {
 			}
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Auswahlbereiche");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Auswahlbereiche");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return list;
@@ -723,11 +731,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Folien");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Folien");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return list;
@@ -761,11 +769,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Foliensätze");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Foliensätze");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return list;
@@ -796,11 +804,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Kurse");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Kurse");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return list;
@@ -835,11 +843,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Kurse von Student");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Kurse von Student");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return list;
@@ -871,11 +879,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Kurse von Lehrer");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Kurse von Lehrer");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return list;
@@ -905,11 +913,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Folie");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Folie");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return obj;
@@ -937,11 +945,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Folie");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Folie");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return obj;
@@ -968,11 +976,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Foliensatz");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Foliensatz");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return obj;
@@ -1000,11 +1008,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Kurs");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Kurs");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return obj;
@@ -1032,11 +1040,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Lehrer");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Lehrer");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return obj;
@@ -1064,11 +1072,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Lehrer");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Lehrer");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return obj;
@@ -1096,11 +1104,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Student");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Student");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return obj;
@@ -1128,11 +1136,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Student");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Student");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return obj;
@@ -1187,11 +1195,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Uservotings");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Uservotings");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return list;
@@ -1219,11 +1227,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Befragung");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Befragung");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return obj;
@@ -1257,11 +1265,11 @@ public class DBManager {
 			}
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Befragungen");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Befragungen");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return list;
@@ -1287,11 +1295,11 @@ public class DBManager {
 				return getFolie(rs.getInt("FolienID"));
 
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - Befragung");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Befragung");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 
 		return null;
@@ -1318,11 +1326,11 @@ public class DBManager {
 				return rs.getInt("BefID");
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - getCurrentBef");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - getCurrentBef");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 	
 		return 0;
@@ -1349,11 +1357,11 @@ public class DBManager {
 				return true;
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - isKursBeteiligt");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - isKursBeteiligt");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 	
 		return false;
@@ -1377,11 +1385,11 @@ public class DBManager {
 				return true;
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - isStudent");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - isStudent");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 	
 		return false;
@@ -1405,11 +1413,11 @@ public class DBManager {
 				return true;
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - isLehrer");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - isLehrer");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 	
 		return false;
@@ -1434,11 +1442,11 @@ public class DBManager {
 				return true;
 			
 		} catch (SQLException e) {
-			e.printStackTrace();
-			System.out.println("Selectproblem - isBeantwortet");
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - isBeantwortet");
 		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-			try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 		}
 	
 		return false;
@@ -1461,11 +1469,11 @@ public class DBManager {
 				stat.execute();
 		
 			} catch (SQLException e) {
-				e.printStackTrace();
-				System.out.println("Insertproblem - Kursteilnahme");
+				LOGGER.severe(e.getMessage());
+				LOGGER.severe("Insertproblem - Kursteilnahme");
 			} finally {
-				try { if (stat != null) stat.close(); } catch (Exception e) {e.printStackTrace();};
-				try { if (rs != null) rs.close(); } catch (Exception e) {e.printStackTrace();};
+				try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+				try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			}
 	}
 }
