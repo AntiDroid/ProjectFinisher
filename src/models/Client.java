@@ -1,6 +1,12 @@
 package models;
 
+import java.util.concurrent.ConcurrentHashMap;
+
+import javax.servlet.http.HttpSession;
+
 public abstract class Client {
+
+	public static ConcurrentHashMap<String, HttpSession> actLogin = new ConcurrentHashMap<String, HttpSession>();
 	
 	private int ID;
 

@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.Client;
+
 @WebServlet("/LogoutServlet")
 public class Logout extends HttpServlet {
 	
@@ -25,7 +27,7 @@ public class Logout extends HttpServlet {
     	
     	if(session != null)
     		session.invalidate();
-
+    	
     	response.sendRedirect("login.jsp");
 	}
 }
