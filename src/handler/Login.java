@@ -68,7 +68,7 @@ public class Login extends HttpServlet {
 		
 		HttpSession old = actLogin.put(c.getBenutzername(), session);
 		
-		if(old != null)
+		if(old != null && !old.equals(session))
 			old.invalidate();
 		
 		session.setAttribute("benutzer", c);
