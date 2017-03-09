@@ -1,7 +1,7 @@
 package models;
 
 public abstract class Client {
-
+	
 	private int ID;
 
 	private String benutzername, vorname, nachname, passwort;

@@ -50,6 +50,43 @@ public class MessageHandler {
 		
 		String type = jsonData.get("type").getAsString();
 		
+		Object[] keys = Message.kursStudentSessions.keySet().toArray();
+		
+		try{
+			
+			int k = jsonData.get("kursId").getAsInt();
+			Session kLehrer = Message.kursLehrerSessions.get(k);
+			
+			if(kLehrer == null){
+				throw new Exception();
+			}
+			
+			for(int i = Message.kursStudentSessions.get(k).size(); i > 0; i--){
+					
+				Session s = Message.kursStudentSessions.get(k).get(i-1);
+					
+				try{
+					s.getBasicRemote().sendText("test");
+				}catch(IllegalStateException e){
+					Message.kursStudentSessions.get(k).remove(s);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+			
+			try{
+				
+				UpdateAnzOnlineMessage responseObj = new UpdateAnzOnlineMessage(Message.kursStudentSessions.size());
+				
+				kLehrer.getBasicRemote().sendText(gson.toJson(responseObj));
+			}catch(IllegalStateException e){
+				Message.kursStudentSessions.get(k).remove(kLehrer);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+
+		}catch(Exception e){}
+		
 		switch(type){
 		
 		case "befRequest":{
@@ -84,14 +121,14 @@ public class MessageHandler {
 			curBef.setEnde(new Timestamp(System.currentTimeMillis()));
 			dbm.save(curBef);
 			
-			for(int i = Message.kursSessions.get(kursID).size(); i > 0; i--){
+			for(int i = Message.kursStudentSessions.get(kursID).size(); i > 0; i--){
 				
-				Session s = Message.kursSessions.get(kursID).get(i-1);
+				Session s = Message.kursStudentSessions.get(kursID).get(i-1);
 				
 				try{
 					s.getBasicRemote().sendText(gson.toJson(responseObj));
 				}catch(IllegalStateException e){
-					Message.kursSessions.get(kursID).remove(s);
+					Message.kursStudentSessions.get(kursID).remove(s);
 				}catch(Exception e){
 					e.printStackTrace();
 				}
@@ -148,7 +185,7 @@ public class MessageHandler {
 			if(f != null)
 				aktiveFolie = f.getID();
 			
-			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursSessions.size(), aktiveFolie);
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursStudentSessions.size(), aktiveFolie);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -186,7 +223,9 @@ public class MessageHandler {
 			if(f != null)
 				aktiveFolie = f.getID();
 			
-			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursSessions.size(), aktiveFolie);
+			Message.kursLehrerSessions.put(kursID, session);
+			
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursStudentSessions.size(), aktiveFolie);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -194,7 +233,7 @@ public class MessageHandler {
 				e.printStackTrace();
 			}
 			
-			Message.kursSessions.putIfAbsent(kursID, new ArrayList<Session>());
+			Message.kursStudentSessions.putIfAbsent(kursID, new ArrayList<Session>());
 			
 			break;
 		}
@@ -287,16 +326,16 @@ public class MessageHandler {
 				e.printStackTrace();
 			}
 			
-			ArrayList<Session> sessionList = Message.kursSessions.get(kursID);
+			ArrayList<Session> sessionList = Message.kursStudentSessions.get(kursID);
 			
 			if(sessionList == null){
 				ArrayList<Session> sL = new ArrayList<Session>();
 				sL.add(session);
-				Message.kursSessions.put(kursID, sL);
+				Message.kursStudentSessions.put(kursID, sL);
 			}
 			else{
 				if(!sessionList.contains(session))
-					Message.kursSessions.get(kursID).add(session);
+					Message.kursStudentSessions.get(kursID).add(session);
 			}
 			
 			break;
@@ -317,14 +356,14 @@ public class MessageHandler {
 			Befragung bef = new Befragung(f, f.getID(), new Timestamp(System.currentTimeMillis()), null);
 			dbm.save(bef);
 				
-			for(int i = Message.kursSessions.get(kursID).size(); i > 0; i--){
+			for(int i = Message.kursStudentSessions.get(kursID).size(); i > 0; i--){
 				
-				Session s = Message.kursSessions.get(kursID).get(i-1);
+				Session s = Message.kursStudentSessions.get(kursID).get(i-1);
 				
 				try{
 					s.getBasicRemote().sendText(gson.toJson(responseObj));
 				}catch(IllegalStateException e){
-					Message.kursSessions.get(kursID).remove(s);
+					Message.kursStudentSessions.get(kursID).remove(s);
 				}catch(Exception e){
 					e.printStackTrace();
 				}
@@ -374,7 +413,7 @@ public class MessageHandler {
 		{
 			int kursID = jsonData.get("kursId").getAsInt();
 			
-			Message.kursSessions.get(kursID).remove(session);
+			Message.kursStudentSessions.get(kursID).remove(session);
 			break;
 		}
 		default:
@@ -473,7 +512,8 @@ class BefMessageObject {
 
 abstract class Message {
 	
-	static public ConcurrentHashMap<Integer, ArrayList<Session>> kursSessions = new ConcurrentHashMap<Integer, ArrayList<Session>>();
+	public static ConcurrentHashMap<Integer, Session> kursLehrerSessions = new ConcurrentHashMap<Integer, Session>();
+	static public ConcurrentHashMap<Integer, ArrayList<Session>> kursStudentSessions = new ConcurrentHashMap<Integer, ArrayList<Session>>();
 	
 	String type;
 	
@@ -562,6 +602,16 @@ class FolienUpdateRequestMessage extends Message {
 		super("folienUpdate");
 		this.folie = f;
 		this.bereichList = bl;
+	}
+}
+
+class UpdateAnzOnlineMessage extends Message {
+	
+	int anzOnline;
+	
+	public UpdateAnzOnlineMessage(int aO){
+		super("onlineUpdate");
+		this.anzOnline = aO;
 	}
 }
 

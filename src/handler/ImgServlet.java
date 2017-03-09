@@ -12,6 +12,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import models.Folie;
 import database.DBManager;
@@ -29,7 +30,14 @@ public class ImgServlet extends HttpServlet {
 
 		DBManager dbm = new DBManager();
 		
+		HttpSession session = request.getSession(true);
+			
 		try {
+			
+			if(session.getAttribute("benutzer") == null){
+				dbm.dispose();
+				response.sendRedirect("login.jsp");
+			}
 			
 			String fPathLocal = System.getProperty("java.io.tmpdir");
 			

@@ -30,7 +30,7 @@ public class KursServlet extends HttpServlet {
 		int kursId = Integer.parseInt(request.getParameter("kursId"));
 		HttpSession session = request.getSession(true);
 		
-		if(session == null || kursId == 0){
+		if(session.getAttribute("benutzer") == null || kursId == 0){
 			dbm.dispose();
 			response.sendRedirect("login.jsp");
 		}
@@ -44,7 +44,7 @@ public class KursServlet extends HttpServlet {
 			dbm.dispose();
 			response.sendRedirect("lehrer_folien.jsp");
 		}
-		
+
 	}
 
 }
