@@ -50,8 +50,6 @@ public class MessageHandler {
 		
 		String type = jsonData.get("type").getAsString();
 		
-		Object[] keys = Message.kursStudentSessions.keySet().toArray();
-		
 		try{
 			
 			int k = jsonData.get("kursId").getAsInt();

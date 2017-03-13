@@ -10,9 +10,6 @@ import com.mchange.v2.c3p0.ComboPooledDataSource;
 
 public class ConnectionPool {
 
-	private ConnectionPool() {
-	}
-
 	private static ConnectionPool instance = null;
 
 	public static ConnectionPool getInstance() {
