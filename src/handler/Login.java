@@ -20,8 +20,6 @@ import database.DBManager;
 public class Login extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
-	
-	private static ConcurrentHashMap<String, HttpSession> actLogin = new ConcurrentHashMap<String, HttpSession>();
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -66,10 +64,13 @@ public class Login extends HttpServlet {
 	
 	public void doStuff(Client c, ArrayList<?> kursListe, HttpSession session){
 		
-		HttpSession old = actLogin.put(c.getBenutzername(), session);
-		
-		if(old != null)
-			old.invalidate();
+		HttpSession old = Client.actLogin.put(c.getBenutzername(), session);
+	
+		if(old != null){
+			try{
+				old.invalidate();
+			}catch(IllegalStateException e){}
+		}
 		
 		session.setAttribute("benutzer", c);
 		// Inaktivität in Serverinteraktion bis Session erlischt (Sekunden)
