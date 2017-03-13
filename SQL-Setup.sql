@@ -15,7 +15,6 @@ CREATE TABLE Kurs (
         LehrerID			int NOT NULL,
         Name              	varchar(30) UNIQUE NOT NULL,
         Passwort            varchar(30) NOT NULL,
-        -- Namenkürzel
         FOREIGN KEY (LehrerID) REFERENCES Lehrer(LehrerID) ON DELETE CASCADE
 );
 
@@ -67,7 +66,7 @@ CREATE TABLE Kursteilnahme (
 
 CREATE TABLE Uservoting (
         VotingID            int PRIMARY KEY AUTO_INCREMENT,
-        BefID           int NOT NULL,
+        BefID           	int NOT NULL,
         StudentenID         int NOT NULL,
         FolienID			int NOT NULL,
         KoordX				int NOT NULL,
