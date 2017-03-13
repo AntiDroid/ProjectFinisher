@@ -1,8 +1,10 @@
 package database;
 
 import java.beans.PropertyVetoException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Properties;
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
 
@@ -29,28 +31,21 @@ public class ConnectionPool {
 		return cpds.getConnection();
 	}
 
-	// Ev. noch die Connection-Daten (DB-url, user, pw) herausziehen in eine
-	// .properties-Datei.
-	// Diese könnte man dann ins src-Verzeichnis geben und wird
-	// automatisch in WEB-INF/classes kopiert
-	// ----
-	// MUSS EINMAL AUFGERUFEN WERDEN -> ServletContext
 	public void InitializeConnectionPool() {
 
 		try {
-			cpds.setDriverClass("com.mysql.jdbc.Driver");
-		} catch (PropertyVetoException e) {
+
+			Properties p = new Properties();
+			p.load(getClass().getClassLoader().getResourceAsStream("context.properties"));
+			cpds.setDriverClass(p.getProperty("driver"));
+
+			cpds.setJdbcUrl(p.getProperty("con_string"));
+			cpds.setUser(p.getProperty("user"));
+			cpds.setPassword(p.getProperty("pw"));
+		
+		} catch (PropertyVetoException | IOException e) {
 			e.printStackTrace();
 		}
-
-		cpds.setJdbcUrl("jdbc:mysql://localhost/interaktivefolien");
-		cpds.setUser("root");
-		cpds.setPassword("");
-
-		// the settings below are optional -- c3p0 can work with defaults
-		// cpds.setMinPoolSize(5);
-		// cpds.setAcquireIncrement(5);
-		// cpds.setMaxPoolSize(20);
 	}
 
 }
