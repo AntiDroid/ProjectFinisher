@@ -434,10 +434,13 @@ public class MessageHandler {
 	
 	@OnError
 	public void onError(Throwable t){
-		System.out.println("MessageHandler-Error");
-		System.out.println();
-		t.printStackTrace();
-		System.out.println("\n\n\n");
+		//Softwaregesteuerter IOException Error
+		if(!(t instanceof IOException)){
+			System.out.println("MessageHandler-Error");
+			System.out.println();
+			t.printStackTrace();
+			System.out.println("\n\n\n");
+		}
 	}
    
 	@OnClose
