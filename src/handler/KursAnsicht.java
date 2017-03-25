@@ -15,7 +15,7 @@ import models.Student;
 import database.DBManager;
 
 @WebServlet("/KursServlet")
-public class KursServlet extends HttpServlet {
+public class KursAnsicht extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 

@@ -26,7 +26,7 @@ import models.Uservoting;
 import database.DBManager;
 
 @ServerEndpoint("/MessageHandler")
-public class MessageHandler {
+public class WSMessageHandler {
 
 	// Folientyp
 	// Heatplot 		- H

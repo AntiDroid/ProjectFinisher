@@ -18,7 +18,7 @@ import models.Folie;
 import database.DBManager;
 
 @WebServlet("/ImgServlet")
-public class ImgServlet extends HttpServlet {
+public class GetImg extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 

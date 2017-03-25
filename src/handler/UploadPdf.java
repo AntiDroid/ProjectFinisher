@@ -22,7 +22,7 @@ import database.DBManager;
 
 @WebServlet("/GetPdfServlet")
 @MultipartConfig
-public class GetPdf extends HttpServlet {
+public class UploadPdf extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
