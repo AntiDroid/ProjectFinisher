@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.Client;
 import models.Lehrer;
 import models.Student;
 import database.DBManager;
@@ -33,13 +34,30 @@ public class KursServlet extends HttpServlet {
 		if(session.getAttribute("benutzer") == null || kursId == 0){
 			dbm.dispose();
 			response.sendRedirect("login.jsp");
+			return;
 		}
-		else if(session.getAttribute("benutzer") instanceof Student){
+		
+		Client c = (Client) session.getAttribute("benutzer");
+		
+		if(c instanceof Student){
+			
+			//Wenn nicht am Kurs beteiligt
+			if(!dbm.isKursBeteiligt(dbm.getKurs(kursId).getName(), c.getBenutzername())){
+				dbm.dispose();
+				response.sendRedirect("studenten_kurse.jsp");
+			}
 			session.setAttribute("kursId", kursId);
 			dbm.dispose();
 			response.sendRedirect("studenten_folie.jsp");
 		}
-		else if(session.getAttribute("benutzer") instanceof Lehrer){
+		else if(c instanceof Lehrer){
+			
+			//Wenn nicht am Kurs beteiligt
+			if(dbm.getKurs(kursId).getLehrerID() != c.getID()){
+				dbm.dispose();
+				response.sendRedirect("lehrer_kurse.jsp");
+			}
+			
 			session.setAttribute("kursId", kursId);
 			dbm.dispose();
 			response.sendRedirect("lehrer_folien.jsp");
