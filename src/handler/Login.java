@@ -33,16 +33,14 @@ public class Login extends HttpServlet {
 		String pw = request.getParameter("pw");
 
 		// Direkter Aufruf von LoginServlet
-		// --Implementierung zu Testzwecken--
 		if (benutzer == null) {
-			System.out.println("So nicht!");
 			response.sendRedirect("login.jsp");
 		} else if (dbm.isStudent(benutzer, pw)) {
 
 			Student s = dbm.getStudent(benutzer);
 
 			// Create a session object if it is already not created.
-			HttpSession session = request.getSession(true);
+			HttpSession session = request.getSession();
 			doStuff(s, dbm.getKurseStudent(s.getID()), session);
 			response.sendRedirect("studenten_kurse.jsp");
 		} else if (dbm.isLehrer(benutzer, pw)) {
@@ -73,7 +71,6 @@ public class Login extends HttpServlet {
 		
 		session.setAttribute("benutzer", c);
 		// Inaktivität in Serverinteraktion bis Session erlischt (Sekunden)
-		// Später in web.xml auslagern
 		session.setMaxInactiveInterval(15*60);
 		session.setAttribute("kursListe", kursListe);
 	}
