@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import models.Kurs;
 import models.Lehrer;
+import models.Student;
 import database.DBManager;
 
 @WebServlet("/KursErstellenServlet")
@@ -29,20 +30,19 @@ public class KursErstellen extends HttpServlet {
 
 		String kursName = request.getParameter("newKursName");
 		String kursPW = request.getParameter("newKursPass");
-
-		boolean kursExists = dbm.isKursVorhanden(kursName);
 		
 		// Die Session nur nehmen, wenn sie bereits existiert
 		HttpSession s = request.getSession(false);
+		String redirectTo = "";
 		
-		if (s == null || kursExists){
-			dbm.dispose();
-			response.sendRedirect("lehrer_kurse.jsp");
-		}
-		else if(!(s.getAttribute("benutzer") instanceof Lehrer)){
-			dbm.dispose();
-			response.sendRedirect("login.jsp");
-		}
+		if (s == null)
+			redirectTo = "login";
+		else if(s.getAttribute("benutzer") instanceof Student)
+			redirectTo = "studenten_kurse";
+		else if(kursName == null || kursPW == null)
+			redirectTo = "lehrer_kurse";
+		else if(dbm.isKursVorhanden(kursName))
+			redirectTo = "lehrer_kurse";
 		else {
 			Lehrer l = ((Lehrer)s.getAttribute("benutzer"));
 			Kurs k = new Kurs(kursName, kursPW, l, l.getID());
@@ -54,9 +54,11 @@ public class KursErstellen extends HttpServlet {
 			kurse.add(k);
 			s.setAttribute("kursListe", kurse);
 
-			dbm.dispose();
-			response.sendRedirect("lehrer_kurse.jsp");
+			redirectTo = "lehrer_kurse";
 		}
+		
+		dbm.dispose();
+		response.sendRedirect(redirectTo+".jsp");
 	}
 
 }

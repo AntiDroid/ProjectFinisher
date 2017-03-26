@@ -1340,8 +1340,7 @@ public class DBManager {
 		
 		PreparedStatement stat = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM Kurs "
-				+ "WHERE Name = ?";
+		String sql = "SELECT * FROM Kurs WHERE Name = ?";
 	
 		try {
 	

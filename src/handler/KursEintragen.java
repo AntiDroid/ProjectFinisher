@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import models.Kurs;
+import models.Lehrer;
 import models.Student;
 import database.DBManager;
 
@@ -32,6 +33,7 @@ public class KursEintragen extends HttpServlet {
 		String kurspw = request.getParameter("kurspw");
 		ArrayList<Kurs> kursListe = dbm.getKurse();
 		Kurs addKurs = null;
+		String redirectTo = "";
 		
 		for (Kurs k : kursListe) {
 			if (k.getName().equals(kursName) && k.getPasswort().equals(kurspw)) {
@@ -43,18 +45,13 @@ public class KursEintragen extends HttpServlet {
 		// Nur nehmen, wenn existiert
 		HttpSession s = request.getSession(false);
 		
-		if(!(s.getAttribute("benutzer") instanceof Student)){
-			dbm.dispose();
-			response.sendRedirect("login.jsp");
-			return;
-		}
-		// Wenn ein solcher Kurs nicht existiert
-		else if (addKurs == null) {			
-			dbm.dispose();
-			response.sendRedirect("studenten_kurse.jsp");
-			return;
-		}
-		else if (addKurs != null && !dbm.isKursBeteiligt(kursName, ((Student) s.getAttribute("benutzer")).getBenutzername())) {
+		if (s == null)
+			redirectTo = "login";
+		else if(s.getAttribute("benutzer") instanceof Lehrer)
+			redirectTo = "lehrer_kurse";
+		else if (!dbm.isKursVorhanden(kursName))		
+			redirectTo = "studenten_kurse";
+		else if (!dbm.isKursBeteiligt(kursName, ((Student) s.getAttribute("benutzer")).getBenutzername())) {
 			
 			dbm.addKursteilnahme(addKurs.getID(), ((Student) s.getAttribute("benutzer")).getID());
 
@@ -62,14 +59,11 @@ public class KursEintragen extends HttpServlet {
 			ArrayList<Kurs> kurse = (ArrayList<Kurs>) s.getAttribute("kursListe");
 			kurse.add(addKurs);
 			s.setAttribute("kursListe", kurse);
-
-			dbm.dispose();
-			response.sendRedirect("studenten_kurse.jsp");
-			return;
+			redirectTo = "studenten_kurse";
 		}
 
 		dbm.dispose();
-		response.sendRedirect("studenten_kurse.jsp");
+		response.sendRedirect(redirectTo+".jsp");
 	}
 
 }
