@@ -32,29 +32,32 @@ public class Login extends HttpServlet {
 
 		String benutzer = request.getParameter("user");
 		String pw = request.getParameter("pw");
+		
+		String redirectTo = "";
 
 		if (benutzer == null || pw == null) {
-			response.sendRedirect("login.jsp");
+			redirectTo = "login";
 		} else if (dbm.isStudent(benutzer, pw)) {
 
 			Student s = dbm.getStudent(benutzer);
 			ArrayList<Kurs> kurse = dbm.getKurseStudent(s.getID());
 			
 			processSession(s, kurse, request.getSession());
-			response.sendRedirect("studenten_kurse.jsp");
+			redirectTo = "studenten_kurse";
 		} else if (dbm.isLehrer(benutzer, pw)) {
 
 			Lehrer l = dbm.getLehrer(benutzer);
 			ArrayList<Kurs> kurse = dbm.getKurseLehrer(l.getID());
 			
 			processSession(l, kurse, request.getSession());
-			response.sendRedirect("lehrer_kurse.jsp");
+			redirectTo = "lehrer_kurse";
 		} 
 		else{
-			response.sendRedirect("login.jsp");
+			redirectTo = "login";
 		}
 
 		dbm.dispose();
+		response.sendRedirect(redirectTo+".jsp");
 	}
 	
 	public void processSession(Client c, ArrayList<Kurs> kursListe, HttpSession session){

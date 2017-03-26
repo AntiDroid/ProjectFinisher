@@ -32,27 +32,27 @@ public class KursErstellen extends HttpServlet {
 		String kursPW = request.getParameter("newKursPass");
 		
 		// Die Session nur nehmen, wenn sie bereits existiert
-		HttpSession s = request.getSession(false);
+		HttpSession session = request.getSession(false);
 		String redirectTo = "";
 		
-		if (s == null)
+		if (session == null)
 			redirectTo = "login";
-		else if(s.getAttribute("benutzer") instanceof Student)
+		else if(session.getAttribute("benutzer") instanceof Student)
 			redirectTo = "studenten_kurse";
 		else if(kursName == null || kursPW == null)
 			redirectTo = "lehrer_kurse";
 		else if(dbm.isKursVorhanden(kursName))
 			redirectTo = "lehrer_kurse";
 		else {
-			Lehrer l = ((Lehrer)s.getAttribute("benutzer"));
+			Lehrer l = ((Lehrer)session.getAttribute("benutzer"));
 			Kurs k = new Kurs(kursName, kursPW, l, l.getID());
 			dbm.save(k);
 
 			//Aktualisieren der anzuzeigenden Kursliste
 			@SuppressWarnings("unchecked")
-			ArrayList<Kurs> kurse = (ArrayList<Kurs>) s.getAttribute("kursListe");
+			ArrayList<Kurs> kurse = (ArrayList<Kurs>) session.getAttribute("kursListe");
 			kurse.add(k);
-			s.setAttribute("kursListe", kurse);
+			session.setAttribute("kursListe", kurse);
 
 			redirectTo = "lehrer_kurse";
 		}

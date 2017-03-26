@@ -810,6 +810,38 @@ public class DBManager {
 	
 		return obj;
 	}
+	
+	public Kurs getKurs(String kursName) {
+		
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Kurs WHERE Name = ?";
+		Kurs obj = new Kurs();
+	
+		try {
+	
+			stat = conn.prepareStatement(sql);
+			stat.setString(1, kursName);
+			rs = stat.executeQuery();
+	
+			if (rs.next()) {
+				obj.setID(rs.getInt("KursID"));
+				obj.setName(kursName);
+				obj.setPasswort(rs.getString("Passwort"));
+				obj.setLehrerID(rs.getInt("LehrerID"));
+				obj.setLehrer(getLehrer(rs.getInt("LehrerID")));
+			}
+	
+		} catch (SQLException e) {
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Kurs");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+		}
+	
+		return obj;
+	}
 
 	public ArrayList<Kurs> getKurse() {
 

@@ -31,34 +31,27 @@ public class KursEintragen extends HttpServlet {
 
 		String kursName = request.getParameter("kursname");
 		String kurspw = request.getParameter("kurspw");
-		ArrayList<Kurs> kursListe = dbm.getKurse();
-		Kurs addKurs = null;
-		String redirectTo = "";
 		
-		for (Kurs k : kursListe) {
-			if (k.getName().equals(kursName) && k.getPasswort().equals(kurspw)) {
-				addKurs = k;
-				break;
-			}
-		}
+		Kurs newKurs = dbm.getKurs(kursName);
+		String redirectTo = "";
 
 		// Nur nehmen, wenn existiert
-		HttpSession s = request.getSession(false);
+		HttpSession session = request.getSession(false);
 		
-		if (s == null)
+		if (session == null)
 			redirectTo = "login";
-		else if(s.getAttribute("benutzer") instanceof Lehrer)
+		else if(session.getAttribute("benutzer") instanceof Lehrer)
 			redirectTo = "lehrer_kurse";
-		else if (!dbm.isKursVorhanden(kursName))		
+		else if (!(dbm.isKursVorhanden(kursName) && newKurs.getPasswort().equals(kurspw)))		
 			redirectTo = "studenten_kurse";
-		else if (!dbm.isKursBeteiligt(kursName, ((Student) s.getAttribute("benutzer")).getBenutzername())) {
+		else if (!dbm.isKursBeteiligt(kursName, ((Student) session.getAttribute("benutzer")).getBenutzername())) {
 			
-			dbm.addKursteilnahme(addKurs.getID(), ((Student) s.getAttribute("benutzer")).getID());
+			dbm.addKursteilnahme(newKurs.getID(), ((Student) session.getAttribute("benutzer")).getID());
 
 			@SuppressWarnings("unchecked")
-			ArrayList<Kurs> kurse = (ArrayList<Kurs>) s.getAttribute("kursListe");
-			kurse.add(addKurs);
-			s.setAttribute("kursListe", kurse);
+			ArrayList<Kurs> kurse = (ArrayList<Kurs>) session.getAttribute("kursListe");
+			kurse.add(newKurs);
+			session.setAttribute("kursListe", kurse);
 			redirectTo = "studenten_kurse";
 		}
 

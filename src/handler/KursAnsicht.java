@@ -30,39 +30,37 @@ public class KursAnsicht extends HttpServlet {
 		
 		int kursId = Integer.parseInt(request.getParameter("kursId"));
 		HttpSession session = request.getSession(true);
+		String redirectTo = "";
 		
-		if(session.getAttribute("benutzer") == null || kursId == 0){
-			dbm.dispose();
-			response.sendRedirect("login.jsp");
-			return;
-		}
-		
-		Client c = (Client) session.getAttribute("benutzer");
-		
-		if(c instanceof Student){
+		if (session == null)
+			redirectTo = "login";
+		else if(session.getAttribute("benutzer") instanceof Student){
+			
+			Student s = (Student) session.getAttribute("benutzer");
 			
 			//Wenn nicht am Kurs beteiligt
-			if(!dbm.isKursBeteiligt(dbm.getKurs(kursId).getName(), c.getBenutzername())){
-				dbm.dispose();
-				response.sendRedirect("studenten_kurse.jsp");
+			if(!dbm.isKursBeteiligt(dbm.getKurs(kursId).getName(), s.getBenutzername()))
+				redirectTo = "studenten_kurse";
+			else{
+				session.setAttribute("kursId", kursId);
+				redirectTo = "studenten_folie";
 			}
-			session.setAttribute("kursId", kursId);
-			dbm.dispose();
-			response.sendRedirect("studenten_folie.jsp");
 		}
-		else if(c instanceof Lehrer){
+		else if(session.getAttribute("benutzer") instanceof Lehrer){
+			
+			Lehrer l = (Lehrer) session.getAttribute("benutzer");
 			
 			//Wenn nicht am Kurs beteiligt
-			if(dbm.getKurs(kursId).getLehrerID() != c.getID()){
-				dbm.dispose();
-				response.sendRedirect("lehrer_kurse.jsp");
+			if(dbm.getKurs(kursId).getLehrerID() != l.getID())
+				redirectTo = "lehrer_kurse";
+			else{
+				session.setAttribute("kursId", kursId);
+				redirectTo = "lehrer_folien";
 			}
-			
-			session.setAttribute("kursId", kursId);
-			dbm.dispose();
-			response.sendRedirect("lehrer_folien.jsp");
 		}
-
+		
+		dbm.dispose();
+		response.sendRedirect(redirectTo+".jsp");
 	}
 
 }
