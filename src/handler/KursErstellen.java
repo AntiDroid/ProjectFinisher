@@ -29,41 +29,26 @@ public class KursErstellen extends HttpServlet {
 
 		String kursName = request.getParameter("newKursName");
 		String kursPW = request.getParameter("newKursPass");
-		
-		// String kursPass = request.getParameter("newKursPass");
-		ArrayList<Kurs> kursListe = dbm.getKurse();
-		boolean kursExists = false;
 
-		for (Kurs k : kursListe) {
-			if (k.getName().equals(kursName)) {
-				kursExists = true;
-				break;
-			}
-		}
+		boolean kursExists = dbm.isKursVorhanden(kursName);
 		
-		// Nur nehmen, wenn existiert
+		// Die Session nur nehmen, wenn sie bereits existiert
 		HttpSession s = request.getSession(false);
 		
-		if(!(s.getAttribute("benutzer") instanceof Lehrer)){
-			dbm.dispose();
-			response.sendRedirect("login.jsp");
-			return;
-		}
-		// Wenn ein solcher Kurs bereits existiert
-		else if (s == null || kursExists){
+		if (s == null || kursExists){
 			dbm.dispose();
 			response.sendRedirect("lehrer_kurse.jsp");
-			return;
+		}
+		else if(!(s.getAttribute("benutzer") instanceof Lehrer)){
+			dbm.dispose();
+			response.sendRedirect("login.jsp");
 		}
 		else {
-			
 			Lehrer l = ((Lehrer)s.getAttribute("benutzer"));
-			
 			Kurs k = new Kurs(kursName, kursPW, l, l.getID());
 			dbm.save(k);
 
-			//anpassen der Kursliste
-			//Temporärlösung
+			//Aktualisieren der anzuzeigenden Kursliste
 			@SuppressWarnings("unchecked")
 			ArrayList<Kurs> kurse = (ArrayList<Kurs>) s.getAttribute("kursListe");
 			kurse.add(k);
@@ -71,7 +56,6 @@ public class KursErstellen extends HttpServlet {
 
 			dbm.dispose();
 			response.sendRedirect("lehrer_kurse.jsp");
-			return;
 		}
 	}
 

@@ -1336,11 +1336,39 @@ public class DBManager {
 		return 0;
 	}
 
+	public boolean isKursVorhanden(String kurs) {
+		
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Kurs "
+				+ "WHERE Name = ?";
+	
+		try {
+	
+			stat = conn.prepareStatement(sql);
+			stat.setString(1, kurs);
+	
+			rs = stat.executeQuery();
+	
+			if (rs.next())
+				return true;
+			
+		} catch (SQLException e) {
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - isKursVorhanden");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+		}
+	
+		return false;
+	}
+	
 	public boolean isKursBeteiligt(String kurs, String student) {
 	
 		PreparedStatement stat = null;
 		ResultSet rs = null;
-		String sql = "SELECT KursID, Name FROM Kursteilnahme "
+		String sql = "SELECT * FROM Kursteilnahme "
 				+ "JOIN Kurs k USING(KursID) "
 				+ "JOIN Student s USING(StudentenID) "
 				+ "WHERE k.Name = ? AND s.Benutzername = ?";

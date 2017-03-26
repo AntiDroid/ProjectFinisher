@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import models.Client;
+import models.Kurs;
 import models.Lehrer;
 import models.Student;
 import database.DBManager;
@@ -32,24 +33,21 @@ public class Login extends HttpServlet {
 		String benutzer = request.getParameter("user");
 		String pw = request.getParameter("pw");
 
-		// Direkter Aufruf von LoginServlet
-		if (benutzer == null) {
+		if (benutzer == null || pw == null) {
 			response.sendRedirect("login.jsp");
 		} else if (dbm.isStudent(benutzer, pw)) {
 
 			Student s = dbm.getStudent(benutzer);
-
-			// Create a session object if it is already not created.
-			HttpSession session = request.getSession();
-			doStuff(s, dbm.getKurseStudent(s.getID()), session);
+			ArrayList<Kurs> kurse = dbm.getKurseStudent(s.getID());
+			
+			processSession(s, kurse, request.getSession());
 			response.sendRedirect("studenten_kurse.jsp");
 		} else if (dbm.isLehrer(benutzer, pw)) {
 
 			Lehrer l = dbm.getLehrer(benutzer);
-
-			// Create a session object if it is already not created.
-			HttpSession session = request.getSession(true);
-			doStuff(l, dbm.getKurseLehrer(l.getID()), session);
+			ArrayList<Kurs> kurse = dbm.getKurseLehrer(l.getID());
+			
+			processSession(l, kurse, request.getSession());
 			response.sendRedirect("lehrer_kurse.jsp");
 		} 
 		else{
@@ -59,18 +57,17 @@ public class Login extends HttpServlet {
 		dbm.dispose();
 	}
 	
-	public void doStuff(Client c, ArrayList<?> kursListe, HttpSession session){
+	public void processSession(Client c, ArrayList<Kurs> kursListe, HttpSession session){
 		
-		HttpSession old = Client.actLogin.put(c.getBenutzername(), session);
+		HttpSession oldSession = Client.actLogin.put(c.getBenutzername(), session);
 	
-		if(old != null){
+		if(oldSession != null){
 			try{
-				old.invalidate();
+				oldSession.invalidate();
 			}catch(IllegalStateException e){}
 		}
 		
 		session.setAttribute("benutzer", c);
-		// Inaktivität in Serverinteraktion bis Session erlischt (Sekunden)
 		session.setMaxInactiveInterval(15*60);
 		session.setAttribute("kursListe", kursListe);
 	}
