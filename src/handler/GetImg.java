@@ -34,11 +34,12 @@ public class GetImg extends HttpServlet {
 			
 		try {
 			
-			if(session.getAttribute("benutzer") == null){
-				dbm.dispose();
-				response.sendRedirect("login.jsp");
+			if(session != null){
+				if(session.getAttribute("benutzer") == null){
+					dbm.dispose();
+					response.sendRedirect("login.jsp");
+				}
 			}
-			
 			String fPathLocal = System.getProperty("java.io.tmpdir");
 			
 			String folienID = request.getParameter("id");

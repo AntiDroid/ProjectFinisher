@@ -391,7 +391,6 @@ public class WSMessageHandler {
 		}
 		
 		//START
-		Object[] keys = Message.kursStudentSessions.keySet().toArray();
 		
 		try{
 			
