@@ -12,6 +12,7 @@ import javax.servlet.http.HttpSession;
 
 import models.Kurs;
 import models.Lehrer;
+import models.Student;
 import database.DBManager;
 
 @WebServlet("/KursErstellenServlet")
@@ -30,49 +31,34 @@ public class KursErstellen extends HttpServlet {
 		String kursName = request.getParameter("newKursName");
 		String kursPW = request.getParameter("newKursPass");
 		
-		// String kursPass = request.getParameter("newKursPass");
-		ArrayList<Kurs> kursListe = dbm.getKurse();
-		boolean kursExists = false;
-
-		for (Kurs k : kursListe) {
-			if (k.getName().equals(kursName)) {
-				kursExists = true;
-				break;
-			}
-		}
+		// Die Session nur nehmen, wenn sie bereits existiert
+		HttpSession session = request.getSession(false);
+		String redirectTo = "";
 		
-		// Nur nehmen, wenn existiert
-		HttpSession s = request.getSession(false);
-		
-		if(!(s.getAttribute("benutzer") instanceof Lehrer)){
-			dbm.dispose();
-			response.sendRedirect("login.jsp");
-			return;
-		}
-		// Wenn ein solcher Kurs bereits existiert
-		else if (s == null || kursExists){
-			dbm.dispose();
-			response.sendRedirect("lehrer_kurse.jsp");
-			return;
-		}
+		if (session == null)
+			redirectTo = "login";
+		else if(session.getAttribute("benutzer") instanceof Student)
+			redirectTo = "studenten_kurse";
+		else if(kursName == null || kursPW == null)
+			redirectTo = "lehrer_kurse";
+		else if(dbm.isKursVorhanden(kursName))
+			redirectTo = "lehrer_kurse";
 		else {
-			
-			Lehrer l = ((Lehrer)s.getAttribute("benutzer"));
-			
+			Lehrer l = ((Lehrer)session.getAttribute("benutzer"));
 			Kurs k = new Kurs(kursName, kursPW, l, l.getID());
 			dbm.save(k);
 
-			//anpassen der Kursliste
-			//Temporärlösung
+			//Aktualisieren der anzuzeigenden Kursliste
 			@SuppressWarnings("unchecked")
-			ArrayList<Kurs> kurse = (ArrayList<Kurs>) s.getAttribute("kursListe");
+			ArrayList<Kurs> kurse = (ArrayList<Kurs>) session.getAttribute("kursListe");
 			kurse.add(k);
-			s.setAttribute("kursListe", kurse);
+			session.setAttribute("kursListe", kurse);
 
-			dbm.dispose();
-			response.sendRedirect("lehrer_kurse.jsp");
-			return;
+			redirectTo = "lehrer_kurse";
 		}
+		
+		dbm.dispose();
+		response.sendRedirect(redirectTo+".jsp");
 	}
 
 }

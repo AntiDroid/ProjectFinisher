@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import models.Kurs;
+import models.Lehrer;
 import models.Student;
 import database.DBManager;
 
@@ -30,46 +31,32 @@ public class KursEintragen extends HttpServlet {
 
 		String kursName = request.getParameter("kursname");
 		String kurspw = request.getParameter("kurspw");
-		ArrayList<Kurs> kursListe = dbm.getKurse();
-		Kurs addKurs = null;
 		
-		for (Kurs k : kursListe) {
-			if (k.getName().equals(kursName) && k.getPasswort().equals(kurspw)) {
-				addKurs = k;
-				break;
-			}
-		}
+		Kurs newKurs = dbm.getKurs(kursName);
+		String redirectTo = "";
 
 		// Nur nehmen, wenn existiert
-		HttpSession s = request.getSession(false);
+		HttpSession session = request.getSession(false);
 		
-		if(!(s.getAttribute("benutzer") instanceof Student)){
-			dbm.dispose();
-			response.sendRedirect("login.jsp");
-			return;
-		}
-		// Wenn ein solcher Kurs nicht existiert
-		else if (addKurs == null) {			
-			dbm.dispose();
-			response.sendRedirect("studenten_kurse.jsp");
-			return;
-		}
-		else if (addKurs != null && !dbm.isKursBeteiligt(kursName, ((Student) s.getAttribute("benutzer")).getBenutzername())) {
+		if (session == null)
+			redirectTo = "login";
+		else if(session.getAttribute("benutzer") instanceof Lehrer)
+			redirectTo = "lehrer_kurse";
+		else if (!(dbm.isKursVorhanden(kursName) && newKurs.getPasswort().equals(kurspw)))		
+			redirectTo = "studenten_kurse";
+		else if (!dbm.isKursBeteiligt(kursName, ((Student) session.getAttribute("benutzer")).getBenutzername())) {
 			
-			dbm.addKursteilnahme(addKurs.getID(), ((Student) s.getAttribute("benutzer")).getID());
+			dbm.addKursteilnahme(newKurs.getID(), ((Student) session.getAttribute("benutzer")).getID());
 
 			@SuppressWarnings("unchecked")
-			ArrayList<Kurs> kurse = (ArrayList<Kurs>) s.getAttribute("kursListe");
-			kurse.add(addKurs);
-			s.setAttribute("kursListe", kurse);
-
-			dbm.dispose();
-			response.sendRedirect("studenten_kurse.jsp");
-			return;
+			ArrayList<Kurs> kurse = (ArrayList<Kurs>) session.getAttribute("kursListe");
+			kurse.add(newKurs);
+			session.setAttribute("kursListe", kurse);
+			redirectTo = "studenten_kurse";
 		}
 
 		dbm.dispose();
-		response.sendRedirect("studenten_kurse.jsp");
+		response.sendRedirect(redirectTo+".jsp");
 	}
 
 }

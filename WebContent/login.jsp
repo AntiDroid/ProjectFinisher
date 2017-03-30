@@ -1,8 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8" import="java.util.ArrayList, models.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+	
+	<%
+	Client user = null;
+	if(session.getAttribute("benutzer") != null){
+		if(session.getAttribute("benutzer") instanceof Lehrer)
+			response.sendRedirect("lehrer_kurse.jsp");
+		else if(session.getAttribute("benutzer") instanceof Student)
+			response.sendRedirect("studenten_kurse.jsp");
+		return;
+	}
+	%>
+
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">

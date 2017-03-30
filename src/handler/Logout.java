@@ -21,12 +21,14 @@ public class Logout extends HttpServlet {
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    
-    	//invalidate the session if exists
+		
     	HttpSession session = request.getSession(false);
     	
-    	if(session != null)
+    	if(session != null){
+    		Client c = (Client) session.getAttribute("benutzer");
+    		Client.actLogin.remove(c.getBenutzername());
     		session.invalidate();
+    	}
     	
     	response.sendRedirect("login.jsp");
 	}

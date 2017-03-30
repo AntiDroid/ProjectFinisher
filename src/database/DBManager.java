@@ -779,6 +779,70 @@ public class DBManager {
 		return list;
 	}
 
+	public Kurs getKurs(int kursID) {
+	
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Kurs WHERE KursID = ?";
+		Kurs obj = new Kurs();
+	
+		try {
+	
+			stat = conn.prepareStatement(sql);
+			stat.setInt(1, kursID);
+			rs = stat.executeQuery();
+	
+			if (rs.next()) {
+				obj.setID(kursID);
+				obj.setName(rs.getString("Name"));
+				obj.setPasswort(rs.getString("Passwort"));
+				obj.setLehrerID(rs.getInt("LehrerID"));
+				obj.setLehrer(getLehrer(rs.getInt("LehrerID")));
+			}
+	
+		} catch (SQLException e) {
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Kurs");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+		}
+	
+		return obj;
+	}
+	
+	public Kurs getKurs(String kursName) {
+		
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Kurs WHERE Name = ?";
+		Kurs obj = new Kurs();
+	
+		try {
+	
+			stat = conn.prepareStatement(sql);
+			stat.setString(1, kursName);
+			rs = stat.executeQuery();
+	
+			if (rs.next()) {
+				obj.setID(rs.getInt("KursID"));
+				obj.setName(kursName);
+				obj.setPasswort(rs.getString("Passwort"));
+				obj.setLehrerID(rs.getInt("LehrerID"));
+				obj.setLehrer(getLehrer(rs.getInt("LehrerID")));
+			}
+	
+		} catch (SQLException e) {
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - Kurs");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+		}
+	
+		return obj;
+	}
+
 	public ArrayList<Kurs> getKurse() {
 
 		ArrayList<Kurs> list = new ArrayList<Kurs>();
@@ -978,38 +1042,6 @@ public class DBManager {
 		} catch (SQLException e) {
 			LOGGER.severe(e.getMessage());
 			LOGGER.severe("Selectproblem - Foliensatz");
-		} finally {
-		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
-			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
-		}
-
-		return obj;
-	}
-	
-	public Kurs getKurs(int kursID) {
-
-		PreparedStatement stat = null;
-		ResultSet rs = null;
-		String sql = "SELECT * FROM Kurs WHERE KursID = ?";
-		Kurs obj = new Kurs();
-
-		try {
-
-			stat = conn.prepareStatement(sql);
-			stat.setInt(1, kursID);
-			rs = stat.executeQuery();
-
-			if (rs.next()) {
-				obj.setID(kursID);
-				obj.setName(rs.getString("Name"));
-				obj.setPasswort(rs.getString("Passwort"));
-				obj.setLehrerID(rs.getInt("LehrerID"));
-				obj.setLehrer(getLehrer(rs.getInt("LehrerID")));
-			}
-
-		} catch (SQLException e) {
-			LOGGER.severe(e.getMessage());
-			LOGGER.severe("Selectproblem - Kurs");
 		} finally {
 		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
 			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
@@ -1336,11 +1368,38 @@ public class DBManager {
 		return 0;
 	}
 
+	public boolean isKursVorhanden(String kurs) {
+		
+		PreparedStatement stat = null;
+		ResultSet rs = null;
+		String sql = "SELECT * FROM Kurs WHERE Name = ?";
+	
+		try {
+	
+			stat = conn.prepareStatement(sql);
+			stat.setString(1, kurs);
+	
+			rs = stat.executeQuery();
+	
+			if (rs.next())
+				return true;
+			
+		} catch (SQLException e) {
+			LOGGER.severe(e.getMessage());
+			LOGGER.severe("Selectproblem - isKursVorhanden");
+		} finally {
+		    try { if (stat != null) stat.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+			try { if (rs != null) rs.close(); } catch (Exception e) {LOGGER.severe(e.getMessage());};
+		}
+	
+		return false;
+	}
+	
 	public boolean isKursBeteiligt(String kurs, String student) {
 	
 		PreparedStatement stat = null;
 		ResultSet rs = null;
-		String sql = "SELECT KursID, Name FROM Kursteilnahme "
+		String sql = "SELECT * FROM Kursteilnahme "
 				+ "JOIN Kurs k USING(KursID) "
 				+ "JOIN Student s USING(StudentenID) "
 				+ "WHERE k.Name = ? AND s.Benutzername = ?";
