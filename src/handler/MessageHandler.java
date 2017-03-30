@@ -50,43 +50,6 @@ public class MessageHandler {
 		
 		String type = jsonData.get("type").getAsString();
 		
-		Object[] keys = Message.kursStudentSessions.keySet().toArray();
-		
-		try{
-			
-			int k = jsonData.get("kursId").getAsInt();
-			Session kLehrer = Message.kursLehrerSessions.get(k);
-			
-			if(kLehrer == null){
-				throw new Exception();
-			}
-			
-			for(int i = Message.kursStudentSessions.get(k).size(); i > 0; i--){
-					
-				Session s = Message.kursStudentSessions.get(k).get(i-1);
-					
-				try{
-					s.getBasicRemote().sendText("test");
-				}catch(IllegalStateException e){
-					Message.kursStudentSessions.get(k).remove(s);
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-			
-			try{
-				
-				UpdateAnzOnlineMessage responseObj = new UpdateAnzOnlineMessage(Message.kursStudentSessions.size());
-				
-				kLehrer.getBasicRemote().sendText(gson.toJson(responseObj));
-			}catch(IllegalStateException e){
-				Message.kursStudentSessions.get(k).remove(kLehrer);
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-
-		}catch(Exception e){}
-		
 		switch(type){
 		
 		case "befRequest":{
@@ -346,9 +309,6 @@ public class MessageHandler {
 			int folienID = jsonData.get("folienId").getAsInt();
 			int kursID = jsonData.get("kursId").getAsInt();
 			
-			// zu viele Daten durch Verschachtelung?
-			// was wenn Websocket auf Client-Seite Verbindung verliert? Liste wird nicht korrigiert
-			
 			Folie f = dbm.getFolie(folienID);
 			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
 			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(f, bereichList);
@@ -426,10 +386,49 @@ public class MessageHandler {
 				e.printStackTrace();
 			}
 			
-			
 			break;
 		}
 		}
+		
+		//START
+		Object[] keys = Message.kursStudentSessions.keySet().toArray();
+		
+		try{
+			
+			int k = jsonData.get("kursId").getAsInt();
+			Session kLehrer = Message.kursLehrerSessions.get(k);
+			
+			if(kLehrer == null){
+				throw new Exception();
+			}
+			
+			for(int i = Message.kursStudentSessions.get(k).size(); i > 0; i--){
+					
+				Session s = Message.kursStudentSessions.get(k).get(i-1);
+					
+				try{
+					s.getBasicRemote().sendText("test");
+				}catch(IllegalStateException e){
+					Message.kursStudentSessions.get(k).remove(s);
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+			
+			try{
+				
+				UpdateAnzOnlineMessage responseObj = new UpdateAnzOnlineMessage(Message.kursStudentSessions.size());
+				
+				kLehrer.getBasicRemote().sendText(gson.toJson(responseObj));
+			}catch(IllegalStateException e){
+				Message.kursStudentSessions.get(k).remove(kLehrer);
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+
+		}catch(Exception e){}
+		//ENDE
+		
 		
 		dbm.dispose();
 	}

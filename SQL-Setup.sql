@@ -86,6 +86,15 @@ CREATE TABLE Befragung (
 );
 
 INSERT INTO Student VALUES(null, 'Student1', 'Talip', 'Vural', 'stud');
+INSERT INTO Student VALUES(null, 'Georg', 'Talip', 'Vural', 'Georg');
+INSERT INTO Student VALUES(null, 'Benny', 'Orcun', 'Döger', 'Benny');
+INSERT INTO Student VALUES(null, 'Tobias', 'Orcun', 'Döger', 'Tobias');
+INSERT INTO Student VALUES(null, 'Lola', 'Orcun', 'Döger', 'Lola');
+INSERT INTO Student VALUES(null, 'Michl', 'Orcun', 'Döger', 'Michl');
+INSERT INTO Student VALUES(null, 'Kredo', 'Orcun', 'Döger', 'Kredo');
+INSERT INTO Student VALUES(null, 'Andrea', 'Orcun', 'Döger', 'Andrea');
+INSERT INTO Student VALUES(null, 'Alex', 'Orcun', 'Döger', 'Alex');
+INSERT INTO Student VALUES(null, 'Albert', 'Orcun', 'Döger', 'Albert');
 INSERT INTO Lehrer VALUES(null, 'Lehrer1', 'Orcun', 'Döger', 'lehr');
 
 INSERT INTO Kurs VALUES(null, 1, 'Mathe', 'PW');
