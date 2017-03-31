@@ -28,25 +28,13 @@ socket.onerror = function(evt) {
 	console.log("Websocket Error :(");
 	console.log(evt.data);
 	
-	var socketEnde = {
-			type : "socketEnde",
-			userId : userId,
-			kursId : kursId
-		};
-	var socketEndeJson = JSON.stringify(socketEnde);
-	socket.send(socketEndeJson);
+	endSocket();
 };
 
 socket.onclose = function() {
 	console.log("Websocket Closed :(")
 	
-	var socketEnde = {
-			type : "socketEnde",
-			userId : userId,
-			kursId : kursId
-		};
-	var socketEndeJson = JSON.stringify(socketEnde);
-	socket.send(socketEndeJson);
+	endSocket();
 };
 
 // Onmessages
@@ -140,6 +128,17 @@ function deactivateAnsicht() {
 	$("#allesContainer").hide();
 	$("#noFoil").show();
 }
+
+function endSocket() {
+	var socketEnde = {
+			type : "socketEnde",
+			userId : userId,
+			kursId : kursId
+		};
+	var socketEndeJson = JSON.stringify(socketEnde);
+	socket.send(socketEndeJson);
+}
+
 
 //Klicks
 

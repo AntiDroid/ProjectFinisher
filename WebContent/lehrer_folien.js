@@ -574,11 +574,5 @@ $('img').on('dragstart', function(event) { event.preventDefault(); });
 
 
 window.onbeforeunload = function (e) {
-	var socketEnde = {
-			type : "socketEnde",
-			userId : userId,
-			kursId : kursId
-		};
-	var socketEndeJson = JSON.stringify(socketEnde);
-	socket.send(socketEndeJson);
+	endSocket();
 };
