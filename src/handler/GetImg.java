@@ -34,7 +34,7 @@ public class GetImg extends HttpServlet {
 			
 		try {
 			
-			if(session != null){
+			if(session == null){
 				dbm.dispose();
 				response.sendRedirect("login.jsp");
 				return;
