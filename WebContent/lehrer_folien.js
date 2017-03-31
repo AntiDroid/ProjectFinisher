@@ -23,7 +23,7 @@ var heatmap = null;
 
 
 // Websocket
-var wsip = "192.168.0.101"
+var wsip = "localhost"
 var socket = new WebSocket("ws://"+wsip+":8080/ProjectFinisher/MessageHandler");
 
 socket.onopen = function() {

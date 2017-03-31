@@ -28,7 +28,7 @@ public class KursAnsicht extends HttpServlet {
 		DBManager dbm = new DBManager();
 		
 		int kursId = Integer.parseInt(request.getParameter("kursId"));
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession(false);
 		String redirectTo = "";
 		
 		if (session == null)

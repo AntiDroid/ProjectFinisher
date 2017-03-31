@@ -35,10 +35,9 @@ public class GetImg extends HttpServlet {
 		try {
 			
 			if(session != null){
-				if(session.getAttribute("benutzer") == null){
-					dbm.dispose();
-					response.sendRedirect("login.jsp");
-				}
+				dbm.dispose();
+				response.sendRedirect("login.jsp");
+				return;
 			}
 			String fPathLocal = System.getProperty("java.io.tmpdir");
 			

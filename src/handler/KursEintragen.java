@@ -54,7 +54,7 @@ public class KursEintragen extends HttpServlet {
 			session.setAttribute("kursListe", kurse);
 			redirectTo = "studenten_kurse";
 		}
-
+		
 		dbm.dispose();
 		response.sendRedirect(redirectTo+".jsp");
 	}
