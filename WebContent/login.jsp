@@ -1,19 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="java.util.ArrayList, models.*"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
-	
+
 	<%
 	Client user = null;
 	if(session.getAttribute("benutzer") != null){
-		
-		if(session.getAttribute("benutzer") instanceof Lehrer)
-			response.sendRedirect("lehrer_kurse.jsp");
-		else if(session.getAttribute("benutzer") instanceof Student)
-			response.sendRedirect("studenten_kurse.jsp");
-		
-		return;
+	  
+	  if(session.getAttribute("benutzer") instanceof Lehrer)
+	    response.sendRedirect("lehrer_kurse.jsp");
+	  else if(session.getAttribute("benutzer") instanceof Student)
+	    response.sendRedirect("studenten_kurse.jsp");
+	  
+	  return;
 	}
 	%>
 
@@ -64,13 +64,14 @@
 	</style>
 </head>
 <body>
+
 <div class="container">
 	<form class="loginForm" action="LoginServlet" method="post">
 		<h3>Login</h3>
 		<input type="text" name="user" class="form-control" id="usernameInput" placeholder="Username" required autofocus>
 		<input type="password" name="pw" class="form-control" id="passwordInput" placeholder="Passwort" required>
 		<input class="btn btn-info btn-lg" type="submit" name="submit" value="Login">
-		<div id="infoBox" hidden=true></div>
+		<div id="infoBox" hidden></div>
 	</form>
 </div>
 
