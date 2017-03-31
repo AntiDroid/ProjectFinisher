@@ -1,7 +1,11 @@
 package models;
 
-public class Kurs {
+import java.io.Serializable;
 
+public class Kurs implements Serializable{
+
+	private static final long serialVersionUID = 1L;
+	
 	private int kursID;
 	
 	private Lehrer lehrer;

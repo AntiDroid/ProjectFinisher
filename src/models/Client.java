@@ -1,10 +1,13 @@
 package models;
 
+import java.io.Serializable;
 import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
-public abstract class Client {
+public abstract class Client implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 
 	public static ConcurrentHashMap<String, HttpSession> actLogin = new ConcurrentHashMap<String, HttpSession>();
 	

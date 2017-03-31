@@ -22,10 +22,10 @@ public class Logout extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-    	HttpSession session = request.getSession(false);
+    	HttpSession session = request.getSession(true);
+		Client c = (Client) session.getAttribute("benutzer");
     	
-    	if(session != null){
-    		Client c = (Client) session.getAttribute("benutzer");
+    	if(c != null){
     		Client.actLogin.remove(c.getBenutzername());
     		session.invalidate();
     	}

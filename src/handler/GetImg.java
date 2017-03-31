@@ -39,6 +39,7 @@ public class GetImg extends HttpServlet {
 				response.sendRedirect("login.jsp");
 				return;
 			}
+			
 			String fPathLocal = System.getProperty("java.io.tmpdir");
 			
 			String folienID = request.getParameter("id");
