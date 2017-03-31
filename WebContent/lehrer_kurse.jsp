@@ -77,7 +77,7 @@
 	        </form>
 	      </div>
 	      <div class="modal-footer">
-	        <button type="button" class="btn btn-default" data-dismiss="modal">SchlieÃen</button>
+	        <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
 	      </div>
 	    </div>
 	    

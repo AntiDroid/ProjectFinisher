@@ -91,12 +91,11 @@ function folienUpdate(msg) {
 	folienId = folie.folienID;
 	
 	if(msg.beantwortet != null){
-	beantwortet = msg.beantwortet;
+		beantwortet = msg.beantwortet;
 	}
 	
 	$("#folienImg").prop("src", "ImgServlet?id=" + folie.folienID);
-	//var proportion = $("#folienImg").width()/$("#folienImg").height();
-	//$("#folienImg").width(proportion*100+"%");
+	
 	$("#lehrerName").html(msg.lehrerName);
 	
 	folienTyp = folie.folienTyp; 
@@ -150,7 +149,7 @@ var clickY = 0;
 var bereichNr = 0;
 
 $('#folienImg').mousedown(function(e) {
-	if(!beantwortet){
+	//if(!beantwortet){
 		if(folieAktiv && folienTyp != 'A'){
 			var offset_x = $(this).offset().left - $(window).scrollLeft();
 			var offset_y = $(this).offset().top - $(window).scrollTop();
@@ -165,7 +164,6 @@ $('#folienImg').mousedown(function(e) {
 			var relY = Math.round((y / imgH) * 100);
 		
 			if(folienTyp == 'C'){
-				// mit bereichlist überprüfen...
 				var inBereich = false;
 				for (var i = 0; i < bereichList.length; i++) {
 					if(relX >= bereichList[i].obenLinksX && relX <= bereichList[i].untenRechtsX){
@@ -191,17 +189,16 @@ $('#folienImg').mousedown(function(e) {
 			}
 			
 			
-			
 			if(pinSet){
 				$('#pin').css('left', e.pageX).css('top', e.pageY - 25).show();
 				enableButtons();
 			}
-			if(!pinSet){
+			else{
 				$('#pin').hide;
 				disableButtons();
 			}
 		}
-	}
+	//}
 });
 
 //Klick auf Bestaetigen
@@ -248,3 +245,14 @@ $('#clearBtn').click(function(e) {
 });
 
 $('img').on('dragstart', function(event) { event.preventDefault(); });
+
+
+window.onbeforeunload = function (e) {
+	var socketEnde = {
+			type : "socketEnde",
+			userId : userId,
+			kursId : kursId
+		};
+	var socketEndeJson = JSON.stringify(socketEnde);
+	socket.send(socketEndeJson);
+};

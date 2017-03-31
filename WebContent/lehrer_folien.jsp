@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="models.*"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 	<%
@@ -65,9 +65,6 @@
 		<button class="btn btn-sm btn-warning outerUploadBtn" data-toggle="modal" data-target="#uploadModal">PDF Hochladen</button>
 		<button id="fSatzLoeschenModalBtn" class="btn btn-sm" data-toggle="modal" data-target="#fSatzLoeschenModal">Foliensatz löschen</button>
 
-		
-		
-
 		</div>
 		<div id="allFoliensatzAnsicht" class="col-md-10" hidden>
 			<div class="row"></div>
@@ -109,7 +106,7 @@
 						</div>
 					</div>
 					
-					<button id="notUseThisFoil" class="btn btn-lg" hidden>Folie<br/>Inaktivieren</button>
+					<button id="notUseThisFoil" class="btn btn-lg" hidden>Folie<br/>deaktivieren</button>
 					
 					<div id="interaktivControlsDiv">
 						<div class="interaktivSwitchDiv">

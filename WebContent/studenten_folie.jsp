@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="models.*"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 	<%
@@ -58,8 +58,9 @@
 		</div>
 	
 		<div class="imgDiv">
-				<img id="folienImg" src="ImgServlet?id=0"/>
+			<img id="folienImg" src="ImgServlet?id=0"/>
 		</div>
+		
 		<img id="pin" src="imgs/pin.png" style="display: none; position: absolute;" />
 	
 		<div class="row">

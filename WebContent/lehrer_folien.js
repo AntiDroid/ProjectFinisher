@@ -27,8 +27,6 @@ var wsip = "localhost"
 var socket = new WebSocket("ws://"+wsip+":8080/ProjectFinisher/MessageHandler");
 
 socket.onopen = function() {
-	console.log("Websocket Open :)");
-
 	var lehrerKursInfoRequest = {
 		type : "lehrerKursInfoRequest",
 		userId : userId,
@@ -39,22 +37,16 @@ socket.onopen = function() {
 };
 
 socket.onerror = function(evt) {
-	console.log("Websocket Error :(");
 	console.log(evt.data);
-	
-	endSocket();
 };
 
 socket.onclose = function() {
 	console.log("Websocket Closed :(")
-	
-	endSocket();
 };
 
 // Onmessages
 socket.onmessage = function(evt) {
 	var msg = $.parseJSON(evt.data);
-	console.log(evt.data);
 	
 	if (msg.type == "lehrerKursInfo") {
 		if(msg.folienSatzList != null){
@@ -237,8 +229,9 @@ function updateFolien() {
 	
 	$("#folienNavAnzahl").html(folienList.length+" Seiten");
 	
-	// Entfernen der vorherigen Folien (50 um sicher zu gehen)
-	for (var i = 0; i < 50; i++) {
+	
+	var anzFolienVorher = $("#folienNavThumbsSlick div").length;
+	for (var i = 0; i < anzFolienVorher; i++) {
 		$("#folienNavThumbsSlick").slick('slickRemove', "");
 	}
 	
@@ -579,3 +572,13 @@ $(document).ready(function(){
 
 $('img').on('dragstart', function(event) { event.preventDefault(); });
 
+
+window.onbeforeunload = function (e) {
+	var socketEnde = {
+			type : "socketEnde",
+			userId : userId,
+			kursId : kursId
+		};
+	var socketEndeJson = JSON.stringify(socketEnde);
+	socket.send(socketEndeJson);
+};

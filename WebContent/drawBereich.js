@@ -77,6 +77,7 @@ $("#folieCanvas").mousemove(function(e) {
 $("#folieCanvas").mouseup(function(e) {
 	if(inNewBerMode){
 		breed = false;
+		var passt = true;
 		
 		var offset_x = $(this).offset().left - $(window).scrollLeft();
 		var offset_y = $(this).offset().top - $(window).scrollTop();
@@ -112,6 +113,12 @@ $("#folieCanvas").mouseup(function(e) {
 			absURX = berStartX;
 			absURY = berEndY;
 		}
+		else{
+			absOLX = 0;
+			absOLY = 0;
+			absURX = 0;
+			absURY = 0;
+		}
 		
 		oLX = absToRelX(absOLX);
 		oLY = absToRelY(absOLY);
@@ -121,8 +128,6 @@ $("#folieCanvas").mouseup(function(e) {
 		console.log("Rel: "+oLX+","+oLY+";"+uRX+","+uRY);
 		
 		
-		
-		var passt = true;
 		
 		if(oLX == uRX || oLY == uRY){
 			passt = false;
