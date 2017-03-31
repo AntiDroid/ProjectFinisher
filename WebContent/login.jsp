@@ -7,10 +7,12 @@
 	<%
 	Client user = null;
 	if(session.getAttribute("benutzer") != null){
+		
 		if(session.getAttribute("benutzer") instanceof Lehrer)
 			response.sendRedirect("lehrer_kurse.jsp");
 		else if(session.getAttribute("benutzer") instanceof Student)
 			response.sendRedirect("studenten_kurse.jsp");
+		
 		return;
 	}
 	%>
