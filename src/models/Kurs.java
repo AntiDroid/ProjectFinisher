@@ -1,6 +1,8 @@
 package models;
 
-public class Kurs {
+import java.io.Serializable;
+
+public class Kurs implements Serializable{
 
 	private int kursID;
 	

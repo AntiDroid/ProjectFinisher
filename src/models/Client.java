@@ -4,7 +4,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.http.HttpSession;
 
-public abstract class Client {
+public abstract class Client implements Serializable{
 
 	public static ConcurrentHashMap<String, HttpSession> actLogin = new ConcurrentHashMap<String, HttpSession>();
 	
