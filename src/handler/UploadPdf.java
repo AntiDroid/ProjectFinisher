@@ -42,7 +42,6 @@ public class UploadPdf extends HttpServlet {
 		
 		String fSatzName = request.getParameter("name");
 		int kursID = Integer.parseInt(request.getParameter("kursId"));
-		
 		Kurs kurs = dbm.getKurs(kursID);
 		
 		HttpSession session = request.getSession();
