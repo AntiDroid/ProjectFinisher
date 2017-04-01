@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.Client;
 import models.Kurs;
 import models.Lehrer;
 import models.Student;
@@ -31,20 +32,20 @@ public class KursErstellen extends HttpServlet {
 		String kursName = request.getParameter("newKursName");
 		String kursPW = request.getParameter("newKursPass");
 		
-		// Die Session nur nehmen, wenn sie bereits existiert
-		HttpSession session = request.getSession(false);
+		HttpSession session = request.getSession();
+		Client benutzer = (Client) session.getAttribute("benutzer");
 		String redirectTo = "";
 		
-		if (session == null)
+		if (benutzer == null)
 			redirectTo = "login";
-		else if(session.getAttribute("benutzer") instanceof Student)
+		else if(benutzer instanceof Student)
 			redirectTo = "studenten_kurse";
 		else if(kursName == null || kursPW == null)
 			redirectTo = "lehrer_kurse";
 		else if(dbm.isKursVorhanden(kursName))
 			redirectTo = "lehrer_kurse";
 		else {
-			Lehrer l = ((Lehrer)session.getAttribute("benutzer"));
+			Lehrer l = (Lehrer) benutzer;
 			Kurs k = new Kurs(kursName, kursPW, l, l.getID());
 			dbm.save(k);
 

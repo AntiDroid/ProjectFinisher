@@ -22,7 +22,7 @@ public class Logout extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-    	HttpSession session = request.getSession(true);
+    	HttpSession session = request.getSession();
 		Client c = (Client) session.getAttribute("benutzer");
     	
     	if(c != null){

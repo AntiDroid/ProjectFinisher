@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import models.Client;
 import models.Kurs;
 import models.Lehrer;
 import models.Student;
@@ -20,8 +21,7 @@ public class KursEintragen extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
 	}
 
@@ -31,22 +31,22 @@ public class KursEintragen extends HttpServlet {
 
 		String kursName = request.getParameter("kursname");
 		String kurspw = request.getParameter("kurspw");
+
+		HttpSession session = request.getSession();
+		Client benutzer = (Client) session.getAttribute("benutzer");
+		String redirectTo = "";
 		
 		Kurs newKurs = dbm.getKurs(kursName);
-		String redirectTo = "";
-
-		// Nur nehmen, wenn existiert
-		HttpSession session = request.getSession(false);
 		
-		if (session == null)
+		if (benutzer == null)
 			redirectTo = "login";
-		else if(session.getAttribute("benutzer") instanceof Lehrer)
+		else if(benutzer instanceof Lehrer)
 			redirectTo = "lehrer_kurse";
 		else if (!(dbm.isKursVorhanden(kursName) && newKurs.getPasswort().equals(kurspw)))		
 			redirectTo = "studenten_kurse";
-		else if (!dbm.isKursBeteiligt(kursName, ((Student) session.getAttribute("benutzer")).getBenutzername())) {
+		else if (!dbm.isKursBeteiligt(kursName, benutzer.getBenutzername())) {
 			
-			dbm.addKursteilnahme(newKurs.getID(), ((Student) session.getAttribute("benutzer")).getID());
+			dbm.addKursteilnahme(newKurs.getID(), benutzer.getID());
 
 			@SuppressWarnings("unchecked")
 			ArrayList<Kurs> kurse = (ArrayList<Kurs>) session.getAttribute("kursListe");
