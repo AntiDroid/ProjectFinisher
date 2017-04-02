@@ -42,7 +42,6 @@ public class WSMessageHandler {
 	public void onMessage(Session session, String message) {
 		
 		DBManager dbm = new DBManager();
-		System.out.println(message);
 		
 		Gson gson = new Gson();
 		JsonObject jsonData = gson.fromJson(message, JsonObject.class);
@@ -303,14 +302,7 @@ public class WSMessageHandler {
 					Message.kursStudentSessions.get(kursID).add(session);
 			}
 			
-				
-			if(Message.kursLehrerSessions.get(kursID) != null){	
-				try {
-					session.getBasicRemote().sendText(gson.toJson(new UpdateAnzOnlineMessage(Message.kursStudentSessions.size())));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			updateOnlineAnzeige(gson, kursID);
 			
 			break;
 		}
@@ -384,15 +376,14 @@ public class WSMessageHandler {
 		{
 			int kursID = jsonData.get("kursId").getAsInt();
 			
-			Message.kursStudentSessions.get(kursID).remove(session);
-			
-			if(Message.kursLehrerSessions.get(kursID) != null){	
-				try {
-					session.getBasicRemote().sendText(gson.toJson(new UpdateAnzOnlineMessage(Message.kursStudentSessions.size())));
-				} catch (IOException e) {
-					e.printStackTrace();
+			for(int i = 0; i < Message.kursStudentSessions.get(kursID).size(); i++){
+				if(Message.kursStudentSessions.get(kursID).get(i).equals(session)){
+					Message.kursStudentSessions.get(kursID).remove(i);
+					break;
 				}
 			}
+
+			updateOnlineAnzeige(gson, kursID);
 			
 			break;
 		}
@@ -410,51 +401,12 @@ public class WSMessageHandler {
 		}
 		}
 		
-		/*
-		//START
-		
-		try{
-			
-			int k = jsonData.get("kursId").getAsInt();
-			Session kLehrer = Message.kursLehrerSessions.get(k);
-			
-			if(kLehrer == null){
-				throw new Exception();
-			}
-			
-			for(int i = Message.kursStudentSessions.get(k).size(); i > 0; i--){
-					
-				Session s = Message.kursStudentSessions.get(k).get(i-1);
-					
-				try{
-					s.getBasicRemote().sendText("test");
-				}catch(IllegalStateException e){
-					Message.kursStudentSessions.get(k).remove(s);
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-			
-			try{
-				
-				UpdateAnzOnlineMessage responseObj = new UpdateAnzOnlineMessage(Message.kursStudentSessions.size());
-				
-				kLehrer.getBasicRemote().sendText(gson.toJson(responseObj));
-			}catch(IllegalStateException e){
-				Message.kursStudentSessions.get(k).remove(kLehrer);
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-
-		}catch(Exception e){}
-		//ENDE
-		*/
-		
 		dbm.dispose();
 	}
 	
 	@OnError
 	public void onError(Throwable t){
+		
 		//Softwaregesteuerter IOException Error
 		if(!(t instanceof IOException)){
 			System.out.println("MessageHandler-Error");
@@ -467,6 +419,17 @@ public class WSMessageHandler {
 	@OnClose
 	public void onClose(){
 		System.out.println("MessageHandler-Close");
+	}
+	
+	public void updateOnlineAnzeige(Gson gson, int kursID){
+		
+		if(Message.kursLehrerSessions.get(kursID) != null){	
+			try {
+				Message.kursLehrerSessions.get(kursID).getBasicRemote().sendText(gson.toJson(new UpdateAnzOnlineMessage(Message.kursStudentSessions.get(kursID).size())));
+			} catch (IOException e) {
+				Message.kursLehrerSessions.remove(kursID);
+			}
+		}
 	}
 	
 	public boolean isInBereich(Uservoting uv, Auswahlbereich aw) {
