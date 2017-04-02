@@ -41,13 +41,6 @@ public class Kurs implements Serializable{
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public boolean equals(Object o){
-		
-		Kurs k = (Kurs) o;
-		
-		return (this.kursID == k.kursID) && (this.getName() == k.getName());
-	}
 
 	public String getPasswort() {
 		return passwort;
@@ -72,5 +65,12 @@ public class Kurs implements Serializable{
 	public void setLehrer(Lehrer lehrer) {
 		this.lehrer = lehrer;
 	}
+	
+    @Override
+    public boolean equals(Object obj){
+    	Kurs k = (Kurs) obj;
+    	
+    	return this.kursID == k.kursID;
+    }
 	
 }
