@@ -40,6 +40,11 @@ public class GetImg extends HttpServlet {
 		
 		Folie f = dbm.getFolie(Integer.parseInt(folienID));
 		
+		if(f.getfSatz() == null){
+			dbm.dispose();
+			return;
+		}
+		
 		HttpSession session = request.getSession();
 		Client benutzer = (Client) session.getAttribute("benutzer");
 		
