@@ -1023,7 +1023,7 @@ public class DBManager {
 
 		PreparedStatement stat = null;
 		ResultSet rs = null;
-		String sql = "SELECT * FROM Folie f JOIN Foliensatz USING(FoliensatzID) WHERE f.FolienID = ?";
+		String sql = "SELECT * FROM Foliensatz WHERE FoliensatzID = ?";
 		Foliensatz obj = new Foliensatz();
 
 		try {

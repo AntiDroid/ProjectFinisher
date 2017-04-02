@@ -42,6 +42,7 @@ public class WSMessageHandler {
 	public void onMessage(Session session, String message) {
 		
 		DBManager dbm = new DBManager();
+		System.out.println(message);
 		
 		Gson gson = new Gson();
 		JsonObject jsonData = gson.fromJson(message, JsonObject.class);
@@ -66,7 +67,9 @@ public class WSMessageHandler {
 			 
 			 //int userID = jsonData.get("userId").getAsInt(); 
 			 int fSID = jsonData.get("folienSatzId").getAsInt();
-			
+			 
+			 System.out.println("ID: "+dbm.getFoliensatz(fSID).getID());
+			 
 			 dbm.delete(dbm.getFoliensatz(fSID));
 			 
 			 break;
@@ -300,6 +303,15 @@ public class WSMessageHandler {
 					Message.kursStudentSessions.get(kursID).add(session);
 			}
 			
+				
+			if(Message.kursLehrerSessions.get(kursID) != null){	
+				try {
+					session.getBasicRemote().sendText(gson.toJson(new UpdateAnzOnlineMessage(Message.kursStudentSessions.size())));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
 			break;
 		}
 		
@@ -373,6 +385,15 @@ public class WSMessageHandler {
 			int kursID = jsonData.get("kursId").getAsInt();
 			
 			Message.kursStudentSessions.get(kursID).remove(session);
+			
+			if(Message.kursLehrerSessions.get(kursID) != null){	
+				try {
+					session.getBasicRemote().sendText(gson.toJson(new UpdateAnzOnlineMessage(Message.kursStudentSessions.size())));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
 			break;
 		}
 		default:
@@ -389,6 +410,7 @@ public class WSMessageHandler {
 		}
 		}
 		
+		/*
 		//START
 		
 		try{
@@ -426,7 +448,7 @@ public class WSMessageHandler {
 
 		}catch(Exception e){}
 		//ENDE
-		
+		*/
 		
 		dbm.dispose();
 	}
