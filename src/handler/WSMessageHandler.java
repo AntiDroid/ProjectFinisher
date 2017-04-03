@@ -150,7 +150,7 @@ public class WSMessageHandler {
 			if(f != null)
 				aktiveFolie = f.getID();
 			
-			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursStudentSessions.size(), aktiveFolie);
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursStudentSessions.get(kursID).size(), aktiveFolie);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
@@ -190,7 +190,7 @@ public class WSMessageHandler {
 			
 			Message.kursLehrerSessions.put(kursID, session);
 			
-			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursStudentSessions.size(), aktiveFolie);
+			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursStudentSessions.get(kursID).size(), aktiveFolie);
 			
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
