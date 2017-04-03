@@ -27,11 +27,6 @@ import database.DBManager;
 
 @ServerEndpoint("/MessageHandler")
 public class WSMessageHandler {
-
-	// Folientyp
-	// Heatplot 		- H
-	// Choice  			- C
-	// reine Anzeige 	- A
 	
 	@OnOpen
 	public void onOpen(){
