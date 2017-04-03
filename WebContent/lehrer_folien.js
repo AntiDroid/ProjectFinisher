@@ -44,6 +44,7 @@ socket.onclose = function() {
 	console.log("Websocket Closed :(")
 };
 
+
 // Onmessages
 socket.onmessage = function(evt) {
 	var msg = $.parseJSON(evt.data);
@@ -122,7 +123,8 @@ socket.onmessage = function(evt) {
 							var absX = Math.round(relToAbsX(relX));
 							var absY = Math.round(relToAbsY(relY));
 							
-					        heatmap.addPoint(absX, absY, 65, 0.45);
+							
+					        heatmap.addPoint(absX, absY, 46, 0.42);
 							}
 						heatmap.update();
 						heatmap.display();
@@ -202,7 +204,6 @@ socket.onmessage = function(evt) {
 
 
 //Functions
-
 function befListUpdate(befList){
 	
 	var htmlString = "<option value='0'>--None--</option>";
@@ -507,6 +508,7 @@ $('#forwardButton').click(function(e) {
 });
 	
 
+
 //OnChange
 $("#interaktivSwitch").change(function() {
 	if(this.checked) {
@@ -570,9 +572,10 @@ $(document).ready(function(){
 	heatmap = createWebGLHeatmap({canvas: heatplotCanvas, intensityToAlpha:true});
 });
 
+// Bild nicht draggable
 $('img').on('dragstart', function(event) { event.preventDefault(); });
 
-
+// SocketEnde beim Schließen
 window.onbeforeunload = function (e) {
 	endSocket();
 };
