@@ -42,6 +42,7 @@ public class WSMessageHandler {
 	public void onMessage(Session session, String message) {
 		
 		DBManager dbm = new DBManager();
+		System.out.println(message);
 		
 		Gson gson = new Gson();
 		JsonObject jsonData = gson.fromJson(message, JsonObject.class);
