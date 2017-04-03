@@ -426,8 +426,9 @@ public class WSMessageHandler {
 		if(Message.kursLehrerSessions.get(kursID) != null){	
 			try {
 				Message.kursLehrerSessions.get(kursID).getBasicRemote().sendText(gson.toJson(new UpdateAnzOnlineMessage(Message.kursStudentSessions.get(kursID).size())));
-			} catch (IOException e) {
+			} catch (IllegalStateException e) {
 				Message.kursLehrerSessions.remove(kursID);
+			} catch (IOException e) {
 			}
 		}
 	}
