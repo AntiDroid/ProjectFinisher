@@ -14,9 +14,9 @@ public class MyLogger {
         logger = Logger.getLogger(MyLogger.class.getName());
         
 		Handler consoleHandler = new ConsoleHandler();
-		consoleHandler.setLevel(Level.INFO);  
+		consoleHandler.setLevel(Level.SEVERE);  
 		logger.addHandler(consoleHandler);
-		logger.setLevel(Level.FINE);
+		logger.setLevel(Level.SEVERE);
     }
 	
 	public static Logger getLogger(){

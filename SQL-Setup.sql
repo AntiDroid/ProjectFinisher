@@ -25,11 +25,6 @@ CREATE TABLE Foliensatz (
         FOREIGN KEY (KursID) REFERENCES Kurs(KursID) ON DELETE CASCADE
 );
 
--- Folientyp
--- Heatplot 		- H
--- Choice  			- C
--- Multiple Choice 	- M
--- reine Anzeige 	- A
 CREATE TABLE Folie (
         FolienID            int PRIMARY KEY AUTO_INCREMENT,
         FoliensatzID		int NOT NULL,
@@ -84,22 +79,21 @@ CREATE TABLE Befragung (
         FOREIGN KEY (FolienID) REFERENCES Folie(FolienID) ON DELETE CASCADE
 );
 
-INSERT INTO Student VALUES(null, 'Student1', 'Talip', 'Vural', 'stud');
-INSERT INTO Student VALUES(null, 'Georg', 'Talip', 'Vural', 'Georg');
-INSERT INTO Student VALUES(null, 'Benny', 'Orcun', 'Döger', 'Benny');
-INSERT INTO Student VALUES(null, 'Tobias', 'Orcun', 'Döger', 'Tobias');
-INSERT INTO Student VALUES(null, 'Lola', 'Orcun', 'Döger', 'Lola');
-INSERT INTO Student VALUES(null, 'Michl', 'Orcun', 'Döger', 'Michl');
-INSERT INTO Student VALUES(null, 'Kredo', 'Orcun', 'Döger', 'Kredo');
-INSERT INTO Student VALUES(null, 'Andrea', 'Orcun', 'Döger', 'Andrea');
-INSERT INTO Student VALUES(null, 'Alex', 'Orcun', 'Döger', 'Alex');
-INSERT INTO Student VALUES(null, 'Albert', 'Orcun', 'Döger', 'Albert');
+INSERT INTO Lehrer VALUES(null, 'Albert', 'Albert', 'Greinöcker', 'Albert');
 INSERT INTO Lehrer VALUES(null, 'Lehrer1', 'Orcun', 'Döger', 'lehr');
+INSERT INTO Student VALUES(null, 'Student1', 'Talip', 'Vural', 'stud');
+INSERT INTO Student VALUES(null, 'Georg', 'Georg', 'Wenzel', 'Georg');
+INSERT INTO Student VALUES(null, 'Benny', 'Benjamin', 'Reichhold', 'Benny');
+INSERT INTO Student VALUES(null, 'Tobias', 'Tobias', 'Möltner', 'Tobias');
+INSERT INTO Student VALUES(null, 'Lola', 'Laura', 'Stauber', 'Lola');
+INSERT INTO Student VALUES(null, 'Michl', 'Michael', 'Krapf', 'Michl');
+INSERT INTO Student VALUES(null, 'Kredo', 'Kurt', 'Brennecke', 'Kredo');
+INSERT INTO Student VALUES(null, 'Andrea', 'Andrea', 'Mader-Ofer', 'Andrea');
+INSERT INTO Student VALUES(null, 'Alex', 'Alexander', 'Hölzl', 'Alex');
 
 INSERT INTO Kurs VALUES(null, 1, 'Mathe', 'PW');
 INSERT INTO Kurs VALUES(null, 1, 'Englisch', 'PW');
 INSERT INTO Kurs VALUES(null, 1, 'Deutsch', 'PW');
 
--- 								ID, Kurs, Student
 INSERT INTO Kursteilnahme VALUES(null, 1, 1);
 INSERT INTO Kursteilnahme VALUES(null, 2, 1);

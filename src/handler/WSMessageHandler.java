@@ -38,7 +38,7 @@ public class WSMessageHandler {
 	public void onMessage(Session session, String message) {
 		
 		DBManager dbm = new DBManager();
-		System.out.println(message);
+		MyLogger.getLogger().fine(message);
 		
 		Gson gson = new Gson();
 		JsonObject jsonData = gson.fromJson(message, JsonObject.class);
@@ -63,8 +63,6 @@ public class WSMessageHandler {
 			 
 			 //int userID = jsonData.get("userId").getAsInt(); 
 			 int fSID = jsonData.get("folienSatzId").getAsInt();
-			 
-			 System.out.println("ID: "+dbm.getFoliensatz(fSID).getID());
 			 
 			 dbm.delete(dbm.getFoliensatz(fSID));
 			 
@@ -413,7 +411,7 @@ public class WSMessageHandler {
    
 	@OnClose
 	public void onClose(){
-		//MyLogger.getLogger().severe("MessageHandler-Close");
+		MyLogger.getLogger().fine("MessageHandler-Close");
 	}
 	
 	public void updateOnlineAnzeige(Gson gson, int kursID){
