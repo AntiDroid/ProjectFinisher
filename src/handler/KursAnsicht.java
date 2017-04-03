@@ -2,7 +2,6 @@ package handler;
 
 import java.io.IOException;
 
-import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,7 +11,8 @@ import javax.servlet.http.HttpSession;
 import models.Client;
 import models.Lehrer;
 import models.Student;
-import database.DBManager;
+import database_logging.DBManager;
+import database_logging.MyLogger;
 
 @WebServlet("/KursServlet")
 public class KursAnsicht extends HttpServlet {
@@ -60,7 +60,7 @@ public class KursAnsicht extends HttpServlet {
 		try {
 			response.sendRedirect(redirectTo+".jsp");
 		} catch (IOException e) {
-			e.printStackTrace();
+			MyLogger.getLogger().severe(e.getMessage());
 		}
 	}
 

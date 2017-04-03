@@ -23,7 +23,8 @@ import models.Folie;
 import models.Foliensatz;
 import models.Kurs;
 import models.Uservoting;
-import database.DBManager;
+import database_logging.DBManager;
+import database_logging.MyLogger;
 
 @ServerEndpoint("/MessageHandler")
 public class WSMessageHandler {
@@ -90,7 +91,7 @@ public class WSMessageHandler {
 				}catch(IllegalStateException e){
 					Message.kursStudentSessions.get(kursID).remove(s);
 				}catch(Exception e){
-					e.printStackTrace();
+					MyLogger.getLogger().severe(e.getMessage());
 				}
 			}
 			
@@ -150,7 +151,7 @@ public class WSMessageHandler {
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
 			} catch (IOException e) {
-				e.printStackTrace();
+				MyLogger.getLogger().severe(e.getMessage());
 			}
 			
 			break;
@@ -192,7 +193,7 @@ public class WSMessageHandler {
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
 			} catch (IOException e) {
-				e.printStackTrace();
+				MyLogger.getLogger().severe(e.getMessage());
 			}
 			
 			break;
@@ -210,7 +211,7 @@ public class WSMessageHandler {
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
 			} catch (IOException e) {
-				e.printStackTrace();
+				MyLogger.getLogger().severe(e.getMessage());
 			}
 			
 			break;
@@ -245,7 +246,7 @@ public class WSMessageHandler {
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
 			} catch (IOException e) {
-				e.printStackTrace();
+				MyLogger.getLogger().severe(e.getMessage());
 			}
 
 			break;
@@ -283,7 +284,7 @@ public class WSMessageHandler {
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
 			} catch (IOException e) {
-				e.printStackTrace();
+				MyLogger.getLogger().severe(e.getMessage());
 			}
 			
 			ArrayList<Session> sessionList = Message.kursStudentSessions.get(kursID);
@@ -324,7 +325,7 @@ public class WSMessageHandler {
 				}catch(IllegalStateException e){
 					Message.kursStudentSessions.get(kursID).remove(s);
 				}catch(Exception e){
-					e.printStackTrace();
+					MyLogger.getLogger().severe(e.getMessage());
 				}
 			}
 			
@@ -390,7 +391,7 @@ public class WSMessageHandler {
 			try {
 				session.getBasicRemote().sendText(gson.toJson(responseObj));
 			} catch (IOException e) {
-				e.printStackTrace();
+				MyLogger.getLogger().severe(e.getMessage());
 			}
 			
 			break;
@@ -405,16 +406,14 @@ public class WSMessageHandler {
 		
 		//Softwaregesteuerter IOException Error
 		if(!(t instanceof IOException)){
-			System.out.println("MessageHandler-Error");
-			System.out.println();
-			t.printStackTrace();
-			System.out.println("\n\n\n");
+			MyLogger.getLogger().severe("MessageHandler-Error");
+			MyLogger.getLogger().severe(t.getMessage());
 		}
 	}
    
 	@OnClose
 	public void onClose(){
-		System.out.println("MessageHandler-Close");
+		//MyLogger.getLogger().severe("MessageHandler-Close");
 	}
 	
 	public void updateOnlineAnzeige(Gson gson, int kursID){
@@ -473,7 +472,7 @@ public class WSMessageHandler {
 		try {
 			session.getBasicRemote().sendText(gson.toJson(responseObj));
 		} catch (Exception e) {
-			e.printStackTrace();
+			MyLogger.getLogger().severe(e.getMessage());
 		}
 		
 	}

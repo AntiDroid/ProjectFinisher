@@ -1,6 +1,5 @@
 package handler;
 
-import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
@@ -19,8 +18,8 @@ import models.Client;
 import models.Folie;
 import models.Kurs;
 import models.Lehrer;
-import models.Student;
-import database.DBManager;
+import database_logging.DBManager;
+import database_logging.MyLogger;
 
 @WebServlet("/ImgServlet")
 public class GetImg extends HttpServlet {
@@ -89,8 +88,9 @@ public class GetImg extends HttpServlet {
 			}
 		
 		}catch(IOException e){
-			e.printStackTrace();
+			MyLogger.getLogger().severe(e.getMessage());
 		}
+		
 		dbm.dispose();
 	}
 }

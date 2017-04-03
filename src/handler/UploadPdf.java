@@ -24,7 +24,8 @@ import models.Foliensatz;
 import models.Kurs;
 import models.Lehrer;
 import models.Student;
-import database.DBManager;
+import database_logging.DBManager;
+import database_logging.MyLogger;
 
 @WebServlet("/GetPdfServlet")
 @MultipartConfig
@@ -96,7 +97,7 @@ public class UploadPdf extends HttpServlet {
 				document.close();
 				
 		    }catch(IOException | ServletException e){
-		    	e.printStackTrace();
+		    	MyLogger.getLogger().severe(e.getMessage());
 		    }
 		
 			redirectTo = "lehrer_folien";
@@ -106,7 +107,7 @@ public class UploadPdf extends HttpServlet {
 		try {
 			response.sendRedirect(redirectTo+".jsp");
 		} catch (IOException e) {
-			e.printStackTrace();
+			MyLogger.getLogger().severe(e.getMessage());
 		}
 	}
 	
