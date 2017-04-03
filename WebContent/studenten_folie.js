@@ -9,7 +9,7 @@ var bereichList = []; // obenLinksX, obenLinksY, untenRechtsX, untenRechtsY
 
 
 // Websocket
-var wsip = "localhost"
+var wsip = "192.168.0.3"
 var socket = new WebSocket("ws://"+wsip+":8080/ProjectFinisher/MessageHandler");
 
 socket.onopen = function() {
@@ -64,14 +64,7 @@ socket.onmessage = function(evt) {
 };
 
 
-//Wenns document geladen hat
-$(document).ready(function() {
-
-});
-
-
 //Functions
-
 function folienUpdate(msg) {
 	folieAktiv = true;
 	beantwortet = false;
@@ -148,7 +141,7 @@ var clickY = 0;
 var bereichNr = 0;
 
 $('#folienImg').mousedown(function(e) {
-	//if(!beantwortet){
+	if(!beantwortet){
 		if(folieAktiv && folienTyp != 'A'){
 			var offset_x = $(this).offset().left - $(window).scrollLeft();
 			var offset_y = $(this).offset().top - $(window).scrollTop();
@@ -197,7 +190,7 @@ $('#folienImg').mousedown(function(e) {
 				disableButtons();
 			}
 		}
-	//}
+	}
 });
 
 //Klick auf Bestaetigen
@@ -246,6 +239,7 @@ $('#clearBtn').click(function(e) {
 $('img').on('dragstart', function(event) { event.preventDefault(); });
 
 
+// SocketEnde beim Schließen
 window.onbeforeunload = function (e) {
 	var socketEnde = {
 			type : "socketEnde",
