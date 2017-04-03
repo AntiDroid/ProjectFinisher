@@ -27,11 +27,11 @@ public class GetImg extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		doGet(request, response);
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
 		DBManager dbm = new DBManager();
 		
@@ -51,42 +51,46 @@ public class GetImg extends HttpServlet {
 		@SuppressWarnings("unchecked")
 		ArrayList<Kurs> kursListe = (ArrayList<Kurs>) session.getAttribute("kursListe");
 			
-		if (benutzer == null || kursListe == null)
-			response.sendRedirect("login.jsp");
-		else if(!kursListe.contains(f.getfSatz().getKurs())){
-			if(benutzer instanceof Lehrer)
-				response.sendRedirect("lehrer_kurse");
-			else
-				response.sendRedirect("studenten_kurse");
-		}
-		else{
-			
-			response.setContentType("image/png");
-			String fPathLocal = System.getProperty("java.io.tmpdir");
-			
-			BufferedImage bi = null;
-			try{
-				
-				if(isSmall == null)
-					bi = ImageIO.read(new File(fPathLocal+f.getfPath()));
-				else{				
-					Image img = ImageIO.read(new File(fPathLocal+f.getfPath())).getScaledInstance(250, 250, BufferedImage.SCALE_SMOOTH);
-					
-					bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.SCALE_SMOOTH);
-
-				    Graphics2D bGr = bi.createGraphics();
-				    bGr.drawImage(img, 0, 0, null);
-				    bGr.dispose();
-				}
-			
-			}catch(IOException e){
-				bi = ImageIO.read(new File(getServletContext().getRealPath("imgs/na.jpg")));
+		try{
+			if (benutzer == null || kursListe == null)
+				response.sendRedirect("login.jsp");
+			else if(!kursListe.contains(f.getfSatz().getKurs())){
+				if(benutzer instanceof Lehrer)
+					response.sendRedirect("lehrer_kurse");
+				else
+					response.sendRedirect("studenten_kurse");
 			}
+			else{
 				
-			ImageIO.write(bi, "png", response.getOutputStream());
-			response.getOutputStream().close();
+				response.setContentType("image/png");
+				String fPathLocal = System.getProperty("java.io.tmpdir");
+				
+				BufferedImage bi = null;
+				try{
+					
+					if(isSmall == null)
+						bi = ImageIO.read(new File(fPathLocal+f.getfPath()));
+					else{				
+						Image img = ImageIO.read(new File(fPathLocal+f.getfPath())).getScaledInstance(250, 250, BufferedImage.SCALE_SMOOTH);
+						
+						bi = new BufferedImage(img.getWidth(null), img.getHeight(null), BufferedImage.SCALE_SMOOTH);
+	
+					    Graphics2D bGr = bi.createGraphics();
+					    bGr.drawImage(img, 0, 0, null);
+					    bGr.dispose();
+					}
+				
+				}catch(IOException e){
+					bi = ImageIO.read(new File(getServletContext().getRealPath("imgs/na.jpg")));
+				}
+					
+				ImageIO.write(bi, "png", response.getOutputStream());
+				response.getOutputStream().close();
+			}
+		
+		}catch(IOException e){
+			e.printStackTrace();
 		}
-			
 		dbm.dispose();
 	}
 }

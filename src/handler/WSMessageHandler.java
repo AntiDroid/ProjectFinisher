@@ -188,6 +188,8 @@ public class WSMessageHandler {
 			if(f != null)
 				aktiveFolie = f.getID();
 			
+			Message.kursStudentSessions.putIfAbsent(kursID, new ArrayList<Session>());
+			
 			Message.kursLehrerSessions.put(kursID, session);
 			
 			KursInfoMessageLehrer responseObj = new KursInfoMessageLehrer(folienSatzList, Message.kursStudentSessions.get(kursID).size(), aktiveFolie);
@@ -197,8 +199,6 @@ public class WSMessageHandler {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
-			Message.kursStudentSessions.putIfAbsent(kursID, new ArrayList<Session>());
 			
 			break;
 		}

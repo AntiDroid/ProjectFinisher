@@ -9,7 +9,7 @@ var bereichList = []; // obenLinksX, obenLinksY, untenRechtsX, untenRechtsY
 
 
 // Websocket
-var wsip = "192.168.0.3"
+var wsip = "localhost"
 var socket = new WebSocket("ws://"+wsip+":8080/ProjectFinisher/MessageHandler");
 
 socket.onopen = function() {

@@ -32,11 +32,11 @@ public class UploadPdf extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 		doGet(request, response);
 	}
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 
 		DBManager dbm = new DBManager();
 		
@@ -61,42 +61,53 @@ public class UploadPdf extends HttpServlet {
 		    Foliensatz fs = new Foliensatz(kursID, kurs, fSatzName);
 		    dbm.save(fs);
 				
-			Part filePart = request.getPart("pdfDatei");
-			//String fileName = Paths.get(filePart.getSubmittedFileName()) .getFileName().toString(); // MSIE fix.
-			InputStream fileContent = filePart.getInputStream();
+		    try{
+		    
+				Part filePart = request.getPart("pdfDatei");
+				//String fileName = Paths.get(filePart.getSubmittedFileName()) .getFileName().toString(); // MSIE fix.
+				InputStream fileContent = filePart.getInputStream();
+					
+				File fSFolder = new File(fPathLocal+"/locale_database/"+fs.getID());
+				deleteDir(fSFolder);
+				fSFolder.mkdirs();
+		
+				// Loading an existing PDF document
+				PDDocument document = PDDocument.load(fileContent);
+		
+				// Instantiating the PDFRenderer class
+				PDFRenderer renderer = new PDFRenderer(document);
+		
+				// Rendering an image from the PDF document
+		
+				for (int i = 0; i < document.getNumberOfPages(); i++) {
+						
+			        Folie f = new Folie(fs.getID(), fs, "wird noch eingefuegt", 'A');
+			        dbm.save(f);
+			        f.setfPath("/locale_database/"+fs.getID()+"/"+f.getID()+".png");
+			        dbm.save(f);
+						
+					BufferedImage image = renderer.renderImage(i, 2.6f);
+					//image = renderer.renderImageWithDPI(i, dpi);
+		
+					// Writing the image to a file
+					ImageIO.write(image, "PNG", new File(fPathLocal+f.getfPath()));
+				}
+				// Closing the document
+				document.close();
 				
-			File fSFolder = new File(fPathLocal+"/locale_database/"+fs.getID());
-			deleteDir(fSFolder);
-			fSFolder.mkdirs();
-	
-			// Loading an existing PDF document
-			PDDocument document = PDDocument.load(fileContent);
-	
-			// Instantiating the PDFRenderer class
-			PDFRenderer renderer = new PDFRenderer(document);
-	
-			// Rendering an image from the PDF document
-	
-			for (int i = 0; i < document.getNumberOfPages(); i++) {
-					
-		        Folie f = new Folie(fs.getID(), fs, "wird noch eingefuegt", 'A');
-		        dbm.save(f);
-		        f.setfPath("/locale_database/"+fs.getID()+"/"+f.getID()+".png");
-		        dbm.save(f);
-					
-				BufferedImage image = renderer.renderImage(i, 2.6f);
-				//image = renderer.renderImageWithDPI(i, dpi);
-	
-				// Writing the image to a file
-				ImageIO.write(image, "PNG", new File(fPathLocal+f.getfPath()));
-			}
-			// Closing the document
-			document.close();
+		    }catch(IOException | ServletException e){
+		    	e.printStackTrace();
+		    }
+		
 			redirectTo = "lehrer_folien";
 		}
 		
 		dbm.dispose();
-		response.sendRedirect(redirectTo+".jsp");
+		try {
+			response.sendRedirect(redirectTo+".jsp");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static boolean deleteDir(File dir) {

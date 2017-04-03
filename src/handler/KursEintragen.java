@@ -21,11 +21,11 @@ public class KursEintragen extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) {
 		doPost(request, response);
 	}
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) {
 
 		DBManager dbm = new DBManager();
 
@@ -56,7 +56,11 @@ public class KursEintragen extends HttpServlet {
 		}
 		
 		dbm.dispose();
-		response.sendRedirect(redirectTo+".jsp");
+		try {
+			response.sendRedirect(redirectTo+".jsp");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
