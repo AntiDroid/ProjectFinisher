@@ -311,6 +311,10 @@ public class WSMessageHandler {
 			ArrayList<Auswahlbereich> bereichList = dbm.getAuswahlbereiche(folienID);
 			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(f, bereichList);
 			
+			Befragung curBef = dbm.getBefragung(dbm.getCurrentBef(kursID));
+			curBef.setEnde(new Timestamp(System.currentTimeMillis()));
+			dbm.save(curBef);
+			
 			Befragung bef = new Befragung(f, f.getID(), new Timestamp(System.currentTimeMillis()), null);
 			dbm.save(bef);
 				

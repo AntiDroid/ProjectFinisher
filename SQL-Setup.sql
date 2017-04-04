@@ -79,8 +79,8 @@ CREATE TABLE Befragung (
         FOREIGN KEY (FolienID) REFERENCES Folie(FolienID) ON DELETE CASCADE
 );
 
-INSERT INTO Lehrer VALUES(null, 'Albert', 'Albert', 'Greinöcker', 'Albert');
 INSERT INTO Lehrer VALUES(null, 'Lehrer1', 'Orcun', 'Döger', 'lehr');
+INSERT INTO Lehrer VALUES(null, 'Albert', 'Albert', 'Greinöcker', 'Albert');
 INSERT INTO Student VALUES(null, 'Student1', 'Talip', 'Vural', 'stud');
 INSERT INTO Student VALUES(null, 'Georg', 'Georg', 'Wenzel', 'Georg');
 INSERT INTO Student VALUES(null, 'Benny', 'Benjamin', 'Reichhold', 'Benny');
