@@ -354,6 +354,16 @@ $('#folienSatzListe').change(function(e) {
 });
 
 $('#useThisFoil').click(function(e) {
+	var folieInaktivieren = {
+			type : "folieInaktivieren",
+			userId : userId,
+			kursId : kursId,
+			folienId : aktiveFolienId,
+			sessionId : 0
+		};
+	var folieInaktivierenJson = JSON.stringify(folieInaktivieren);
+	socket.send(folieInaktivierenJson);
+	
 	quitNewBereich();
 	disableControls();
 	$("#notUseThisFoil").slideDown(220);
