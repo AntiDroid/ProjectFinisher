@@ -76,9 +76,12 @@ public class WSMessageHandler {
 			
 			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(null, null);
 				
-			Befragung curBef = dbm.getBefragung(dbm.getCurrentBef(folienID));
-			curBef.setEnde(new Timestamp(System.currentTimeMillis()));
-			dbm.save(curBef);
+			Befragung curBef;
+			do{
+				curBef = dbm.getBefragung(dbm.getCurrentBef(kursID));
+				curBef.setEnde(new Timestamp(System.currentTimeMillis()));
+				dbm.save(curBef);
+			}while(curBef.getFolie() == null);
 			
 			for(int i = Message.kursStudentSessions.get(kursID).size(); i > 0; i--){
 				
@@ -312,12 +315,11 @@ public class WSMessageHandler {
 			FolienUpdateRequestMessage responseObj = new FolienUpdateRequestMessage(f, bereichList);
 			
 			Befragung curBef;
-			
 			do{
 				curBef = dbm.getBefragung(dbm.getCurrentBef(kursID));
 				curBef.setEnde(new Timestamp(System.currentTimeMillis()));
 				dbm.save(curBef);
-			}while(curBef.getFolie() != null);
+			}while(curBef.getFolie() == null);
 				
 			Befragung bef = new Befragung(f, f.getID(), new Timestamp(System.currentTimeMillis()), null);
 			dbm.save(bef);
