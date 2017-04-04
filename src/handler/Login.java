@@ -74,7 +74,6 @@ public class Login extends HttpServlet {
 			}catch(IllegalStateException e){}
 		}
 		
-		//TODO Session already invalidated bla bla Exception
 		session.setAttribute("benutzer", c);
 		session.setMaxInactiveInterval(15*60);
 		session.setAttribute("kursListe", kursListe);
