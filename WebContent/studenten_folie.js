@@ -13,7 +13,6 @@ var wsip = "localhost"
 var socket = new WebSocket("ws://"+wsip+":8080/ProjectFinisher/MessageHandler");
 
 socket.onopen = function() {
-	console.log("Websocketverbindung hergestellt :)");
 
 	var kursInfoRequest = {
 		type : "kursInfoRequest",
@@ -25,7 +24,6 @@ socket.onopen = function() {
 };
 
 socket.onerror = function(evt) {
-	console.log("Websocket Error :(");
 	console.log(evt.data);
 	
 	endSocket();
@@ -40,7 +38,6 @@ socket.onclose = function() {
 // Onmessages
 socket.onmessage = function(evt) {
 	var msg = $.parseJSON(evt.data);
-	console.log(evt.data);
 
 	if (msg.type == "kursInfo") {
 		$("#kursName").html(msg.kursName);
